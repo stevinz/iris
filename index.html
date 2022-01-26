@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Eyedrop</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="main.css" type="text/css">
+    </head>
+
+    <body>
+        
+        <br><br>
+
+        <div class="title"><h1>Color Eye</h1></div>
+
+        <div id="mainBox">
+            <canvas id="colorWheel">
+                <!-- to draw color wheel -->
+            </canvas>
+
+            <div id="sliderBox">
+            
+                
+                <div id="slider-container">
+                    <span id="sliderValue" hidden=true></span>
+                    <div id="slider-bar"></div>
+                    <div id="slider-handle"></div>
+                </div>
+
+                
+            </div>
+        </div>
+
+        
+        <script type="module">
+
+            let canvas = document.getElementById("colorWheel");
+            let ctx = canvas.getContext("2d");
+            //ctx.fillStyle = "#FF0000";
+            //ctx.fillRect(0, 0, 150, 75);
+
+
+            
+            // html elements
+            let container = document.getElementById("slider-container");
+            let slider = document.getElementById("slider-bar");
+            let handle = document.getElementById("slider-handle");
+		
+            // initial values
+            let minVal = 0;
+            let maxVal = 255;
+		
+		    let range = maxVal - minVal;
+		    let isSliding = false;
+
+            // the sliding function
+            let move = function(e) {
+
+                var mouseY = 0;
+                var containerTop = 0;
+                var newHeight = 0;
+                var containerHeight = 0;
+                var percentHght = 0;
+                var x = 0;
+                var y = 0;
+                var sliderValue = 0;
+                
+                if (!e) var e = window.event;
+
+                if( e.pageY ){ // all browsers except IE before version 9
+                    mouseY = e.pageY;
+
+                } else if ( e.clientY ) { // IE before version 9
+                    mouseY = e.clientY;
+                }	
+
+                containerTop = container.offsetTop;
+                newHeight = mouseY - containerTop;
+                containerHeight = container.offsetHeight;
+                percentHght = newHeight * 100 / containerHeight;
+
+                if( (percentHght <= 100) && (percentHght >= 0) ) {
+                    slider.style.height = (percentHght) + '%';
+                    y = 100 - percentHght;
+                    x = y * range / 100;
+
+                } else if( percentHght < 0 ) {
+                    percentHght = 0;
+                    slider.style.height = (percentHght) + '%';
+                    y = 100 - percentHght;
+                    x = y * range / 100;
+
+                } else if( percentHght > 100 ) {
+                    percentHght = 100;
+                    slider.style.height = (percentHght) + '%';
+                    y = 100 - percentHght;
+                    x = y * range / 100;
+                }
+                sliderValue = Math.round(x);
+                document.getElementById('sliderValue').innerHTML = sliderValue + minVal;
+            };
+
+            // adding the slide functionality
+            var addSlide = function() {
+                isSliding = true;
+                if ( !window.addEventListener ){
+                    document.attachEvent('onmousemove',move);
+                } else {
+                    document.addEventListener('mousemove', move, false);
+                }
+            };
+
+            // removing the slide functionality
+            var cancelSlide = function() {
+                if( isSliding ) {
+                    if ( window.removeEventListener ) {
+                        document.removeEventListener('mousemove', move, false);
+                    } else if ( window.detachEvent ) {
+                        document.detachEvent('onmousemove', move );
+                    }
+                }
+            };
+
+            // cancelling event bubbling
+            // cancelling default event action
+            var cancelBubble = function(e) {
+                var evt = e ? e:window.event;
+
+                if( evt.stopPropogation ){
+                    evt.stopPropogation();
+                }
+
+                if( evt.cancelBubble != null ){
+                    evt.cancelBubble = true;
+                }
+
+                if( evt.preventDefault ){
+                    evt.preventDefault();
+                } else {
+                    evt.returnValue = false;
+                }
+            };
+
+            // capture events
+            //capturing the mousedown on the handle
+            handle.onmousedown = function(e) {
+                addSlide();
+                cancelBubble(e);
+            }
+
+            //capture the mouseup on the handle
+            handle.onmouseup = function(e) {
+                cancelSlide();
+                cancelBubble(e);
+            }
+
+            // capture the mouse up on the slider
+            slider.onmouseup = function(e) {
+                cancelSlide();
+                cancelBubble(e);
+            }
+
+            // capture the mouse down on the slider
+            slider.onmousedown = function(e) {
+                move(e);
+                cancelBubble(e);
+            }
+
+            // capture the mouse up on the container
+            container.onmouseup = function(e) {
+                cancelSlide();
+                cancelBubble(e);
+            }
+
+            // capture the mouse down on the container
+            container.onmousedown = function(e) {
+                move(e);
+                cancelBubble(e);
+            }
+
+            // capture the mouse up on the window
+            document.onmouseup = function(e) {
+                cancelSlide();
+                cancelBubble(e);
+            }
+
+
+        </script>
+
+    </body>
+
+</html>
