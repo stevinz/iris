@@ -4,12 +4,12 @@
         <title>Eyedrop</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" href="./main.css" type="text/css">
+        <link rel="stylesheet" href="./colorwheel.css" type="text/css">
     </head>
-
     <body>
-        
-        <br><br>
+        <br><br><br><br><br><br><br><br><br><br>
+
+        <!-------------------------------------------------------------------->
 
         <div class="title"><h1>Color Eye</h1></div>
 
@@ -18,82 +18,21 @@
                 <!-- to draw color wheel -->
             </canvas>
 
-            <div id="sliderBox">
-            
-                
-                <div id="slider-container">
-                    <div id="slider-bar"><div id="slider-thumb"></div></div>
-                    
-                    <div class="value" id="demo-value">0</div>
-                </div>
-
-
+            <div id="sliders">
+                <div class="sliderBox"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div>
+                <div class="sliderBox"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div>
+                <div class="sliderBox"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div>
+                <div class="sliderBox"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div>
+                <div class="sliderBox"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div>
+                <div class="sliderBox"><input type="range" min="1" max="100" value="50" class="slider" id="myRange"></div>
             </div>
         </div>
 
+        <!-------------------------------------------------------------------->
         
         <script type="module">
 
-            class Slider {
-                constructor(min, max, element, thumb) {
-                    this.min = min;
-                    this.max = max;
-                    this.value = min;
-                    this.element = element;
-                    this.thumb = thumb;
-
-                    this._mousedown = sliderMouseDown.bind(this);
-                    this._mousemove = sliderMouseMove.bind(this);
-                    this._mouseup = sliderMouseUp.bind(this);
-                
-                    this.element.addEventListener('mousedown', this._mousedown, false);
-                }
-
-                getId() { return this.element.id; }
-                getValue() { return this.value; }
-                setValue(value) {
-                    value = Math.max(this.min, Math.min(this.max, value));
-                    let yRange = this.element.clientHeight;
-                    let y = Math.floor((this.max - value) / (this.max - this.min) * yRange);
-                    let o = (this.thumb.getBoundingClientRect().bottom - this.thumb.getBoundingClientRect().top) / 2;
-                    this.thumb.style.top = y - o + 'px';
-                    this.value = value;
-                    this.onChange();
-                }
-
-                onChange() { 
-                    document.getElementById("demo-value").innerHTML = slider.getValue().toFixed(0);
-                }
-            }
-
-            function sliderMouseDown(event) {    
-                document.addEventListener('mousemove', this._mousemove, false);
-                document.addEventListener('mouseup', this._mouseup, false);
-                event.preventDefault();
-            }
-
-            function sliderMouseMove(event) {
-                let height = this.element.getBoundingClientRect().bottom - this.element.getBoundingClientRect().top;
-                let pos = event.clientY - this.element.getBoundingClientRect().top;
-                if (pos < 0) pos = 0;
-                if (pos > height) pos = height;
-
-                let value = height - pos;
-                    value /= (height / (this.max - this.min));
-                value = Math.max(0, Math.min(value, this.max));
-
-                this.setValue(value);
-                this.onChange();
-                event.preventDefault();
-            }
-
-            function sliderMouseUp(event) {
-                document.removeEventListener('mousemove', this._mousemove, false);
-                document.removeEventListener('mouseup', this._mouseup, false);
-            }
- 
-
-
+           
 
             let canvas = document.getElementById("colorWheel");
             let ctx = canvas.getContext("2d");
@@ -101,15 +40,12 @@
             //ctx.fillRect(0, 0, 150, 75);
 
 
-            let slider = new Slider(0, 255, document.getElementById("slider-bar"), document.getElementById("slider-thumb"));
-                slider.setValue(100);
-
-
 
 
 
         </script>
 
-    </body>
+        <!-------------------------------------------------------------------->
 
+    </body>
 </html>
