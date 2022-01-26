@@ -4,7 +4,7 @@
         <title>Eyedrop</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" href="main.css" type="text/css">
+        <link rel="stylesheet" href="./main.css" type="text/css">
     </head>
 
     <body>
@@ -22,17 +22,78 @@
             
                 
                 <div id="slider-container">
-                    <span id="sliderValue" hidden=true></span>
-                    <div id="slider-bar"></div>
-                    <div id="slider-handle"></div>
+                    <div id="slider-bar"><div id="slider-thumb"></div></div>
+                    
+                    <div class="value" id="demo-value">0</div>
                 </div>
 
-                
+
             </div>
         </div>
 
         
         <script type="module">
+
+            class Slider {
+                constructor(min, max, element, thumb) {
+                    this.min = min;
+                    this.max = max;
+                    this.value = min;
+                    this.element = element;
+                    this.thumb = thumb;
+
+                    this._mousedown = sliderMouseDown.bind(this);
+                    this._mousemove = sliderMouseMove.bind(this);
+                    this._mouseup = sliderMouseUp.bind(this);
+                
+                    this.element.addEventListener('mousedown', this._mousedown, false);
+                }
+
+                getId() { return this.element.id; }
+                getValue() { return this.value; }
+                setValue(value) {
+                    value = Math.max(this.min, Math.min(this.max, value));
+                    let yRange = this.element.clientHeight;
+                    let y = Math.floor((this.max - value) / (this.max - this.min) * yRange);
+                    let o = (this.thumb.getBoundingClientRect().bottom - this.thumb.getBoundingClientRect().top) / 2;
+                    this.thumb.style.top = y - o + 'px';
+                    this.value = value;
+                    this.onChange();
+                }
+
+                onChange() { 
+                    document.getElementById("demo-value").innerHTML = slider.getValue().toFixed(0);
+                }
+            }
+
+            function sliderMouseDown(event) {    
+                document.addEventListener('mousemove', this._mousemove, false);
+                document.addEventListener('mouseup', this._mouseup, false);
+                event.preventDefault();
+            }
+
+            function sliderMouseMove(event) {
+                let height = this.element.getBoundingClientRect().bottom - this.element.getBoundingClientRect().top;
+                let pos = event.clientY - this.element.getBoundingClientRect().top;
+                if (pos < 0) pos = 0;
+                if (pos > height) pos = height;
+
+                let value = height - pos;
+                    value /= (height / (this.max - this.min));
+                value = Math.max(0, Math.min(value, this.max));
+
+                this.setValue(value);
+                this.onChange();
+                event.preventDefault();
+            }
+
+            function sliderMouseUp(event) {
+                document.removeEventListener('mousemove', this._mousemove, false);
+                document.removeEventListener('mouseup', this._mouseup, false);
+            }
+ 
+
+
 
             let canvas = document.getElementById("colorWheel");
             let ctx = canvas.getContext("2d");
@@ -40,149 +101,11 @@
             //ctx.fillRect(0, 0, 150, 75);
 
 
-            
-            // html elements
-            let container = document.getElementById("slider-container");
-            let slider = document.getElementById("slider-bar");
-            let handle = document.getElementById("slider-handle");
-		
-            // initial values
-            let minVal = 0;
-            let maxVal = 255;
-		
-		    let range = maxVal - minVal;
-		    let isSliding = false;
+            let slider = new Slider(0, 255, document.getElementById("slider-bar"), document.getElementById("slider-thumb"));
+                slider.setValue(100);
 
-            // the sliding function
-            let move = function(e) {
 
-                var mouseY = 0;
-                var containerTop = 0;
-                var newHeight = 0;
-                var containerHeight = 0;
-                var percentHght = 0;
-                var x = 0;
-                var y = 0;
-                var sliderValue = 0;
-                
-                if (!e) var e = window.event;
 
-                if( e.pageY ){ // all browsers except IE before version 9
-                    mouseY = e.pageY;
-
-                } else if ( e.clientY ) { // IE before version 9
-                    mouseY = e.clientY;
-                }	
-
-                containerTop = container.offsetTop;
-                newHeight = mouseY - containerTop;
-                containerHeight = container.offsetHeight;
-                percentHght = newHeight * 100 / containerHeight;
-
-                if( (percentHght <= 100) && (percentHght >= 0) ) {
-                    slider.style.height = (percentHght) + '%';
-                    y = 100 - percentHght;
-                    x = y * range / 100;
-
-                } else if( percentHght < 0 ) {
-                    percentHght = 0;
-                    slider.style.height = (percentHght) + '%';
-                    y = 100 - percentHght;
-                    x = y * range / 100;
-
-                } else if( percentHght > 100 ) {
-                    percentHght = 100;
-                    slider.style.height = (percentHght) + '%';
-                    y = 100 - percentHght;
-                    x = y * range / 100;
-                }
-                sliderValue = Math.round(x);
-                document.getElementById('sliderValue').innerHTML = sliderValue + minVal;
-            };
-
-            // adding the slide functionality
-            var addSlide = function() {
-                isSliding = true;
-                if ( !window.addEventListener ){
-                    document.attachEvent('onmousemove',move);
-                } else {
-                    document.addEventListener('mousemove', move, false);
-                }
-            };
-
-            // removing the slide functionality
-            var cancelSlide = function() {
-                if( isSliding ) {
-                    if ( window.removeEventListener ) {
-                        document.removeEventListener('mousemove', move, false);
-                    } else if ( window.detachEvent ) {
-                        document.detachEvent('onmousemove', move );
-                    }
-                }
-            };
-
-            // cancelling event bubbling
-            // cancelling default event action
-            var cancelBubble = function(e) {
-                var evt = e ? e:window.event;
-
-                if( evt.stopPropogation ){
-                    evt.stopPropogation();
-                }
-
-                if( evt.cancelBubble != null ){
-                    evt.cancelBubble = true;
-                }
-
-                if( evt.preventDefault ){
-                    evt.preventDefault();
-                } else {
-                    evt.returnValue = false;
-                }
-            };
-
-            // capture events
-            //capturing the mousedown on the handle
-            handle.onmousedown = function(e) {
-                addSlide();
-                cancelBubble(e);
-            }
-
-            //capture the mouseup on the handle
-            handle.onmouseup = function(e) {
-                cancelSlide();
-                cancelBubble(e);
-            }
-
-            // capture the mouse up on the slider
-            slider.onmouseup = function(e) {
-                cancelSlide();
-                cancelBubble(e);
-            }
-
-            // capture the mouse down on the slider
-            slider.onmousedown = function(e) {
-                move(e);
-                cancelBubble(e);
-            }
-
-            // capture the mouse up on the container
-            container.onmouseup = function(e) {
-                cancelSlide();
-                cancelBubble(e);
-            }
-
-            // capture the mouse down on the container
-            container.onmousedown = function(e) {
-                move(e);
-                cancelBubble(e);
-            }
-
-            // capture the mouse up on the window
-            document.onmouseup = function(e) {
-                cancelSlide();
-                cancelBubble(e);
-            }
 
 
         </script>
