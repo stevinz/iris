@@ -90,6 +90,8 @@ class Coloreye {
 
     setHsl(h, s, l) {
         h = keepInRange(h, 0, 360);
+        s = clamp(s, 0, 1);
+        l = clamp(l, 0, 1);
         let c = (1 - Math.abs(2 * l - 1)) * s;
         let x = c * (1 - Math.abs((h / 60) % 2 - 1));
         let m = l - (c / 2);
