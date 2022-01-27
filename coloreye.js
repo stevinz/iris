@@ -61,7 +61,7 @@ class Coloreye {
         // Three arguments were passed
         } else {
             switch (type) {
-                case 'hsl':     return this.setHsl(h, s, l);
+                case 'hsl':     return this.setHsl(r, g, b);
                 case 'three':   return this.setRgb(r, g, b, 255.0);
                 default:        return this.setRgb(r, g, b, 1.0);
             }
@@ -89,16 +89,17 @@ class Coloreye {
     }
 
     setHsl(h, s, l) {
+        h = keepInRange(h, 0, 360);
         let c = (1 - Math.abs(2 * l - 1)) * s;
         let x = c * (1 - Math.abs((h / 60) % 2 - 1));
         let m = l - (c / 2);
         let r = 0, g = 0, b = 0;
-        if      (  0 <= h && h <  60) { r = c; g = x; b = 0; } 
+        if                  (h <  60) { r = c; g = x; b = 0; } 
         else if ( 60 <= h && h < 120) { r = x; g = c; b = 0; } 
         else if (120 <= h && h < 180) { r = 0; g = c; b = x; } 
         else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
         else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
-        else if (300 <= h && h < 360) { r = c; g = 0; b = x; }
+        else if (300 <= h)            { r = c; g = 0; b = x; }
         r = Math.round((r + m) * 255);
         g = Math.round((g + m) * 255);
         b = Math.round((b + m) * 255);
@@ -245,15 +246,20 @@ class Coloreye {
         return this.setRgb(r3, g3, b3);
     }
 
+     // Adjusts the RGB values to fit in the RYB spectrum
+    adjustToRyb() {
+        return this.setHsl(hue(rybMatchSpectrum(this.hue())), this.saturation(), this.lightness());
+    }
+
     // Rotates the hue of a color in the RYB spectrum by degrees
     rybRotateHue(degrees = 90) {
-        let newHue = this.rybHue() + degrees;
+        let newHue = keepInRange(this.rybHue() + degrees);
         return this.setHsl(hue(rybMatchSpectrum(newHue)), this.saturation(), this.lightness());
     }
 
     // Rotates the hue of a color in the RGB spectrum by degrees
     rgbRotateHue(degrees = 90) {
-        let newHue = this.hue() + degrees;
+        let newHue = keepInRange(this.hue() + degrees);
         return this.setHsl(newHue, this.saturation(), this.lightness());
     }
 }
@@ -274,6 +280,12 @@ function blue(hexColor) { return clamp((hexColor & 0x0000ff), 0, 255); }
 function hue(hexColor) { return hsl(hexColor, 'h'); }
 function saturation(hexColor) { return hsl(hexColor, 's'); }
 function lightness(hexColor) { return hsl(hexColor, 'l'); }
+
+function keepInRange(value, min = 0, max = 360) {
+    while (value >= max) value -= (max - min);
+    while (value <  min) value += (max - min);
+    return value;
+}
 
 // Returns: hsl(0 to 360, 0 to 1, 0 to 1)
 function hsl(hexColor, channel = 'h') {
@@ -311,9 +323,6 @@ const _mix1 = new Coloreye();
 const _mix2 = new Coloreye();
 
 function rybMatchSpectrum(matchHue) {
-    while (matchHue >= 360) matchHue -= 360;
-    while (matchHue <    0) matchHue += 360;
-
     let colorDegrees = 360 / RYB_SPECTRUM.length;
     let degreeCount = colorDegrees;
     let stopCount = 0;

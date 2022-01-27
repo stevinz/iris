@@ -20,34 +20,44 @@
 body {
 	color: var(--color-icon);
 	background-color: var(--color-background-dark);
-
     margin: 0;
     overflow: auto;
     text-align: center;
 }
 
+.unselectable {
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+ }
+ 
 .title {
 	margin: auto;
 }
 
-#mainBox {
+.centerBox {
 	background-color: var(--color-background-light);
-	margin: auto;
+	border-radius: var(--border-radius);
+	margin: 20px auto 20px auto;
     padding: 5px;
-	width: 50%;
+	width: 750px;
 	display: flex;
 }
 
-#colorWheel {
-	background-color: blanchedalmond;
+.colorWheel {
+	background-color: var(--color-background-light);
+	border-radius: calc(var(--wheel-size) / 2);
+	overflow: auto;
+	border: 2px solid;
+	border-color: var(--color-background-light);
 	width: var(--wheel-size);
 	height: var(--wheel-size);
 }
-
-#sliders {
-	background-color: transparent;
-	margin: auto;	
-	display: flex;
+.colorWheel:hover {
+	border: 2px solid;
+	border-color: var(--color-background-dark);
 }
 
 /*/////////////////////////////////////////////////////////////////////////////////////
@@ -56,52 +66,79 @@ body {
 
 :root {
 	--color-icon: #08f;
+	--color-shadow: #111;
 	--color-background-dark: #222;
-	--color-background-light: #444;
+	--color-background-light:#444;
 
-	--wheel-size: 200px;
+	--border-radius: 8px;
 
-	--slider-box-width: 50px;
-	--slider-box-height: 220px;
+	--wheel-size: 220px;
+
+	--color-width: 30px;
+	--color-height: 100px;
+
+	--slider-box-width: 40px;
+	--slider-box-height: 170px;
 
 	--slider-height: 150px;
-	--slider-width: 6px;
-
+	--slider-width: 7px;
 	--slider-thumb: 20px;
 }
 
-.sliderBox {
+#sliders {
 	background-color: transparent;
-	width: var(--slider-box-width);
-	height: var(--slider-box-height);
+	margin: auto;	
+	display: flex;
+  	align-items: center;
 }
-	.slider {
-		-webkit-appearance: none;
-		appearance: none;
-		width: var(--slider-height);
-		height: var(--slider-width);
-		border-radius: 5px;
-		background: var(--color-background-dark);
-		outline: none;
-		opacity: 0.7;
-		-webkit-transition: .2s;
-		transition: opacity .2s;
-
-		position: relative;
-		left: calc(0px - (var(--slider-height) / 2) + (var(--slider-box-width) / 2));
-		top: calc((var(--slider-box-height) / 2) - (var(--slider-thumb) / 2));
-		/* transform: rotateZ(270deg); */
-		transform: rotate(270deg);
+	#colorBox {
+		background-color: black;
+		border-radius: var(--border-radius);
+		width: var(--color-width);
+		height: var(--color-height);
 	}
-	.slider:hover {
-		opacity: 1;
+	.sliderBox {
+		background-color: transparent;
+		width: var(--slider-box-width);
+		height: var(--slider-box-height);
 	}
-		.slider::-webkit-slider-thumb, .slider::-moz-range-thumb {
+		.slider {
 			-webkit-appearance: none;
+			-moz-appearance: none;
 			appearance: none;
-			width: var(--slider-thumb);
-			height: var(--slider-thumb);
-			border-radius: 50%; 
-			background: var(--color-icon);
-			cursor: pointer;
+			width: var(--slider-height);
+			height: var(--slider-width);
+			/* border: 1px solid;
+			border-color: var(--color-background-light); */
+			border-radius: 5px;
+			background: var(--color-background-dark);
+			outline: none;
+			opacity: 0.75;
+			position: relative;
+			left: calc(0px - (var(--slider-height) / 2) + ((var(--slider-box-width) / 2) - 2px));
+			top: calc((var(--slider-box-height) / 2) - ((var(--slider-thumb)) / 2));
+			/* transform: rotateZ(270deg); */
+			transform: rotate(270deg);
 		}
+		.slider:hover {
+			opacity: 1;
+			/* border-color: var(--color-background-light); */
+		}
+			/* .slider::-moz-range-thumb {
+				-moz-appearance: none;
+			} */
+
+			.slider::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				width: var(--slider-thumb);
+				height: var(--slider-thumb);
+				border: 2px solid;
+				border-color: var(--color-background-light);
+				border-radius: 50%; 
+				background: var(--color-icon);
+				cursor: pointer;
+			}
+			.slider::-webkit-slider-thumb:hover {
+				border: 2px solid;
+				border-color: var(--color-background-dark);
+			}
