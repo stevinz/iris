@@ -214,20 +214,20 @@ class Coloreye {
         return ((this.r << 16) + (this.g << 8) + this.b);
     }
 
-    // Example output: "rgb(255, 0, 0)"
+    // Example output: 'rgb(255, 0, 0)'
     cssString(alpha) {
-        return ("rgb(" + this.rgbString(alpha) + ")");
+        return ('rgb(' + this.rgbString(alpha) + ')');
     }
 
-    // Example output: "#ff0000"
+    // Example output: '#ff0000'
     hexString(hexColor){
-        return "#" + ('000000' + ((hexColor) >>> 0).toString(16)).slice(-6);
+        return '#' + ('000000' + ((hexColor) >>> 0).toString(16)).slice(-6);
     }
 
-    // Example output: "255, 0, 0"
+    // Example output: '255, 0, 0'
     rgbString(alpha) {
-        let rgb = this.r + ", " + this.g + ", " + this.b;
-        let rgba = (alpha) ? rgb + ", " + alpha : rgb;
+        let rgb = this.r + ', ' + this.g + ', ' + this.b;
+        let rgba = (alpha) ? rgb + ', ' + alpha : rgb;
         return rgba;
     }
 

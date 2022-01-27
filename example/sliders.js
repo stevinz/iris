@@ -37,13 +37,13 @@ import { Coloreye } from '../src/coloreye.js';
 /////////////////////////////////////////////////////////////////////////////////////
 let ryb = { r: 0, y: 0, b: 0 };
 let eye = new Coloreye();
-let colorBox = document.getElementById("colorBox");
-let rgbR = document.getElementById("sliderRgbR"), txtRgbR = document.getElementById("rgbValueR");
-let rgbG = document.getElementById("sliderRgbG"), txtRgbG = document.getElementById("rgbValueG");
-let rgbB = document.getElementById("sliderRgbB"), txtRgbB = document.getElementById("rgbValueB");
-let rybR = document.getElementById("sliderRybR"), txtRybR = document.getElementById("rybValueR");
-let rybY = document.getElementById("sliderRybY"), txtRybY = document.getElementById("rybValueY");
-let rybB = document.getElementById("sliderRybB"), txtRybB = document.getElementById("rybValueB");
+let colorBox = document.getElementById('colorBox');
+let rgbR = document.getElementById('sliderRgbR'), txtRgbR = document.getElementById('rgbValueR');
+let rgbG = document.getElementById('sliderRgbG'), txtRgbG = document.getElementById('rgbValueG');
+let rgbB = document.getElementById('sliderRgbB'), txtRgbB = document.getElementById('rgbValueB');
+let rybR = document.getElementById('sliderRybR'), txtRybR = document.getElementById('rybValueR');
+let rybY = document.getElementById('sliderRybY'), txtRybY = document.getElementById('rybValueY');
+let rybB = document.getElementById('sliderRybB'), txtRybB = document.getElementById('rybValueB');
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -57,6 +57,9 @@ function connectSliders() {
     onSliderChange(rybY, updateSlider, updateRybY);
     onSliderChange(rybB, updateSlider, updateRybB);
 
+    const colorStyle = getComputedStyle(colorBox);
+    eye.set(colorStyle.backgroundColor);
+    
     updateRgb();
     updateRyb();
     updateText();
@@ -117,14 +120,14 @@ function onSliderChange(element, handler, updateFunction) {
     element.currentValue = element.value;
     element.newValue = element.value;
     
-    element.addEventListener("input", function(event) {
+    element.addEventListener('input', function(event) {
         event.target.inputCalled = true;
         event.target.newValue = event.target.value;
         if (event.target.newValue !== event.target.currentValue) handler(event);
         event.target.currentValue = event.target.newValue;
     });
   
-    element.addEventListener("change", function(event) {
+    element.addEventListener('change', function(event) {
         if (! event.target.inputCalled) handler(event);
     }); 
 }

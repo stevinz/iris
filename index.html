@@ -1,79 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
     <head>
         <title>Eyedrop</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" href="./css/colorwheel.css" type="text/css">
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0'>
+        <link rel='stylesheet' href='./css/colorwheel.css' type='text/css'>
     </head>
     <body>
-        <div style="height: 200px;"></div>
+        <div style='height: 200px;'></div>
 
         <!-------------------------------------------------------------------->
 
-        <div class="title"><h1>Color Eye</h1></div>
+        <div class='title'><h1>Color Eye</h1></div>
 
-        <div class="centerBox">
-            <canvas class="colorWheel" id="colorWheelRgb" width="200" height="200"></canvas>
+        <div class='centerBox'>
+            <canvas class='colorWheel' id='colorWheelRgb' width='200' height='200'></canvas>
                 <!-- to draw color wheel -->
             </canvas>
 
-            <div id="sliders">
-                <div class="sliderCombo">
-                    <div class="dot unselectable" style="color: red; font-size: xx-large; margin: -8px;">●</div>
-                    <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRgbR"></div>
-                    <span class="unselectable" id="rgbValueR">0</span>
+            <div id='sliders'>
+                <div class='sliderCombo'>
+                    <div class='dot unselectable' style='color: red; font-size: xx-large; margin: -8px;'>●</div>
+                    <div class='sliderBox'><input type='range' min='0' max='255' value='255' class='slider' id='sliderRgbR'></div>
+                    <span class='unselectable' id='rgbValueR'>255</span>
                 </div>
-                <div class="sliderCombo">
-                    <div class="dot unselectable" style="color: green; font-size: xx-large; margin: -8px;">●</div>
-                    <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRgbG"></div>
-                    <span class="unselectable" id="rgbValueG">0</span>
+                <div class='sliderCombo'>
+                    <div class='dot unselectable' style='color: green; font-size: xx-large; margin: -8px;'>●</div>
+                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRgbG'></div>
+                    <span class='unselectable' id='rgbValueG'>0</span>
                 </div>
-                <div class="sliderCombo">
-                    <div class="dot unselectable" style="color: blue; font-size: xx-large; margin: -8px;">●</div>
-                    <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRgbB"></div>
-                    <span class="unselectable" id="rgbValueB">0</span>
+                <div class='sliderCombo'>
+                    <div class='dot unselectable' style='color: blue; font-size: xx-large; margin: -8px;'>●</div>
+                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRgbB'></div>
+                    <span class='unselectable' id='rgbValueB'>0</span>
                 </div>
                 
-                <div id="colorBox"></div>
+                <div id='colorBox'></div>
                 
-                <div class="sliderCombo">
-                    <div class="dot unselectable" style="color: red; font-size: xx-large; margin: -8px;">●</div>
-                    <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRybR"></div>
-                    <span class="unselectable" id="rybValueR">0</span>
+                <div class='sliderCombo'>
+                    <div class='dot unselectable' style='color: red; font-size: xx-large; margin: -8px;'>●</div>
+                    <div class='sliderBox'><input type='range' min='0' max='255' value='255' class='slider' id='sliderRybR'></div>
+                    <span class='unselectable' id='rybValueR'>255</span>
                 </div>
-                <div class="sliderCombo">
-                    <div class="dot unselectable" style="color: yellow; font-size: xx-large; margin: -8px;">●</div>
-                    <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRybY"></div>
-                    <span class="unselectable" id="rybValueY">0</span>
+                <div class='sliderCombo'>
+                    <div class='dot unselectable' style='color: yellow; font-size: xx-large; margin: -8px;'>●</div>
+                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRybY'></div>
+                    <span class='unselectable' id='rybValueY'>0</span>
                 </div>
-                <div class="sliderCombo">
-                    <div class="dot unselectable" style="color: blue; font-size: xx-large; margin: -8px;">●</div>
-                    <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRybB"></div>
-                    <span class="unselectable" id="rybValueB">0</span>
+                <div class='sliderCombo'>
+                    <div class='dot unselectable' style='color: blue; font-size: xx-large; margin: -8px;'>●</div>
+                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRybB'></div>
+                    <span class='unselectable' id='rybValueB'>0</span>
                 </div>
             </div>
 
-            <canvas class="colorWheel" id="colorWheelRyb" width="200" height="200">
+            <canvas class='colorWheel' id='colorWheelRyb' width='200' height='200'>
                 <!-- to draw color wheel -->
             </canvas>
         </div>
 
         <!-------------------------------------------------------------------->
         
-        <script type="module">
+        <script type='module'>
 
             import { Coloreye } from '../src/coloreye.js';
-            import { drawColorBox, drawColorWheel } from "./example/colorwheel.js";
-            import { connectSliders } from "./example/sliders.js"
+            import { drawColorBox, drawColorWheel } from './example/colorwheel.js';
+            import { connectSliders } from './example/sliders.js'
             
-            drawColorWheel("colorWheelRgb", 'rgb');
-            drawColorWheel("colorWheelRyb", 'ryb');
+            let rgbWheel = document.getElementById('colorWheelRgb');
+            let rybWheel = document.getElementById('colorWheelRyb');
 
-            drawColorBox("colorWheelRgb", 'rgb', 120, 0.5);
-            drawColorBox("colorWheelRyb", 'ryb', 120, 0.5);
+            drawColorWheel(rgbWheel, 'rgb');
+            drawColorWheel(rybWheel, 'ryb');
+
+            drawColorBox(rgbWheel, 'rgb', 120, 0.5);
+            drawColorBox(rybWheel, 'ryb', 120, 0.5);
             
             connectSliders();
+
+
+            let mouseCircle = document.createElement('div');
+            mouseCircle.id = '';
+            rgbWheel.addEventListener('mousemove', function(event) {
+
+
+            });
+            
+
+
 
         </script>
 

@@ -96,7 +96,7 @@ body {
   	align-items: center;
 }
 	#colorBox {
-		background-color: black;
+		background-color: red;
 		border-radius: var(--color-radius);
 		width: var(--color-width);
 		height: var(--color-height);

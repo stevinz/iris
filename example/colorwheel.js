@@ -59,9 +59,8 @@ function rotatePoint(centerX, centerY, x, y, degrees, target) {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Color Wheels / Boxes
 /////////////////////////////////////////////////////////////////////////////////////
-function drawColorWheel(elementId, type = 'rgb', saturation = 1, size = 0.75 /* 0.0 to 1.0 */) {
-    let canvas = document.getElementById(elementId);
-    let ctx = canvas.getContext("2d");
+function drawColorWheel(canvas, type = 'rgb', saturation = 1, size = 0.75 /* 0.0 to 1.0 */) {
+    let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let eye = new Coloreye();
     for (let x = 0; x < canvas.width; x++) {
@@ -88,13 +87,12 @@ function drawColorWheel(elementId, type = 'rgb', saturation = 1, size = 0.75 /* 
     }
 }
 
-function drawColorBox(elementId, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 */) {
-    let canvas = document.getElementById(elementId);
-    let ctx = canvas.getContext("2d");
+function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 */) {
+    let ctx = canvas.getContext('2d');
     let inMemoryCanvas = document.createElement('canvas');
         inMemoryCanvas.width = Math.round(canvas.width * size);
         inMemoryCanvas.height = Math.round(canvas.height * size);
-    let ctxMemory = inMemoryCanvas.getContext("2d");
+    let ctxMemory = inMemoryCanvas.getContext('2d');
     let img = ctxMemory.getImageData(0, 0, inMemoryCanvas.width, inMemoryCanvas.height);
     let eye = new Coloreye();
     for (let y = 0; y < inMemoryCanvas.height; y++) {
