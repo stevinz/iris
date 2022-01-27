@@ -4,10 +4,10 @@
         <title>Eyedrop</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" href="./colorwheel.css" type="text/css">
+        <link rel="stylesheet" href="./css/colorwheel.css" type="text/css">
     </head>
     <body>
-        <br><br><br><br><br><br><br><br><br><br>
+        <div style="height: 200px;"></div>
 
         <!-------------------------------------------------------------------->
 
@@ -83,108 +83,53 @@
         
         <script type="module">
 
-            import { Coloreye } from './coloreye.js';
-
-            function calculateCartesian(r, theta) {
-                let x = r * Math.cos(theta);
-                let y = r * Math.sin(theta);
-                return { x: x, y: y };
-            }
-
-            function calculatePolar(x, y) {
-                let r = Math.pow((Math.pow(x, 2) + Math.pow(y, 2)), 0.5);       // magnitude
-                let theta = Math.atan2(y, x);                                   // angle
-                return { magnitude: r, angle: theta };
-            }
-
-            function rotatePoint(cx, cy, x, y, angle, target) {
-                let radians = (Math.PI / 180) * angle;
-                let cos = Math.cos(radians);
-                let sin = Math.sin(radians);
-                let nx = (cos * (x - cx)) + (sin * (y - cy)) + cx;
-                let ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-                target.x = nx;
-                target.y = ny;
-            }
-
+            import { Coloreye } from '../src/coloreye.js';
+            import { drawColorBox, drawColorWheel } from "./example/colorwheel.js";
+            import { onSliderChange } from "./example/input.js"
             
             drawColorWheel("colorWheelRgb", 'rgb');
             drawColorWheel("colorWheelRyb", 'ryb');
 
-            drawColorBox("colorWheelRgb", 'rgb', 0, 0.5);
+            drawColorBox("colorWheelRgb", 'rgb', 120, 0.5);
+            drawColorBox("colorWheelRyb", 'ryb', 120, 0.5);
             
+            ///////////
 
+            let rgbR = document.getElementById("sliderRgbR");
+            let rgbG = document.getElementById("sliderRgbG");
+            let rgbB = document.getElementById("sliderRgbB");
+            let rybR = document.getElementById("sliderRybR");
+            let rybY = document.getElementById("sliderRybY");
+            let rybB = document.getElementById("sliderRybB");
+            
+            let eye = new Coloreye();
+            let colorBox = document.getElementById("colorBox");
 
-            function drawColorWheel(elementId, type = 'rgb', saturation = 1, size = 0.75 /* 0.0 to 1.0 */) {
-                let canvas = document.getElementById(elementId);
-                let ctx = canvas.getContext("2d");
-                let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                let eye = new Coloreye();
-                for (let x = 0; x < canvas.width; x++) {
-                    for (let y = 0; y < canvas.height; y++) {
-                        let ax = x - (canvas.width / 2);
-                        let ay = y - (canvas.height / 2);
-                        let h = Math.atan2(ay, ax) * (180 / Math.PI) + 90;
-                        let s = saturation;
-                        let l = (Math.pow((Math.pow(ax, 2) + Math.pow(ay, 2)), 0.5) / canvas.width);
-                        if (l > (size / 2.0)) {
-                            eye.set(h, s, l, 'hsl');
-                            if (type === 'ryb') eye.adjustToRyb();
-                            setPixel(img, x, y, eye.r, eye.g, eye.b, 255);
-                        }
-                    }
-                }
-                ctx.putImageData(img, 0, 0);
-                if (size > 0) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = '#444';
-                    ctx.lineWidth = 2;
-                    ctx.arc(canvas.width / 2, canvas.height / 2, (canvas.width / 2) * size, 0, Math.PI * 2, false);
-                    ctx.stroke();
-                }
+            function updateSlider(event) {    
+                const colorStyle = getComputedStyle(colorBox);
+                eye.set(colorStyle.backgroundColor);
+                event.target.updateFunction(event);
+                colorBox.style.backgroundColor = eye.cssString();
+
+                // Update colors
+                rgbR.value = eye.r;
+                rgbG.value = eye.g;
+                rgbB.value = eye.b;
+                let ryb = { r: 0, y: 0, b: 0 };
+                    eye.getRyb(ryb);
+                rybR.value = ryb.r;
+                rybY.value = ryb.y;
+                rybB.value = ryb.b;
             }
 
+            function updateRgbR(event) { eye.r = event.target.value; }
+            function updateRgbG(event) { eye.g = event.target.value; }
+            function updateRgbB(event) { eye.b = event.target.value; }
 
-            function drawColorBox(elementId, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 */) {
-                let canvas = document.getElementById(elementId);
-                let ctx = canvas.getContext("2d");
-                let inMemoryCanvas = document.createElement('canvas');
-                    inMemoryCanvas.width = Math.round(canvas.width * size);
-                    inMemoryCanvas.height = Math.round(canvas.height * size);
-                let ctxMemory = inMemoryCanvas.getContext("2d");
-                let img = ctxMemory.getImageData(0, 0, inMemoryCanvas.width, inMemoryCanvas.height);
-                let eye = new Coloreye();
-                for (let y = 0; y < inMemoryCanvas.height; y++) {
-                    for (let x = 0; x < inMemoryCanvas.width; x++) {
-                        let h = hue;
-                        let s = 1.0 - (y / inMemoryCanvas.height);
-                        let l = 1.0 - (x / inMemoryCanvas.width);
-                            l = (0.5 * s) + (l * (1.0 - s)); 
-                        eye.set(h, s, l, 'hsl');
-                        if (type === 'ryb') eye.adjustToRyb();
-                        setPixel(img, x, y, eye.r, eye.g, eye.b, 255);
-                    }
-                }
-                ctxMemory.putImageData(img, 0, 0);
-                ctx.save();
-                ctx.translate(canvas.width/2, canvas.height/2);
-                ctx.rotate(hue * (Math.PI / 180));
-                ctx.drawImage(inMemoryCanvas, -inMemoryCanvas.width/2, -inMemoryCanvas.height/2);
-                ctx.restore();
-            }
+            onSliderChange(rgbR, updateSlider, updateRgbR);
+            onSliderChange(rgbG, updateSlider, updateRgbG);
+            onSliderChange(rgbB, updateSlider, updateRgbB);
 
-
-            function setPixel(img, x, y, r, g, b, a) {
-                x = Math.floor(x);
-                y = Math.floor(y);
-                let pos = (y * img.width * 4) + (x * 4);
-                if (pos >= 0 && pos <= img.data.length - 4) {
-                    img.data[pos]     = r;
-                    img.data[pos + 1] = g;
-                    img.data[pos + 2] = b;
-                    img.data[pos + 3] = a;
-                }
-            }
 
 
         </script>

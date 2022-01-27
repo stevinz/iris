@@ -12,12 +12,13 @@
 ////
 ////    constructor() or set() arguments
 ////        new Coloreye(hexColor)                      hexadecimal value (0xffffff) or decimal (16777215)
-////        new Coloreye(r, g, b)                       values from 0 to 255
-////        new Coloreye(r, g, b, 'three')              values from 0.0 to 1.0
+////        new Coloreye(r, g, b)                       pass in values ranging from 0 to 255
+////        new Coloreye(r, g, b, 'three')              pass in values ranging from 0.0 to 1.0
 ////        new Coloreye([1.0, 0.0, 0.0], offset)       array of r, g, b values from 0.0 to 1.0, optional array offset
 ////        new Coloreye(h, s, l, type = 'hsl')         h from 0 to 360, s and l from 0.0 to 1.0
 ////        new Coloreye('#ff0000') or ('#ff0')         hex string, 3 or 6 digits
 ////        new Coloreye('red') or ('lightgray')        x11 color name
+////        new Coloreye('rgb(255, 0, 0)')              css color string
 ////        new Coloreye(fromColoreye)                  copy from another Coloreye() object
 ////
 ////    member variables:
@@ -82,9 +83,9 @@ class Coloreye {
     }
 
     setRgb(r, g, b, multiplier = 1.0) {
-        this.r = clamp(r * multiplier, 0, 255);
-        this.g = clamp(g * multiplier, 0, 255);
-        this.b = clamp(b * multiplier, 0, 255);
+        this.r = Math.floor(clamp(r * multiplier, 0, 255));
+        this.g = Math.floor(clamp(g * multiplier, 0, 255));
+        this.b = Math.floor(clamp(b * multiplier, 0, 255));
         return this;
     }
 
@@ -102,19 +103,53 @@ class Coloreye {
         else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
         else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
         else if (300 <= h)            { r = c; g = 0; b = x; }
-        r = Math.round((r + m) * 255);
-        g = Math.round((g + m) * 255);
-        b = Math.round((b + m) * 255);
+        r = Math.floor((r + m) * 255);
+        g = Math.floor((g + m) * 255);
+        b = Math.floor((b + m) * 255);
         this.setRgb(r, g, b);
         return this;
     }
 
     setStyle(style) {
+        // CSS Color: rgb() / rgba() / hsl() / hsla()
+        let m;
+		if (m = /^((?:rgb|hsl)a?)\(([^\)]*)\)/.exec(style)) {
+			let color;
+			const name = m[1];
+			const components = m[2];
+			switch (name) {
+				case 'rgb':
+				case 'rgba':
+					if (color = /^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
+						// rgb(255,0,0) rgba(255,0,0,0.5)
+						this.r = Math.min(255, parseInt(color[1], 10));
+						this.g = Math.min(255, parseInt(color[2], 10));
+						this.b = Math.min(255, parseInt(color[3], 10));
+						return this;
+					}
+					if ( color = /^\s*(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
+						// rgb(100%,0%,0%) rgba(100%,0%,0%,0.5)
+						this.r = (Math.min(100, parseInt(color[1], 10)) / 100) * 255;
+						this.g = (Math.min(100, parseInt(color[2], 10)) / 100) * 255;
+						this.b = (Math.min(100, parseInt(color[3], 10)) / 100) * 255;
+						return this;
+					}
+					break;
+				case 'hsl':
+				case 'hsla':
+					if (color = /^\s*(\d*\.?\d+)\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
+						// hsl(120,50%,50%) hsla(120,50%,50%,0.5)
+						const h = parseFloat(color[1]);
+						const s = parseInt(color[2], 10) / 100;
+						const l = parseInt(color[3], 10) / 100;
+						return this.setHsl(h, s, l);
+					}
+					break;
+			}
         // Hex Color, i.e. #FF0000
-		if (m = /^\#([A-Fa-f\d]+)$/.exec(style)) {
+        } else if (m = /^\#([A-Fa-f\d]+)$/.exec(style)) {
 			const hex = m[1];
 			const size = hex.length;
-
             // #FF0
 			if (size === 3) {
 				let r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
@@ -170,15 +205,30 @@ class Coloreye {
         return ((this.r << 16) + (this.g << 8) + this.b);
     }
 
+    // Example output: "rgb(255, 0, 0)"
+    cssString(alpha) {
+        return ("rgb(" + this.rgbString(alpha) + ")");
+    }
+
+    // Example output: "#ff0000"
+    hexString(hexColor){
+        return "#" + ('000000' + ((hexColor) >>> 0).toString(16)).slice(-6);
+    }
+
     // Example output: "255, 0, 0"
-    css() {
-        return (this.r + ", " + this.g + ", " + this.b);
+    rgbString(alpha) {
+        let rgb = this.r + ", " + this.g + ", " + this.b;
+        let rgba = (alpha) ? rgb + ", " + alpha : rgb;
+        return rgba;
     }
 
     // Spectrum components
     red() { return this.r; }
     green() { return this.g; }
     blue() { return this.b; }
+    redF() { return this.r / 255.0; }
+    greenF() { return this.g / 255.0; }
+    blueF() { return this.b / 255.0; }
     hue() { return hue(this.hex()); }
     saturation() { return saturation(this.hex()); }
     lightness() { return lightness(this.hex()); }
@@ -191,16 +241,61 @@ class Coloreye {
         }
     }
 
-    // Example output: "#ff0000"
-    getHexString(hexColor){
-        return "#" + ('000000' + ((hexColor) >>> 0).toString(16)).slice(-6);
-    }
-
     // Copies hsl values into target
-    getHSL(target) {
+    getHsl(target) {
         target.h = hue(this.hex());
         target.s = saturation(this.hex());
         target.l = lightness(this.hex());
+    }
+
+    // Copies rgb values into target, use multiuplier to copy into three.js Color(), i.e. multiplier = (1 / 255)
+    getRgb(target, multiplier = 1.0) {
+        target.r = this.r * multiplier;
+        target.g = this.g * multiplier;
+        target.b = this.b * multiplier;
+    }
+
+    getRyb(target) {
+	    // Remove the whiteness from the color
+	    let w = Math.min(this.redF(), this.greenF(), this.blueF());
+	    let r = this.redF() - w;
+	    let g = this.greenF() - w;
+	    let b = this.blueF() - w;
+	    let mg = Math.max(r, g, b);
+
+	    // Get the yellow out of the red + green
+	    let y = Math.min(r, g);
+	    r -= y;
+	    g -= y;
+
+	    // If this conversion combines blue and green, then cut each in half to preserve the value's maximum range
+	    if (b && g) {
+		    b /= 2.0
+		    g /= 2.0
+        }
+
+	    // Redistribute the remaining green
+	    y += g
+	    b += g
+
+	    // Normalize to values
+	    let my = Math.max(r, y, b);
+	    if (my) {
+		    let n = mg / my;
+		    r *= n;
+		    y *= n;
+		    b *= n;
+        }
+
+	    // Add the white back in
+	    r += w;
+	    y += w;
+	    b += w;
+
+	    // Return back the ryb
+        target.r = r * 255;
+        target.y = y * 255;
+        target.b = b * 255;
     }
 
     // Export to JSON
@@ -455,7 +550,7 @@ export { Coloreye, COLOR_KEYWORDS };
 // ColorEye
 //      Copyright (c) 2022 Stephens Nunnally (@stevinz)
 //
-// Other Portions
+// Some Portions
 //      Copyright (c) 2011 Scott Kellum (@scottkellum) and Mason Wendell (@canarymason)
 //      Copyright (c) 2010-2022 mrdoob and three.js authors
 //
