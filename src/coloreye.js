@@ -67,7 +67,7 @@ class Coloreye {
                 case 'hsl':     return this.setHsl(r, g, b);
                 case 'rgb':     return this.setRgb(r, g, b, 1.0);
                 case 'ryb':     return this.setRyb(r, g, b);
-                case 'three':   return this.setRgb(r, g, b, 255.0);
+                case 'three':   return this.setRgb(r, g, b, 255);
                 default:        return this.setRgb(r, g, b, 1.0);
             }
         }
@@ -108,14 +108,14 @@ class Coloreye {
     }
 
     setRgb(r, g, b, multiplier = 1.0) {
-        this.r = Math.floor(clamp(r * multiplier, 0, 255));
-        this.g = Math.floor(clamp(g * multiplier, 0, 255));
-        this.b = Math.floor(clamp(b * multiplier, 0, 255));
+        this.r = clamp(Math.floor(r * multiplier), 0, 255);
+        this.g = clamp(Math.floor(g * multiplier), 0, 255);
+        this.b = clamp(Math.floor(b * multiplier), 0, 255);
         return this;
     }
 
     setRyb(r, y, b) {
-        let hexColor = cubicInterpolation(r, y, b, 255, CUBE.IRISSON_RYB_TO_RGB);
+        let hexColor = cubicInterpolation(r, y, b, 255, CUBE.RYB_TO_RGB);
         return this.setHex(hexColor);
     }
 
@@ -257,7 +257,7 @@ class Coloreye {
         target.l = lightness(this.hex());
     }
 
-    // Copies rgb values into target, use multiuplier to copy into three.js Color(), i.e. multiplier = (1 / 255)
+    // Copies rgb values into target, when copying to THREE.Color() use multiplier = (1 / 255)
     getRgb(target, multiplier = 1.0) {
         target.r = this.r * multiplier;
         target.g = this.g * multiplier;
@@ -265,7 +265,7 @@ class Coloreye {
     }
 
     getRyb(target) {
-	    let rybAsHex = cubicInterpolation(this.r, this.g, this.b, 255, CUBE.IRRISON_RGB_TO_RYB);
+	    let rybAsHex = cubicInterpolation(this.r, this.g, this.b, 255, CUBE.RGB_TO_RYB);
         target.r = clamp((rybAsHex & 0xff0000) >> 16, 0, 255);
         target.y = clamp((rybAsHex & 0x00ff00) >>  8, 0, 255);
         target.b = clamp((rybAsHex & 0x0000ff),       0, 255);
@@ -424,10 +424,10 @@ const _interpolate = new Coloreye();
  * @param {*} table Table to use for cubic interpolation
  * @returns Hexidecimal that has 3 new values embedded
  */
-function cubicInterpolation(v1, v2, v3, scale = 255, table = CUBE.IRISSON_RYB_TO_RGB) {
-    v1 /= scale;
-    v2 /= scale;
-    v3 /= scale;
+function cubicInterpolation(v1, v2, v3, scale = 255, table = CUBE.RYB_TO_RGB) {
+    v1 = clamp(v1 / scale, 0, 1);
+    v2 = clamp(v2 / scale, 0, 1);
+    v3 = clamp(v3 / scale, 0, 1);
 
     // Cube Points
 	// f0=000, f1=001, f2=010, f3=011, f4=100, f5=101, f6=110, f7=111
@@ -459,42 +459,28 @@ function cubicInterpolation(v1, v2, v3, scale = 255, table = CUBE.IRISSON_RYB_TO
 ////    Color Data
 /////////////////////////////////////////////////////////////////////////////////////
 let CUBE = {
-	//http://vis.computer.org/vis2004/DVD/infovis/papers/gossett.pdf
-	GOSSET_RYB_TO_RGB: [
-		[ 1.000, 1.000, 1.000 ],
-		[ 1.000, 0.000, 0.000 ],
-		[ 1.000, 1.000, 0.000 ],
-		[ 0.163, 0.373, 0.600 ],
-		[ 0.500, 0.000, 0.500 ],
-		[ 0.000, 0.660, 0.200 ],
-		[ 1.000, 0.500, 0.000 ],
-		[ 0.200, 0.094, 0.000 ]
+	RYB_TO_RGB: [
+		[ 1.000, 1.000, 1.000 ],    // white
+		[ 0.163, 0.373, 0.600 ],    // blue
+        [ 1.000, 1.000, 0.000 ],    // yellow
+		[ 1.000, 0.000, 0.000 ],    // red
+        [ 0.000, 0.660, 0.200 ],    // green
+        [ 0.500, 0.000, 0.500 ],    // purple
+        [ 1.000, 0.500, 0.000 ],    // orange
+		[ 0.000, 0.000, 0.000 ]     // black
     ],
 
-	// evaluated by Jean Oliver Irisson https://math.stackexchange.com/users/561007/jean-olivier-irisson
-	IRISSON_RYB_TO_RGB: [
-		[ 1.000, 1.000, 1.000 ],
-		[ 1.000, 0.000, 0.000 ],
-		[ 1.000, 1.000, 0.000 ],
-		[ 0.163, 0.373, 0.600 ],
-		[ 0.500, 0.000, 0.500 ],
-		[ 0.000, 0.660, 0.200 ],
-		[ 1.000, 0.500, 0.000 ],
-		[ 0.000, 0.000, 0.000 ]
-    ],
-
-	IRRISON_RGB_TO_RYB: [
-		[ 1.000, 1.000, 1.000 ],
-		[ 1.000, 0.000, 0.000 ],
-		[ 0.000, 1.000, 0.483 ],
-		[ 0.000, 1.000, 0.000 ],
-		[ 0.000, 0.000, 1.000 ],
-		[ 0.309, 0.000, 0.469 ],
-		[ 0.000, 0.053, 0.210 ],
-		[ 0.000, 0.000, 0.000 ]
+	RGB_TO_RYB: [
+		[ 1.000, 1.000, 1.000 ],    // black
+		[ 0.000, 0.000, 1.000 ],    // blue
+        [ 0.000, 1.000, 0.483 ],    // green
+        [ 1.000, 0.000, 0.000 ],    // red
+        [ 0.000, 0.053, 0.210 ],    // cyan
+        [ 0.309, 0.000, 0.469 ],    // magenta
+        [ 0.000, 1.000, 0.000 ],    // yellow
+		[ 0.000, 0.000, 0.000 ]     // white
     ]
 };
-
 
 // Stop values for RYB color wheel
 let RYB_SPECTRUM = [
@@ -570,7 +556,6 @@ const COLOR_KEYWORDS = {
 ////    Exports
 /////////////////////////////////////////////////////////////////////////////////////
 export { Coloreye, COLOR_KEYWORDS };
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////

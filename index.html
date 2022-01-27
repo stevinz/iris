@@ -22,17 +22,17 @@
                 <div class="sliderCombo">
                     <div class="dot unselectable" style="color: red; font-size: xx-large; margin: -8px;">●</div>
                     <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRgbR"></div>
-                    <span class="unselectable" id="rgbValueR" value="0">0</span>
+                    <span class="unselectable" id="rgbValueR">0</span>
                 </div>
                 <div class="sliderCombo">
                     <div class="dot unselectable" style="color: green; font-size: xx-large; margin: -8px;">●</div>
                     <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRgbG"></div>
-                    <span class="unselectable" id="rgbValueR" value="0">0</span>
+                    <span class="unselectable" id="rgbValueG">0</span>
                 </div>
                 <div class="sliderCombo">
                     <div class="dot unselectable" style="color: blue; font-size: xx-large; margin: -8px;">●</div>
                     <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRgbB"></div>
-                    <span class="unselectable" id="rgbValueR" value="0">0</span>
+                    <span class="unselectable" id="rgbValueB">0</span>
                 </div>
                 
                 <div id="colorBox"></div>
@@ -40,17 +40,17 @@
                 <div class="sliderCombo">
                     <div class="dot unselectable" style="color: red; font-size: xx-large; margin: -8px;">●</div>
                     <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRybR"></div>
-                    <span class="unselectable" id="rgbValueR" value="0">0</span>
+                    <span class="unselectable" id="rybValueR">0</span>
                 </div>
                 <div class="sliderCombo">
                     <div class="dot unselectable" style="color: yellow; font-size: xx-large; margin: -8px;">●</div>
                     <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRybY"></div>
-                    <span class="unselectable" id="rgbValueR" value="0">0</span>
+                    <span class="unselectable" id="rybValueY">0</span>
                 </div>
                 <div class="sliderCombo">
                     <div class="dot unselectable" style="color: blue; font-size: xx-large; margin: -8px;">●</div>
                     <div class="sliderBox"><input type="range" min="0" max="255" value="0" class="slider" id="sliderRybB"></div>
-                    <span class="unselectable" id="rgbValueR" value="0">0</span>
+                    <span class="unselectable" id="rybValueB">0</span>
                 </div>
             </div>
 
@@ -65,17 +65,7 @@
 
             import { Coloreye } from '../src/coloreye.js';
             import { drawColorBox, drawColorWheel } from "./example/colorwheel.js";
-            import { onSliderChange } from "./example/input.js"
-            
-            let ryb = { r: 0, y: 0, b: 0 };
-            let eye = new Coloreye();
-            let colorBox = document.getElementById("colorBox");
-            let rgbR = document.getElementById("sliderRgbR");
-            let rgbG = document.getElementById("sliderRgbG");
-            let rgbB = document.getElementById("sliderRgbB");
-            let rybR = document.getElementById("sliderRybR");
-            let rybY = document.getElementById("sliderRybY");
-            let rybB = document.getElementById("sliderRybB");
+            import { connectSliders } from "./example/sliders.js"
             
             drawColorWheel("colorWheelRgb", 'rgb');
             drawColorWheel("colorWheelRyb", 'ryb');
@@ -83,35 +73,7 @@
             drawColorBox("colorWheelRgb", 'rgb', 120, 0.5);
             drawColorBox("colorWheelRyb", 'ryb', 120, 0.5);
             
-            updateRgb();
-            updateRyb();
-
-            ///////////
-            
-            function updateSlider(event) {    
-                const colorStyle = getComputedStyle(colorBox);
-                eye.set(colorStyle.backgroundColor);
-                event.target.updateFunction(event);
-                colorBox.style.backgroundColor = eye.cssString();
-            }
-
-            function updateRgb() { rgbR.value = eye.r; rgbG.value = eye.g; rgbB.value = eye.b; }
-            function updateRyb() { eye.getRyb(ryb); rybR.value = ryb.r; rybY.value = ryb.y; rybB.value = ryb.b; }
-
-            let _ryb = { r: 0, y: 0, b: 0 };
-            function updateRgbR(event) { eye.set(event.target.value, eye.g, eye.b, 'rgb'); updateRyb(); }
-            function updateRgbG(event) { eye.set(eye.r, event.target.value, eye.b, 'rgb'); updateRyb(); }
-            function updateRgbB(event) { eye.set(eye.r, eye.g, event.target.value, 'rgb'); updateRyb(); }
-            function updateRybR(event) { eye.getRyb(_ryb); eye.set(event.target.value, _ryb.y, _ryb.b, 'ryb'); updateRgb(); }
-            function updateRybY(event) { eye.getRyb(_ryb); eye.set(_ryb.r, event.target.value, _ryb.b, 'ryb'); updateRgb(); }
-            function updateRybB(event) { eye.getRyb(_ryb); eye.set(_ryb.r, _ryb.y, event.target.value, 'ryb'); updateRgb(); }
-
-            onSliderChange(rgbR, updateSlider, updateRgbR);
-            onSliderChange(rgbG, updateSlider, updateRgbG);
-            onSliderChange(rgbB, updateSlider, updateRgbB);
-            onSliderChange(rybR, updateSlider, updateRybR);
-            onSliderChange(rybY, updateSlider, updateRybY);
-            onSliderChange(rybB, updateSlider, updateRybB);
+            connectSliders();
 
         </script>
 

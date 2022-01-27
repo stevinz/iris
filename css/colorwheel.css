@@ -39,11 +39,12 @@ body {
 
 .centerBox {
 	background-color: var(--color-background-light);
-	border-radius: var(--border-radius);
+	border-radius: var(--display-radius);
 	margin: 20px auto 20px auto;
     padding: 5px;
-	width: 750px;
+	width: var(--display-width);
 	display: flex;
+	align-items: center;
 }
 
 .colorWheel {
@@ -54,6 +55,7 @@ body {
 	border-color: var(--color-background-light);
 	width: var(--wheel-size);
 	height: var(--wheel-size);
+	margin: auto;
 }
 .colorWheel:hover {
 	border: 2px solid;
@@ -70,19 +72,21 @@ body {
 	--color-background-dark: #222;
 	--color-background-light:#444;
 
-	--border-radius: 20px;
+	--display-width: 750px;
+	--display-radius: 20px;
 
-	--wheel-size: 220px;
+	--wheel-size: 180px;
 
-	--color-width: 30px;
+	--color-width: 100px;
 	--color-height: 100px;
+	--color-radius: 50px;
 
-	--slider-box-width: 40px;
+	--slider-box-width: 35px;
 	--slider-box-height: 170px;
 
 	--slider-height: 150px;
-	--slider-width: 7px;
-	--slider-thumb: 20px;
+	--slider-width: 5px;
+	--slider-thumb: 18px;
 }
 
 #sliders {
@@ -93,7 +97,7 @@ body {
 }
 	#colorBox {
 		background-color: black;
-		border-radius: var(--border-radius);
+		border-radius: var(--color-radius);
 		width: var(--color-width);
 		height: var(--color-height);
 	}
