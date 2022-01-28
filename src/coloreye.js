@@ -25,16 +25,18 @@
 ////        Coloreye('#ff0000');                    // Hex String (also 3 digits: #f00)
 ////        Coloreye('rgb(255, 0, 0)');             // CSS Color String
 ////        Coloreye('darkred')                     // X11 Color Name
-////        Coloreye(fromColoreye);                 // Copy from Coloreye()
-////        Coloreye(fromTHREEColor);               // Copy from Three.js Color()
+////        Coloreye(fromColoreye);                 // Copy from Coloreye Object
+////        Coloreye(fromTHREEColor);               // Copy from THREE.Color Object
 ////
-////    member variables:
+////    properties:
 ////        Coloreye.r      0 to 255  
 ////        Coloreye.g      0 to 255
 ////        Coloreye.b      0 to 255
 ////
 /////////////////////////////////////////////////////////////////////////////////////
+
 class Coloreye {
+
     constructor(r = 0, g, b, type = 'rgb') {
         this.r = 0;
         this.g = 0;
@@ -42,12 +44,20 @@ class Coloreye {
         this.set(r, g, b, type);
     }
 
+
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Setters
+    ////    Assignment
     ////////////////////
+    clone() { return new this.constructor(this.r, this.g, this.b); }
+   
+    copy(colorObject) { return this.set(colorObject); }
+   
     set(r = 0, g, b, type = 'rgb') {
+        // No arguments passed
+        if (arguments.length === 0) {
+            return this.set(0);
         // No valid arguments passed
-        if (r === undefined || r === null || Number.isNaN(r)) {
+        } else if (r === undefined || r === null || Number.isNaN(r)) {
             if (g || b) console.warn(`Coloreye: Passed some valid arguments, however 'r' was ${r}`);
             // nothing to do
         // One argument, hexColor, rgbColor, hslColor, or string
@@ -205,14 +215,6 @@ class Coloreye {
         return this.setRgb(r, g, b);
     };
 
-    copy(color) {
-        return this.set(color);
-	}
-
-    clone() {
-        return new this.constructor(this.r, this.g, this.b);
-    }
-
 
     /////////////////////////////////////////////////////////////////////////////////////
     ////    Output
@@ -229,6 +231,7 @@ class Coloreye {
 
     // Example output: '#ff0000'
     hexString(hexColor){
+        if (hexColor === undefined || typeof value !== 'number') hexColor = this.hex();
         return '#' + ('000000' + ((hexColor) >>> 0).toString(16)).slice(-6);
     }
 
@@ -286,21 +289,6 @@ class Coloreye {
  
 
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Comparison
-    ////////////////////
-    // Returns true if the RGB values of 'color' are the same as those of this object.
-    equals(color) {
-        return (this.r === color.r && this.g === color.g && this.b === color.b);
-    }
-
-    // Return true if lightness is < 60% for blue / purple / red, or else < 32% for all other colors
-    isDark() {
-        const h = this.hue();
-        const l = this.lightness();
-        return ((l < 0.60 && (h >= 210 || h <= 27)) || (l <= 0.32));
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////
     ////    Color Functions
     ////////////////////
     // Lightens color by amount
@@ -349,6 +337,24 @@ class Coloreye {
         let newHue = keepInRange(this.hue() + degrees);
         return this.setHsl(newHue, this.saturation(), this.lightness());
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    ////    Comparison
+    ////////////////////
+    // Returns true if the RGB values of 'color' are the same as those of this object.
+    equals(color) {
+        return (this.r === color.r && this.g === color.g && this.b === color.b);
+    }
+
+    // Return true if lightness is < 60% for blue / purple / red, or else < 32% for all other colors
+    isDark() {
+        const h = this.hue();
+        const l = this.lightness();
+        return ((l < 0.60 && (h >= 210 || h <= 27)) || (l <= 0.32));
+    }
+
+
 }
 
 

@@ -66,8 +66,6 @@ function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle)
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let eye = new Coloreye();
 
-
-
     for (let x = 0; x < canvas.width; x++) {
         for (let y = 0; y < canvas.height; y++) {
             let ax = x - (canvas.width / 2);
