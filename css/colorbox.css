@@ -7,10 +7,38 @@
 
 */
 
+
+/*/////////////////////////////////////////////////////////////////////////////////////
+//		Variables
+/////////////////////////////////////////////////////////////////////////////////////*/
+:root {
+	--color-icon: #08f;
+	--color-shadow: #111;
+	--color-background-dark: #222;
+	--color-background-light:#444;
+
+	--display-width: 900px;
+	--display-radius: 20px;
+
+	--wheel-size: 250px;
+	--mouse-circle-size: 10px;
+
+	--color-width: 120px;
+	--color-height: 120px;
+	--color-radius: 120px;
+
+	--slider-box-width: 35px;
+	--slider-box-height: 170px;
+
+	--slider-height: 150px;
+	--slider-width: 5px;
+	--slider-thumb: 18px;
+}
+
+
 /*/////////////////////////////////////////////////////////////////////////////////////
 //		Main
 /////////////////////////////////////////////////////////////////////////////////////*/
-
 
 * {
 	font-family: Helvetica, Arial, sans-serif;
@@ -72,33 +100,10 @@ body {
 	position: absolute;
 }
 
+
 /*/////////////////////////////////////////////////////////////////////////////////////
 //		Slider
 /////////////////////////////////////////////////////////////////////////////////////*/
-
-:root {
-	--color-icon: #08f;
-	--color-shadow: #111;
-	--color-background-dark: #222;
-	--color-background-light:#444;
-
-	--display-width: 750px;
-	--display-radius: 20px;
-
-	--wheel-size: 180px;
-	--mouse-circle-size: 10px;
-
-	--color-width: 100px;
-	--color-height: 100px;
-	--color-radius: 50px;
-
-	--slider-box-width: 35px;
-	--slider-box-height: 170px;
-
-	--slider-height: 150px;
-	--slider-width: 5px;
-	--slider-thumb: 18px;
-}
 
 #sliders {
 	background-color: transparent;

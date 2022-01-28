@@ -15,6 +15,7 @@
 ////        new Coloreye(r, g, b)                       default 3 value set, pass in values ranging from 0 to 255
 ////        new Coloreye(r, g, b, 'rgb')                optional rgb identifier, identical operation as Coloreye(r, g, b)
 ////        new Coloreye(r, g, b, 'three')              pass in values ranging from 0.0 to 1.0
+////        new Coloreye(r, g, b, 'gl')                 pass in values ranging from 0.0 to 1.0
 ////        new Coloreye([1.0, 0.0, 0.0], offset)       array of r, g, b values from 0.0 to 1.0, optional array offset
 ////        new Coloreye(h, s, l, type = 'hsl')         h from 0 to 360, s and l from 0.0 to 1.0
 ////        new Coloreye(r, y, b, type = 'ryb')         pass in values ranging from 0 to 255
@@ -68,6 +69,7 @@ class Coloreye {
                 case 'rgb':     return this.setRgb(r, g, b, 1.0);
                 case 'ryb':     return this.setRyb(r, g, b);
                 case 'three':   return this.setRgb(r, g, b, 255);
+                case 'gl':      return this.setRgb(r, g, b, 255);
                 default:        return this.setRgb(r, g, b, 1.0);
             }
         }
@@ -318,13 +320,13 @@ class Coloreye {
 
      // Adjusts the RGB values to fit in the RYB spectrum
     adjustToRyb() {
-        return this.setHsl(hue(rybMatchSpectrum(this.hue())), this.saturation(), this.lightness());
+        return this.setHsl(hue(matchSpectrum(this.hue(), SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 
     // Rotates the hue of a color in the RYB spectrum by degrees
     rybRotateHue(degrees = 90) {
         let newHue = keepInRange(this.rybHue() + degrees);
-        return this.setHsl(hue(rybMatchSpectrum(newHue)), this.saturation(), this.lightness());
+        return this.setHsl(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 
     // Rotates the hue of a color in the RGB spectrum by degrees
@@ -387,21 +389,21 @@ function hsl(hexColor, channel = 'h') {
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-////    Match to RYB spectrum
+////    Match to 'matchHue' into 'spectrum'
 ////////////////////
 const _mix1 = new Coloreye();
 const _mix2 = new Coloreye();
 
-function rybMatchSpectrum(matchHue) {
-    let colorDegrees = 360 / RYB_SPECTRUM.length;
+function matchSpectrum(matchHue, spectrum) {
+    let colorDegrees = 360 / spectrum.length;
     let degreeCount = colorDegrees;
     let stopCount = 0;
 
-    for (let i = 0; i < RYB_SPECTRUM.length; i++) {
+    for (let i = 0; i < spectrum.length; i++) {
         if (matchHue < degreeCount) {
             let percent = (degreeCount - matchHue) / colorDegrees;
-            _mix1.set(RYB_SPECTRUM[stopCount + 1]);
-            return _mix1.mix(_mix2.set(RYB_SPECTRUM[stopCount]), percent).hex();
+            _mix1.set(spectrum[stopCount + 1]);
+            return _mix1.mix(_mix2.set(spectrum[stopCount]), percent).hex();
         } else {
             degreeCount = degreeCount + colorDegrees;
             stopCount = stopCount + 1
@@ -451,7 +453,7 @@ function cubicInterpolation(v1, v2, v3, scale = 255, table = CUBE.RYB_TO_RGB) {
     let o2 = c0*f0[1] + c1*f1[1] + c2*f2[1] + c3*f3[1] + c4*f4[1] + c5*f5[1] + c6*f6[1] + v7*f7[1];
     let o3 = c0*f0[2] + c1*f1[2] + c2*f2[2] + c3*f3[2] + c4*f4[2] + c5*f5[2] + c6*f6[2] + v7*f7[2];
 
-    return _interpolate.set(o1, o2, o3, 'three').hex();
+    return _interpolate.set(o1, o2, o3, 'gl').hex();
 }
 
 
@@ -467,7 +469,7 @@ let CUBE = {
         [ 0.000, 0.660, 0.200 ],    // green
         [ 0.500, 0.000, 0.500 ],    // purple
         [ 1.000, 0.500, 0.000 ],    // orange
-		[ 0.000, 0.000, 0.000 ]     // black
+		[ 0.000, 0.000, 0.000 ],    // black
     ],
 
 	RGB_TO_RYB: [
@@ -478,17 +480,19 @@ let CUBE = {
         [ 0.000, 0.053, 0.210 ],    // cyan
         [ 0.309, 0.000, 0.469 ],    // magenta
         [ 0.000, 1.000, 0.000 ],    // yellow
-		[ 0.000, 0.000, 0.000 ]     // white
-    ]
+		[ 0.000, 0.000, 0.000 ],    // white
+    ],
 };
 
 // Stop values for RYB color wheel
-let RYB_SPECTRUM = [
-    0xFF0000, 0xFF4900, 0xFF7400, 0xFF9200, 0xFFAA00, 0xFFBF00, 0xFFD300, 0xFFE800, 
-    0xFFFF00, 0xCCF600, 0x9FEE00, 0x67E300, 0x00CC00, 0x00AF64, 0x009999, 0x0B61A4,
-    0x1240AB, 0x1B1BB3, 0x3914AF, 0x530FAD, 0x7109AA, 0xA600A6, 0xCD0074, 0xE40045, 
-    0xFF0000 /* <-- addded first value to end */
-];
+let SPECTRUM = {
+    RYB: [
+        0xFF0000, 0xFF4900, 0xFF7400, 0xFF9200, 0xFFAA00, 0xFFBF00, 0xFFD300, 0xFFE800, 
+        0xFFFF00, 0xCCF600, 0x9FEE00, 0x67E300, 0x00CC00, 0x00AF64, 0x009999, 0x0B61A4,
+        0x1240AB, 0x1B1BB3, 0x3914AF, 0x530FAD, 0x7109AA, 0xA600A6, 0xCD0074, 0xE40045, 
+        0xFF0000 /* <-- addded first value to end */
+    ]
+};
 
 // Map of the RYB wheel to RGB wheel offset
 const RYB_OFFSET = [

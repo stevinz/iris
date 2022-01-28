@@ -4,10 +4,10 @@
         <title>Eyedrop</title>
         <meta charset='utf-8'>
         <meta name='viewport' content='width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0'>
-        <link rel='stylesheet' href='./css/colorwheel.css' type='text/css'>
+        <link rel='stylesheet' href='./css/colorbox.css' type='text/css'>
     </head>
     <body>
-        <div class='filler' style='height: 200px;'></div>
+        <div class='filler' style='height: 210px;'></div>
 
         <!-------------------------------------------------------------------->
 
@@ -59,24 +59,25 @@
             </canvas>
         </div>
 
-        <div class='filler' style='height: 20000px;'></div>
+        <div class='filler' style='height: 21000px;'></div>
 
         <!-------------------------------------------------------------------->
         
         <script type='module'>
 
             import { Coloreye } from '../src/coloreye.js';
-            import { drawColorBox, drawColorWheel } from './example/colorwheel.js';
+            import { drawColorBox, drawHueWheel } from './example/colorbox.js';
             import { connectSliders } from './example/sliders.js'
             
             let rgbWheel = document.getElementById('colorWheelRgb');
             let rybWheel = document.getElementById('colorWheelRyb');
 
-            drawColorWheel(rgbWheel, 'rgb');
-            drawColorWheel(rybWheel, 'ryb');
-            drawColorBox(rgbWheel, 'rgb', 0);
-            drawColorBox(rybWheel, 'ryb', 0);
-            
+            drawColorBox(rgbWheel, 'rgb', 0, 0.725);
+            drawColorBox(rybWheel, 'ryb', 0, 0.725);
+
+            drawHueWheel(rgbWheel, 'rgb', 1, 0.5);
+            drawHueWheel(rybWheel, 'ryb', 1, 0.5);
+                        
             connectSliders();
 
 
