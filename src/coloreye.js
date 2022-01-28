@@ -8,34 +8,34 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////
 ////
-////                                    Coloreye
+////                                    ColorEye
 ////
 ////    constructor() or set() arguments
-////        Coloreye(hexColor);                     // Hexadecimal (0xffffff, i.e. 16777215)
-////        Coloreye(r, g, b);                      // RGB Values (0 to 255)
-////        Coloreye(r, g, b, 'rgb');               // RGB Values (0 to 255)
-////        Coloreye(r, g, b, 'three');             // RGB Values (0.0 to 1.0)
-////        Coloreye(r, g, b, 'gl');                // RGB Values (0.0 to 1.0)
-////        Coloreye(h, s, l, 'hsl');               // HSL Values (h: 0 to 360, s / l: 0.0 to 1.0)
-////        Coloreye(r, y, b, 'ryb');               // RYB Values (0 to 255)
-////        Coloreye({ r: 255, g: 0, b: 0 });       // Object with RGB Properties
-////        Coloreye({ h: 360, s: 1.0, l: 0.5 });   // Object with HSL Properties
-////        Coloreye({ r: 255, y: 0, b: 0 });       // Object with RYB Properties
-////        Coloreye([1.0, 0.0, 0.0], offset);      // RGB Array (0.0 to 1.0), Optional Array Offset
-////        Coloreye('#ff0000');                    // Hex String (also 3 digits: #f00)
-////        Coloreye('rgb(255, 0, 0)');             // CSS Color String
-////        Coloreye('darkred')                     // X11 Color Name
-////        Coloreye(fromColoreye);                 // Copy from Coloreye Object
-////        Coloreye(fromTHREEColor);               // Copy from THREE.Color Object
+////        ColorEye(hexColor);                     // Hexadecimal (0xffffff, i.e. 16777215)
+////        ColorEye(r, g, b);                      // RGB Values (0 to 255)
+////        ColorEye(r, g, b, 'rgb');               // RGB Values (0 to 255)
+////        ColorEye(r, g, b, 'three');             // RGB Values (0.0 to 1.0)
+////        ColorEye(r, g, b, 'gl');                // RGB Values (0.0 to 1.0)
+////        ColorEye(h, s, l, 'hsl');               // HSL Values (h: 0 to 360, s / l: 0.0 to 1.0)
+////        ColorEye(r, y, b, 'ryb');               // RYB Values (0 to 255)
+////        ColorEye({ r: 255, g: 0, b: 0 });       // Object with RGB Properties
+////        ColorEye({ h: 360, s: 1.0, l: 0.5 });   // Object with HSL Properties
+////        ColorEye({ r: 255, y: 0, b: 0 });       // Object with RYB Properties
+////        ColorEye([1.0, 0.0, 0.0], offset);      // RGB Array (0.0 to 1.0), Optional Array Offset
+////        ColorEye('#ff0000');                    // Hex String (also 3 digits: #f00)
+////        ColorEye('rgb(255, 0, 0)');             // CSS Color String
+////        ColorEye('darkred')                     // X11 Color Name
+////        ColorEye(fromColorEye);                 // Copy from ColorEye Object
+////        ColorEye(fromTHREEColor);               // Copy from THREE.Color Object
 ////
 ////    properties:
-////        Coloreye.r      0 to 255  
-////        Coloreye.g      0 to 255
-////        Coloreye.b      0 to 255
+////        ColorEye.r      0 to 255  
+////        ColorEye.g      0 to 255
+////        ColorEye.b      0 to 255
 ////
 /////////////////////////////////////////////////////////////////////////////////////
 
-class Coloreye {
+class ColorEye {
 
     constructor(r = 0, g, b, type = 'rgb') {
         this.r = 0;
@@ -48,9 +48,13 @@ class Coloreye {
     /////////////////////////////////////////////////////////////////////////////////////
     ////    Assignment
     ////////////////////
-    clone() { return new this.constructor(this.r, this.g, this.b); }
+    clone() { 
+        return new this.constructor(this.r, this.g, this.b);
+    }
    
-    copy(colorObject) { return this.set(colorObject); }
+    copy(colorObject) {
+        return this.set(colorObject);
+    }
    
     set(r = 0, g, b, type = 'rgb') {
         // No arguments passed
@@ -58,7 +62,7 @@ class Coloreye {
             return this.set(0);
         // No valid arguments passed
         } else if (r === undefined || r === null || Number.isNaN(r)) {
-            if (g || b) console.warn(`Coloreye: Passed some valid arguments, however 'r' was ${r}`);
+            if (g || b) console.warn(`ColorEye: Passed some valid arguments, however 'r' was ${r}`);
             // nothing to do
         // One argument, hexColor, rgbColor, hslColor, or string
         } else if (g === undefined && b === undefined) {
@@ -92,10 +96,20 @@ class Coloreye {
         return this;
 	}
 
+    setColorName(style) {
+	    const hex = COLOR_KEYWORDS[ style.toLowerCase() ];
+		if (hex !== undefined) {
+			this.setHex(hex);
+		} else {
+			console.warn(`ColorEye: Unknown color ${style}`);
+		}
+		return this;
+	}
+
     setHex(hexColor) {
         hexColor = Math.floor(hexColor);
         if (hexColor > 0xffffff || hexColor < 0) {
-            console.warn(`Coloreye: Given decimal outside of range, value was ${hexColor}`);
+            console.warn(`ColorEye: Given decimal outside of range, value was ${hexColor}`);
             hexColor = clamp(hexColor(0, 0xffffff));
         } 
         this.r = clamp((hexColor & 0xff0000) >> 16, 0, 255);
@@ -105,9 +119,9 @@ class Coloreye {
     }
 
     setHsl(h, s, l) {
-        h = keepInRange(h, 0, 360);
-        s = clamp(s, 0, 1);
-        l = clamp(l, 0, 1);
+        h = (h) ? keepInRange(h, 0, 360) : 0;
+        s = (s) ? clamp(s, 0, 1) : 0;
+        l = (l) ? clamp(l, 0, 1) : 0;
         let c = (1 - Math.abs(2 * l - 1)) * s;
         let x = c * (1 - Math.abs((h / 60) % 2 - 1));
         let m = l - (c / 2);
@@ -125,7 +139,17 @@ class Coloreye {
         return this;
     }
 
+    setRandom() {
+        let r = Math.floor(Math.random() * 256);
+        let g = Math.floor(Math.random() * 256);
+        let b = Math.floor(Math.random() * 256);
+        return this.setRgb(r, g, b);
+    };
+
     setRgb(r, g, b, multiplier = 1.0) {
+        r = r ?? 0;
+        g = g ?? 0;
+        b = b ?? 0;
         this.r = clamp(Math.floor(r * multiplier), 0, 255);
         this.g = clamp(Math.floor(g * multiplier), 0, 255);
         this.b = clamp(Math.floor(b * multiplier), 0, 255);
@@ -133,6 +157,9 @@ class Coloreye {
     }
 
     setRyb(r, y, b) {
+        r = r ?? 0;
+        y = y ?? 0;
+        b = b ?? 0;
         let hexColor = cubicInterpolation(r, y, b, 255, CUBE.RYB_TO_RGB);
         return this.setHex(hexColor);
     }
@@ -197,23 +224,6 @@ class Coloreye {
 		}
 		return this;
 	}
-
-	setColorName(style) {
-	    const hex = COLOR_KEYWORDS[ style.toLowerCase() ];
-		if (hex !== undefined) {
-			this.setHex(hex);
-		} else {
-			console.warn(`Coloreye: Unknown color ${style}`);
-		}
-		return this;
-	}
-
-    setRandom() {
-        let r = Math.floor(Math.random() * 256);
-        let g = Math.floor(Math.random() * 256);
-        let b = Math.floor(Math.random() * 256);
-        return this.setRgb(r, g, b);
-    };
 
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -382,39 +392,51 @@ function keepInRange(value, min = 0, max = 360) {
 }
 
 // Returns: hsl(0 to 360, 0 to 1, 0 to 1)
+let _hslHex;
+let _hslH;
+let _hslS;
+let _hslL;
 function hsl(hexColor, channel = 'h') {
-    const r = red(hexColor) / 255, g = green(hexColor) / 255, b = blue(hexColor) / 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    const delta = max - min;
-    let h, s, l = (max + min) / 2;
+    if (hexColor !== _hslHex) {
+        if (hexColor === undefined || hexColor === null) return 0;
 
-    if (delta === 0) {
-        h = s = 0;
-    } else {
-        s = (l <= 0.5) ? (delta / (max + min)) : (delta / (2 - max - min));
-        switch (max) {
-            case r: h = (g - b) / delta + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / delta + 2; break;
-            case b: h = (r - g) / delta + 4; break;
+        const r = red(hexColor) / 255, g = green(hexColor) / 255, b = blue(hexColor) / 255;
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        const delta = max - min;
+        _hslL = (max + min) / 2;
+
+        if (delta === 0) {
+            _hslH = _hslS = 0;
+        } else {
+            _hslS = (_hslL <= 0.5) ? (delta / (max + min)) : (delta / (2 - max - min));
+            switch (max) {
+                case r: _hslH = (g - b) / delta + (g < b ? 6 : 0); break;
+                case g: _hslH = (b - r) / delta + 2; break;
+                case b: _hslH = (r - g) / delta + 4; break;
+            }
+            _hslH = Math.round(_hslH * 60);
+            if (_hslH < 0) _hslH += 360;
         }
-        h = Math.round(h * 60);
-        if (h < 0) h += 360;
+
+        _hslHex = hexColor;
     }
     
     switch (channel) {
-        case 'h': return h;
-        case 's': return s;
-        case 'l': return l;
-        default: console.warn(`Coloreye: Unknown channel (${channel}) requested in hsl()`); return 0;
+        case 'h': return _hslH;
+        case 's': return _hslS;
+        case 'l': return _hslL;
+        default: console.warn(`ColorEye: Unknown channel (${channel}) requested in hsl()`);
     }
+
+    return 0;
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Match to 'matchHue' into 'spectrum'
 ////////////////////
-const _mix1 = new Coloreye();
-const _mix2 = new Coloreye();
+const _mix1 = new ColoColorEyeeye();
+const _mix2 = new ColorEye();
 
 function matchSpectrum(matchHue, spectrum) {
     let colorDegrees = 360 / spectrum.length;
@@ -437,7 +459,7 @@ function matchSpectrum(matchHue, spectrum) {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Cubic Interpolation
 ////////////////////
-const _interpolate = new Coloreye();
+const _interpolate = new ColorEye();
 
 /**
  * cubicInterpolation
@@ -491,7 +513,7 @@ let CUBE = {
         [ 0.000, 0.660, 0.200 ],    // green
         [ 0.500, 0.000, 0.500 ],    // purple
         [ 1.000, 0.500, 0.000 ],    // orange
-		[ 0.000, 0.000, 0.000 ],    // black
+		[ 0.000, 0.000, 0.000 ]     // black
     ],
 
 	RGB_TO_RYB: [
@@ -502,8 +524,8 @@ let CUBE = {
         [ 0.000, 0.053, 0.210 ],    // cyan
         [ 0.309, 0.000, 0.469 ],    // magenta
         [ 0.000, 1.000, 0.000 ],    // yellow
-		[ 0.000, 0.000, 0.000 ],    // white
-    ],
+		[ 0.000, 0.000, 0.000 ]     // white
+    ]
 };
 
 // Stop values for RYB color wheel
@@ -581,7 +603,7 @@ const COLOR_KEYWORDS = {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Exports
 /////////////////////////////////////////////////////////////////////////////////////
-export { Coloreye, COLOR_KEYWORDS };
+export { ColorEye, COLOR_KEYWORDS };
 
 
 /////////////////////////////////////////////////////////////////////////////////////

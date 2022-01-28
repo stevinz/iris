@@ -29,7 +29,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Imports
 /////////////////////////////////////////////////////////////////////////////////////
-import { Coloreye } from '../src/coloreye.js';
+import { ColorEye } from '../src/coloreye.js';
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,30 @@ function rotatePoint(centerX, centerY, x, y, degrees, target) {
 function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle) {
     let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let eye = new Coloreye();
+    let eye = new ColorEye();
+
+
+    if (type === 'rgb') {
+        let time, test = 0;
+
+        time = performance.now();
+        for (let x = 0; x < 20000000; x++) {
+            let eye1 = new ColorEye(1, 0, 0).brighten();
+            test += eye1.r;
+        }
+        console.log(performance.now() - time);
+
+        time = performance.now();
+        let eye2 = new ColorEye();
+        for (let x = 0; x < 20000000; x++) {
+            eye2.set(1, 0, 0).brighten();
+            test += eye2.r;
+        }
+        console.log(performance.now() - time);
+        console.log(test);
+    }
+
+    
 
     for (let x = 0; x < canvas.width; x++) {
         for (let y = 0; y < canvas.height; y++) {
@@ -105,7 +128,7 @@ function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 *
         inMemoryCanvas.height = Math.round(canvas.height * size);
     let ctxMemory = inMemoryCanvas.getContext('2d');
     let img = ctxMemory.getImageData(0, 0, inMemoryCanvas.width, inMemoryCanvas.height);
-    let eye = new Coloreye();
+    let eye = new ColorEye();
     for (let y = 0; y < inMemoryCanvas.height; y++) {
         for (let x = 0; x < inMemoryCanvas.width; x++) {
             let h = hue;
