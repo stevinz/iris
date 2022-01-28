@@ -88,6 +88,8 @@ function drawColorWheel(canvas, type = 'rgb', saturation = 1, size = 0.75 /* 0.0
 }
 
 function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 */) {
+    let sizeSquared = size * size;
+    size = Math.sqrt(sizeSquared / 2) - (2 / canvas.width);
     let ctx = canvas.getContext('2d');
     let inMemoryCanvas = document.createElement('canvas');
         inMemoryCanvas.width = Math.round(canvas.width * size);
@@ -98,9 +100,18 @@ function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 *
     for (let y = 0; y < inMemoryCanvas.height; y++) {
         for (let x = 0; x < inMemoryCanvas.width; x++) {
             let h = hue;
+            
+            // Top saturation: 1.0, bottom: 0.0
             let s = 1.0 - (y / inMemoryCanvas.height);
+
+            // Saturation, Lightness
+            //      (1.0, 0.5) ---- (1.0, 0.0)
+            //          |               |
+            //          |               |
+            //      (0.0, 1.0) ---- (0.0, 0.0)
             let l = 1.0 - (x / inMemoryCanvas.width);
-                l = (0.5 * s) + (l * (1.0 - s)); 
+                l = ((0.5 * s) + (l * (1.0 - s))) * l;
+                
             eye.set(h, s, l, 'hsl');
             if (type === 'ryb') eye.adjustToRyb();
             setPixel(img, x, y, eye.r, eye.g, eye.b, 255);
@@ -109,7 +120,7 @@ function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 *
     ctxMemory.putImageData(img, 0, 0);
     ctx.save();
     ctx.translate(canvas.width/2, canvas.height/2);
-    ctx.rotate(hue * (Math.PI / 180));
+    ctx.rotate((hue + 45) * (Math.PI / 180));
     ctx.drawImage(inMemoryCanvas, -inMemoryCanvas.width/2, -inMemoryCanvas.height/2);
     ctx.restore();
 }

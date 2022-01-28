@@ -7,7 +7,7 @@
         <link rel='stylesheet' href='./css/colorwheel.css' type='text/css'>
     </head>
     <body>
-        <div style='height: 200px;'></div>
+        <div class='filler' style='height: 200px;'></div>
 
         <!-------------------------------------------------------------------->
 
@@ -15,7 +15,7 @@
 
         <div class='centerBox'>
             <canvas class='colorWheel' id='colorWheelRgb' width='200' height='200'></canvas>
-                <!-- to draw color wheel -->
+                <div class="mouseCircle"></div>
             </canvas>
 
             <div id='sliders'>
@@ -59,6 +59,8 @@
             </canvas>
         </div>
 
+        <div class='filler' style='height: 20000px;'></div>
+
         <!-------------------------------------------------------------------->
         
         <script type='module'>
@@ -72,17 +74,15 @@
 
             drawColorWheel(rgbWheel, 'rgb');
             drawColorWheel(rybWheel, 'ryb');
-
-            drawColorBox(rgbWheel, 'rgb', 120, 0.5);
-            drawColorBox(rybWheel, 'ryb', 120, 0.5);
+            drawColorBox(rgbWheel, 'rgb', 0);
+            drawColorBox(rybWheel, 'ryb', 0);
             
             connectSliders();
 
 
-            let mouseCircle = document.createElement('div');
-            mouseCircle.id = '';
+            let mouseCircle = document.getElementsByClassName('mouseCircle');
+            
             rgbWheel.addEventListener('mousemove', function(event) {
-
 
             });
             
