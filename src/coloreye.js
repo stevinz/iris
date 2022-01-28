@@ -11,18 +11,22 @@
 ////                                    Coloreye
 ////
 ////    constructor() or set() arguments
-////        new Coloreye(hexColor);                     // Hexadecimal (0xffffff, i.e. 16777215)
-////        new Coloreye(r, g, b);                      // RGB Values (0 to 255)
-////        new Coloreye(r, g, b, 'rgb');               // RGB Values (0 to 255)
-////        new Coloreye(r, g, b, 'three');             // RGB Values (0.0 to 1.0)
-////        new Coloreye(r, g, b, 'gl');                // RGB Values (0.0 to 1.0)
-////        new Coloreye(h, s, l, 'hsl');               // HSL Values (h: 0 to 360, s / l: 0.0 to 1.0)
-////        new Coloreye(r, y, b, 'ryb');               // RYB Values (0 to 255)
-////        new Coloreye([1.0, 0.0, 0.0], offset);      // RGB Array (0.0 to 1.0), Optional Array Offset
-////        new Coloreye('#ff0000') or ('#ff0');        // Hex String (3 or 6 digits)
-////        new Coloreye('red') or ('lightgray');       // X11 Color Name
-////        new Coloreye('rgb(255, 0, 0)');             // CSS Color String
-////        new Coloreye(fromColoreye);                 // Copy from Coloreye() Object
+////        Coloreye(hexColor);                     // Hexadecimal (0xffffff, i.e. 16777215)
+////        Coloreye(r, g, b);                      // RGB Values (0 to 255)
+////        Coloreye(r, g, b, 'rgb');               // RGB Values (0 to 255)
+////        Coloreye(r, g, b, 'three');             // RGB Values (0.0 to 1.0)
+////        Coloreye(r, g, b, 'gl');                // RGB Values (0.0 to 1.0)
+////        Coloreye(h, s, l, 'hsl');               // HSL Values (h: 0 to 360, s / l: 0.0 to 1.0)
+////        Coloreye(r, y, b, 'ryb');               // RYB Values (0 to 255)
+////        Coloreye({ r: 255, g: 0, b: 0 });       // Object with RGB Properties
+////        Coloreye({ h: 360, s: 1.0, l: 0.5 });   // Object with HSL Properties
+////        Coloreye({ r: 255, y: 0, b: 0 });       // Object with RYB Properties
+////        Coloreye([1.0, 0.0, 0.0], offset);      // RGB Array (0.0 to 1.0), Optional Array Offset
+////        Coloreye('#ff0000');                    // Hex String (also 3 digits: #f00)
+////        Coloreye('rgb(255, 0, 0)');             // CSS Color String
+////        Coloreye('darkred')                     // X11 Color Name
+////        Coloreye(fromColoreye);                 // Copy from Coloreye()
+////        Coloreye(fromTHREEColor);               // Copy from Three.js Color()
 ////
 ////    member variables:
 ////        Coloreye.r      0 to 255  
@@ -56,6 +60,8 @@ class Coloreye {
                 return this.setRgb(value.r, value.g, value.b, multiplier);
             } else if (value && isHsl(value)) {
                 return this.setHsl(value.h, value.s, value.l);
+            } else if (value && isRyb(value)) {
+                return this.setRyb(value.r, value.y, value.b);
             } else if (Array.isArray(value) && value.length > 2) {
                 let offset = (typeof g === number && g > 0) ? g : 0;
                 return this.setRgb(value[offset], value[offset + 1], value[offset + 2])
@@ -278,6 +284,22 @@ class Coloreye {
 		return this.hex();
 	}
  
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    ////    Comparison
+    ////////////////////
+    // Returns true if the RGB values of 'color' are the same as those of this object.
+    equals(color) {
+        return (this.r === color.r && this.g === color.g && this.b === color.b);
+    }
+
+    // Return true if lightness is < 60% for blue / purple / red, or else < 32% for all other colors
+    isDark() {
+        const h = this.hue();
+        const l = this.lightness();
+        return ((l < 0.60 && (h >= 210 || h <= 27)) || (l <= 0.32));
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////
     ////    Color Functions
     ////////////////////
@@ -300,13 +322,6 @@ class Coloreye {
         return this;
     }
 
-    // Return true if lightness is < 60% for blue / purple / red, or else < 32% for all other colors
-    isDark() {
-        const h = this.hue();
-        const l = this.lightness();
-        return ((l < 0.60 && (h >= 210 || h <= 27)) || (l <= 0.32));
-    }
-
     // Mixes in mixColor by percent
     mix(mixColor, percent = 0.5) {
         percent = Math.abs(percent);
@@ -318,7 +333,7 @@ class Coloreye {
         return this.setRgb(r3, g3, b3);
     }
 
-     // Adjusts the RGB values to fit in the RYB spectrum
+     // Adjusts the RGB values to fit in the RYB spectrum as best as possible
     adjustToRyb() {
         return this.setHsl(hue(matchSpectrum(this.hue(), SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
@@ -342,6 +357,7 @@ class Coloreye {
 /////////////////////////////////////////////////////////////////////////////////////
 function isRgb(object) { return (object.r !== undefined && object.g !== undefined && object.b !== undefined); }
 function isHsl(object) { return (object.h !== undefined && object.s !== undefined && object.l !== undefined); }
+function isRyb(object) { return (object.r !== undefined && object.y !== undefined && object.b !== undefined); }
 
 function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
 
