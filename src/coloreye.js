@@ -11,18 +11,18 @@
 ////                                    Coloreye
 ////
 ////    constructor() or set() arguments
-////        new Coloreye(hexColor)                      hexadecimal value (0xffffff) or decimal (16777215)
-////        new Coloreye(r, g, b)                       default 3 value set, pass in values ranging from 0 to 255
-////        new Coloreye(r, g, b, 'rgb')                optional rgb identifier, identical operation as Coloreye(r, g, b)
-////        new Coloreye(r, g, b, 'three')              pass in values ranging from 0.0 to 1.0
-////        new Coloreye(r, g, b, 'gl')                 pass in values ranging from 0.0 to 1.0
-////        new Coloreye([1.0, 0.0, 0.0], offset)       array of r, g, b values from 0.0 to 1.0, optional array offset
-////        new Coloreye(h, s, l, type = 'hsl')         h from 0 to 360, s and l from 0.0 to 1.0
-////        new Coloreye(r, y, b, type = 'ryb')         pass in values ranging from 0 to 255
-////        new Coloreye('#ff0000') or ('#ff0')         hex string, 3 or 6 digits
-////        new Coloreye('red') or ('lightgray')        x11 color name
-////        new Coloreye('rgb(255, 0, 0)')              css color string
-////        new Coloreye(fromColoreye)                  copy from another Coloreye() object
+////        new Coloreye(hexColor);                     // Hexadecimal (0xffffff, i.e. 16777215)
+////        new Coloreye(r, g, b);                      // RGB Values (0 to 255)
+////        new Coloreye(r, g, b, 'rgb');               // RGB Values (0 to 255)
+////        new Coloreye(r, g, b, 'three');             // RGB Values (0.0 to 1.0)
+////        new Coloreye(r, g, b, 'gl');                // RGB Values (0.0 to 1.0)
+////        new Coloreye(h, s, l, 'hsl');               // HSL Values (h: 0 to 360, s / l: 0.0 to 1.0)
+////        new Coloreye(r, y, b, 'ryb');               // RYB Values (0 to 255)
+////        new Coloreye([1.0, 0.0, 0.0], offset);      // RGB Array (0.0 to 1.0), Optional Array Offset
+////        new Coloreye('#ff0000') or ('#ff0');        // Hex String (3 or 6 digits)
+////        new Coloreye('red') or ('lightgray');       // X11 Color Name
+////        new Coloreye('rgb(255, 0, 0)');             // CSS Color String
+////        new Coloreye(fromColoreye);                 // Copy from Coloreye() Object
 ////
 ////    member variables:
 ////        Coloreye.r      0 to 255  
