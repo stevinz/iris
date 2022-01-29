@@ -44,7 +44,7 @@ class ColorEye {
         this.r = 1;
         this.g = 1;
         this.b = 1;
-        this.set(r, g, b, type);
+        return this.set(r, g, b, type);
     }
 
 
@@ -63,26 +63,26 @@ class ColorEye {
         } else if (r === undefined || r === null || Number.isNaN(r)) {
             if (g || b) console.warn(`ColorEye: Passed some valid arguments, however 'r' was ${r}`);
             // nothing to do
-        // One argument, hexColor, rgbColor, hslColor, or string
+        // r is Object, Hexidecimal, or String
         } else if (g === undefined && b === undefined) {
             let value = r;
             if (typeof value === 'number' || value === 0) { return this.setHex(value);
-            } else if (value && isRgb(value)) { return this.setRgbF(value.r, value.g, value.b);
-            } else if (value && isHsl(value)) { return this.setHsl(value.h * 360, value.s, value.l);
-            } else if (value && isRyb(value)) { return this.setRyb(value.r * 255, value.y * 255, value.b * 255);
+            } else if (value && isRGB(value)) { return this.setRGBF(value.r, value.g, value.b);
+            } else if (value && isHSL(value)) { return this.setHSL(value.h * 360, value.s, value.l);
+            } else if (value && isRYB(value)) { return this.setRYB(value.r * 255, value.y * 255, value.b * 255);
             } else if (Array.isArray(value) && value.length > 2) {
                 let offset = (typeof g === number && g > 0) ? g : 0;
-                return this.setRgbF(value[offset], value[offset + 1], value[offset + 2])
+                return this.setRGBF(value[offset], value[offset + 1], value[offset + 2])
             } else if (typeof value === 'string') {
                 return this.setStyle(value);
             }
         // Three arguments were passed
         } else {
             switch (type) {
-                case 'rgb':     return this.setRgb(r, g, b);
-                case 'hsl':     return this.setHsl(r, g, b);
-                case 'ryb':     return this.setRyb(r, g, b);
-                default:        return this.setRgbF(r, g, b);
+                case 'rgb': return this.setRGB(r, g, b);
+                case 'hsl': return this.setHSL(r, g, b);
+                case 'ryb': return this.setRYB(r, g, b);
+                default:    return this.setRGBF(r, g, b);
             }
         }
         return this;
@@ -104,10 +104,10 @@ class ColorEye {
         let r = (hexColor & 0xff0000) >> 16;
         let g = (hexColor & 0x00ff00) >>  8;
         let b = (hexColor & 0x0000ff);
-        return this.setRgb(r, g, b);
+        return this.setRGB(r, g, b);
     }
 
-    setHsl(h, s, l) {
+    setHSL(h, s, l) {
         h = keepInRange(h, 0, 360);
         s = clamp(s, 0, 1);
         l = clamp(l, 0, 1);
@@ -121,21 +121,21 @@ class ColorEye {
         else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
         else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
         else if (300 <= h)            { r = c; g = 0; b = x; }
-        this.setRgbF(r + m, g + m, b + m);
+        this.setRGBF(r + m, g + m, b + m);
         return this;
     }
 
     setRandom() {
-        return this.setRgbF(Math.random(), Math.random(), Math.random());
+        return this.setRGBF(Math.random(), Math.random(), Math.random());
     };
 
     // 0 to 255
-    setRgb(r, g, b) {
-        return this.setRgbF(r / 255, g / 255, b / 255);
+    setRGB(r, g, b) {
+        return this.setRGBF(r / 255, g / 255, b / 255);
     }
 
     // 0.0 to 1.0
-    setRgbF(r, g, b) {
+    setRGBF(r, g, b) {
         this.r = clamp(r, 0, 1);
         this.g = clamp(g, 0, 1);
         this.b = clamp(b, 0, 1);
@@ -143,19 +143,19 @@ class ColorEye {
     }
 
     // 0 to 255
-    setRyb(r, y, b) {
+    setRYB(r, y, b) {
         let hexColor = cubicInterpolation(clamp(r, 0, 255), clamp(y, 0, 255), clamp(b, 0, 255), 255, CUBE.RYB_TO_RGB);
         return this.setHex(hexColor);
     }
 
     // 0 to 255
     setScalar(scalar) {
-        return this.setRgb(scalar, scalar, scalar);
+        return this.setRGB(scalar, scalar, scalar);
     }
 
     // 0.0 to 1.0
     setScalarF(scalar) {
-        return this.setRgbF(scalar, scalar, scalar);
+        return this.setRGBF(scalar, scalar, scalar);
     }
 
     setStyle(style) {
@@ -173,14 +173,14 @@ class ColorEye {
 						let r = Math.min(255, parseInt(color[1], 10));
 						let g = Math.min(255, parseInt(color[2], 10));
 						let b = Math.min(255, parseInt(color[3], 10));
-						return this.setRgb(r, g, b);
+						return this.setRGB(r, g, b);
 					}
 					if ( color = /^\s*(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
 						// rgb(100%,0%,0%) rgba(100%,0%,0%,0.5)
 						let r = (Math.min(100, parseInt(color[1], 10)) / 100);
 						let g = (Math.min(100, parseInt(color[2], 10)) / 100);
 						let b = (Math.min(100, parseInt(color[3], 10)) / 100);
-						return this.setRgbF(r, g, b);
+						return this.setRGBF(r, g, b);
 					}
 					break;
 				case 'hsl':
@@ -190,7 +190,7 @@ class ColorEye {
 						const h = parseFloat(color[1]);
 						const s = parseInt(color[2], 10) / 100;
 						const l = parseInt(color[3], 10) / 100;
-						return this.setHsl(h, s, l);
+						return this.setHSL(h, s, l);
 					}
 					break;
 			}
@@ -203,13 +203,13 @@ class ColorEye {
 				let r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
 				let g = parseInt(hex.charAt(1) + hex.charAt(1), 16);
 				let b = parseInt(hex.charAt(2) + hex.charAt(2), 16);
-				return this.setRgb(r, g, b);
+				return this.setRGB(r, g, b);
             // #FF0000
 			} else if (size === 6) {
 				let r = parseInt(hex.charAt(0) + hex.charAt(1), 16);
 				let g = parseInt(hex.charAt(2) + hex.charAt(3), 16);
 				let b = parseInt(hex.charAt(4) + hex.charAt(5), 16);
-				return this.setRgb(r, g, b);
+				return this.setRGB(r, g, b);
 			}
 		}
         // X11 Color Name
@@ -261,8 +261,8 @@ class ColorEye {
    
     // Copies HSL values into optional target, or returns new Object, values range from 0.0 to 1.0
     // Values are in range 0.0 to 1.0
-    getHsl(target) {
-        if (target && isHsl(target)) {
+    getHSL(target) {
+        if (target && isHSL(target)) {
             target.h = hueF(this.hex());
             target.s = saturation(this.hex());
             target.l = lightness(this.hex());
@@ -272,8 +272,8 @@ class ColorEye {
     }
 
     // Copies RGB values into optional target, or returns new Object, values range from 0.0 to 1.0
-    getRgb(target) {
-        if (target && isHsl(target)) {
+    getRGB(target) {
+        if (target && isHSL(target)) {
             target.r = this.r;
             target.g = this.g;
             target.b = this.b;
@@ -283,9 +283,9 @@ class ColorEye {
     }
 
     // Copies RYB values into optional target, or returns new Object, values range from 0.0 to 1.0
-    getRyb(target) {
+    getRYB(target) {
 	    let rybAsHex = cubicInterpolation(this.r, this.g, this.b, 1.0, CUBE.RGB_TO_RYB);
-        if (target && isRyb(target)) {
+        if (target && isRYB(target)) {
             target.r = redF(rybAsHex);
             target.y = greenF(rybAsHex);
             target.b = blueF(rybAsHex);
@@ -309,13 +309,16 @@ class ColorEye {
     red() { return clamp(Math.floor(this.r * 255), 0, 255); }
     green() { return clamp(Math.floor(this.g * 255), 0, 255); }
     blue() { return clamp(Math.floor(this.b * 255), 0, 255); }
+
     redF() { return this.r; }
     greenF() { return this.g; }
     blueF() { return this.b; }
+    
     hue() { return hue(this.hex()); }
-    hueF() { return hue(this.hex()) / 6.0; }
     saturation() { return saturation(this.hex()); }
     lightness() { return lightness(this.hex()); }
+    
+    hueF() { return hue(this.hex()) / 6.0; }
 
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -324,12 +327,12 @@ class ColorEye {
     // Adds RGB values from color to this color
     add(color) {
         if (! (color instanceof ColorEye)) console.warn(`ColorEye: add() was not called with a ColorEye object`);
-        return this.setRgb(this.r + color.r, this.g + color.g, this.b + color.b);
+        return this.setRGB(this.r + color.r, this.g + color.g, this.b + color.b);
     }
 
     // Adds scalar value to this colors RGB values
     addScalar(scalar) {
-        return this.setRgb(this.r + scalar, this.g + scalar, this.b + scalar);
+        return this.setRGB(this.r + scalar, this.g + scalar, this.b + scalar);
     }
 
     // Lightens color by amount
@@ -338,7 +341,7 @@ class ColorEye {
         let s = saturation(this.hex());
         let l = lightness(this.hex());
         l = l + ((1.0 - l) * amount)
-        this.setHsl(h, s, l);
+        this.setHSL(h, s, l);
         return this;
     }
 
@@ -347,7 +350,7 @@ class ColorEye {
         let h = hue(this.hex());
         let s = saturation(this.hex());
         let l = lightness(this.hex()) * amount;
-        this.setHsl(h, s, l);
+        this.setHSL(h, s, l);
         return this;
     }
 
@@ -366,7 +369,7 @@ class ColorEye {
     }
 
     hslOffset(h, s, l) {
-        return this.setHsl(this.hue() + h, this.saturation() + s, this.lightness() + l);
+        return this.setHSL(this.hue() + h, this.saturation() + s, this.lightness() + l);
     }
 
     // Mixes in mixColor by percent to this color
@@ -376,22 +379,22 @@ class ColorEye {
         let r = (this.r * (1.0 - percent)) + (percent * mixColor.r);
         let g = (this.g * (1.0 - percent)) + (percent * mixColor.g);
         let b = (this.b * (1.0 - percent)) + (percent * mixColor.b);
-        return this.setRgbF(r, g, b);
+        return this.setRGBF(r, g, b);
     }
 
     multiply(color) {
         if (! (color instanceof ColorEye)) console.warn(`ColorEye: multiply() was not called with a ColorEye object`);
-        return this.setRgbF(this.r * color.r, this.g * color.g, this.b * color.b);
+        return this.setRGBF(this.r * color.r, this.g * color.g, this.b * color.b);
     }
 
     // Multiplies RGB values from this color with scalar value
     multiplyScalar(scalar) {
-        return this.setRgb(this.r * scalar, this.g * scalar, this.b * scalar);
+        return this.setRGB(this.r * scalar, this.g * scalar, this.b * scalar);
     }
 
     // Adjusts the RGB values to fit in the RYB spectrum as best as possible
     rybAdjust() {
-        return this.setHsl(hue(matchSpectrum(this.hue(), SPECTRUM.RYB)), this.saturation(), this.lightness());
+        return this.setHSL(hue(matchSpectrum(this.hue(), SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 
     rybComplementary() {
@@ -407,7 +410,7 @@ class ColorEye {
         }
         // Add in degrees to rotate hue
         let newHue = keepInRange(rybHue + degrees);
-        return this.setHsl(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
+        return this.setHSL(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 
     rgbComplementary() {
@@ -417,13 +420,13 @@ class ColorEye {
     // Rotates the hue of a color in the RGB spectrum by degrees
     rgbRotateHue(degrees = 90) {
         let newHue = keepInRange(this.hue() + degrees);
-        return this.setHsl(newHue, this.saturation(), this.lightness());
+        return this.setHSL(newHue, this.saturation(), this.lightness());
     }
 
     // Subtractd RGB values from color to this color
     subtract(color) {
         if (! (color instanceof ColorEye)) console.warn(`ColorEye: sub() was not called with a ColorEye object`);
-        return this.setRgb(this.r - color.r, this.g - color.g, this.b - color.b);
+        return this.setRGB(this.r - color.r, this.g - color.g, this.b - color.b);
     }
 
 
@@ -453,9 +456,9 @@ class ColorEye {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Utility Functions
 /////////////////////////////////////////////////////////////////////////////////////
-function isRgb(object) { return (object.r !== undefined && object.g !== undefined && object.b !== undefined); }
-function isHsl(object) { return (object.h !== undefined && object.s !== undefined && object.l !== undefined); }
-function isRyb(object) { return (object.r !== undefined && object.y !== undefined && object.b !== undefined); }
+function isRGB(object) { return (object.r !== undefined && object.g !== undefined && object.b !== undefined); }
+function isHSL(object) { return (object.h !== undefined && object.s !== undefined && object.l !== undefined); }
+function isRYB(object) { return (object.r !== undefined && object.y !== undefined && object.b !== undefined); }
 
 function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
 

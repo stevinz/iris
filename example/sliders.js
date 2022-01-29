@@ -84,7 +84,7 @@ function updateRgbG(event) { eye.set(rgbR.value, event.target.value, rgbB.value,
 function updateRgbB(event) { eye.set(rgbR.value, rgbG.value, event.target.value, 'rgb'); updateRyb(); }
 
 function updateRgb() { 
-    let rgb = eye.getRgb();
+    let rgb = eye.getRGB();
     rgbR.value = rgb.r * 255;
     rgbG.value = rgb.g * 255;
     rgbB.value = rgb.b * 255;
@@ -96,7 +96,7 @@ function updateRybY(event) { eye.set(rybR.value, event.target.value, rybB.value,
 function updateRybB(event) { eye.set(rybR.value, rybY.value, event.target.value, 'ryb'); updateRgb(); }
 
 function updateRyb() { 
-    let ryb = eye.getRyb();
+    let ryb = eye.getRYB();
     rybR.value = ryb.r * 255;
     rybY.value = ryb.y * 255;
     rybB.value = ryb.b * 255;
