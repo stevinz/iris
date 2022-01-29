@@ -35,7 +35,6 @@ import { ColorEye } from '../src/coloreye.js';
 /////////////////////////////////////////////////////////////////////////////////////
 ////    File Scope Variables
 /////////////////////////////////////////////////////////////////////////////////////
-let ryb = { r: 0, y: 0, b: 0 };
 let eye = new ColorEye();
 let colorBox = document.getElementById('colorBox');
 let rgbR = document.getElementById('sliderRgbR'), txtRgbR = document.getElementById('rgbValueR');
@@ -80,14 +79,14 @@ function updateSlider(event) {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Update Sliders / Values
 /////////////////////////////////////////////////////////////////////////////////////
-function updateRgbR(event) { eye.set(event.target.value, eye.g, eye.b, 'rgb'); updateRyb(); }
-function updateRgbG(event) { eye.set(eye.r, event.target.value, eye.b, 'rgb'); updateRyb(); }
-function updateRgbB(event) { eye.set(eye.r, eye.g, event.target.value, 'rgb'); updateRyb(); }
+function updateRgbR(event) { eye.set(event.target.value, eye.green(), eye.blue(), 'rgb'); updateRyb(); }
+function updateRgbG(event) { eye.set(eye.red(), event.target.value, eye.blue(), 'rgb'); updateRyb(); }
+function updateRgbB(event) { eye.set(eye.red(), eye.green(), event.target.value, 'rgb'); updateRyb(); }
 
 function updateRgb() { 
-    rgbR.value = eye.r;
-    rgbG.value = eye.g;
-    rgbB.value = eye.b;
+    rgbR.value = eye.red();
+    rgbG.value = eye.green();
+    rgbB.value = eye.blue();
     updateText();
 }
 
@@ -96,7 +95,7 @@ function updateRybY(event) { eye.set(rybR.value, event.target.value, rybB.value,
 function updateRybB(event) { eye.set(rybR.value, rybY.value, event.target.value, 'ryb'); updateRgb(); }
 
 function updateRyb() { 
-    eye.getRyb(ryb); 
+    let ryb = eye.getRyb();
     rybR.value = ryb.r;
     rybY.value = ryb.y;
     rybB.value = ryb.b;

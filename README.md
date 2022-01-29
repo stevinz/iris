@@ -24,7 +24,7 @@ let myColor = new ColorEye();
 #### ColorEye can be initialized in the following ways
 
 ```javascript
-ColorEye(hexColor);                     // Hexadecimal (0xffffff, i.e. 16777215)
+ColorEye(hexColor);                     // Hexadecimal (0xff0000, i.e. 16711680)
 ColorEye(r, g, b);                      // RGB Values (0 to 255)
 ColorEye(r, g, b, 'rgb');               // RGB Values (0 to 255)
 ColorEye(r, g, b, 'three');             // RGB Values (0.0 to 1.0)
@@ -93,7 +93,7 @@ Copies the r, g, b properties from
 All arguments are optional. Sets this color based on a wide range of possible inputs, works identically as the constructor.
 
 ### **.[setHex]()** ( hexColor : Integer ) : this
-Sets this color based on a hexidecimal / decimal value (i.e. 0xff0000 or 16777215).
+Sets this color based on a hexidecimal / decimal value (i.e. 0xff0000 or 16711680).
 
 ### **.[setHsl]()** ( h : Integer, s: Float, l: Float ) : this
 Sets this color based on hue (0 to 360), saturation (0.0 to 1.0), and lightness (0.0 to 1.0) values.

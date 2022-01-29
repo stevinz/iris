@@ -95,7 +95,7 @@ function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle)
             if (l > (size / 2)) {
                 eye.set(h, s, l, 'hsl');
                 if (type === 'ryb') eye.rybAdjust();
-                setPixel(img, x, y, eye.r, eye.g, eye.b, 255);
+                setPixel(img, x, y, eye.red(), eye.green(), eye.blue(), 255);
             }
         }
     }
@@ -152,7 +152,7 @@ function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 *
             //          |               |
             //          |               |
             //      (0.0, 1.0) ---- (0.0, 0.0)
-            // // also for fun:
+            // // also for fun, more saturation in middle:
             // let s = 2.0 - ((y / inMemoryCanvas.height) * 2.0);
             //     s = Math.min(1.0, s);
             let s = 1.0 - (y / inMemoryCanvas.height);
@@ -160,7 +160,7 @@ function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 *
                 
             eye.set(h, s, l, 'hsl');
             if (type === 'ryb') eye.rybAdjust();
-            setPixel(img, x, y, eye.r, eye.g, eye.b, 255);
+            setPixel(img, x, y, eye.red(), eye.green(), eye.blue(), 255);
         }
     }
     ctxMemory.putImageData(img, 0, 0);
