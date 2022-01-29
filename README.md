@@ -30,27 +30,27 @@ let color = new ColorEye();
 #### ColorEye can be initialized in the following ways
 
 ```javascript
-ColorEye()                              // Defaults to white, 0xffffff
-ColorEye(hexColor)                      // Hexadecimal (0xff0000, i.e. 16711680)
+ColorEye();                             // Defaults to white, 0xffffff
+ColorEye(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
 
-ColorEye(1.0, 0.0, 0.0)                 // RGB Values (0.0 to 1.0)
+ColorEye(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
 
-ColorEye(255,   0,   0, 'rgb')          // RGB Values (0 to 255)
-ColorEye(255,   0,   0, 'ryb')          // RYB Values (0 to 255)
-ColorEye(360, 1.0, 0.5, 'hsl')          // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
+ColorEye(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
+ColorEye(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
+ColorEye(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
 
-ColorEye({ r: 1.0, g: 0.0, b: 0.0 })    // Object with RGB Properties (0.0 to 1.0)
-ColorEye({ r: 1.0, y: 0.0, b: 0.0 })    // Object with RYB Properties (0.0 to 1.0)
-ColorEye({ h: 1.0, s: 1.0, l: 0.5 })    // Object with HSL Properties (0.0 to 1.0)
+ColorEye({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
+ColorEye({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
+ColorEye({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
 
-ColorEye([ 1.0, 0.0, 0.0 ], offset)     // RGB Array (0.0 to 1.0), optional array offset
+ColorEye([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional array offset
 
-ColorEye('#ff0000')                     // Hex String (also 3 digits: #f00)
-ColorEye('rgb(255, 0, 0)')              // CSS Color String
-ColorEye('red')                         // X11 Color Name
+ColorEye('#ff0000');                    // Hex String (also 3 digits: #f00)
+ColorEye('rgb(255, 0, 0)');             // CSS Color String
+ColorEye('red');                        // X11 Color Name
 
-ColorEye(fromColorEye)                  // Copy from ColorEye Object
-ColorEye(fromThreeColor)                // Copy from Three.js Color Object
+ColorEye(fromColorEye);                 // Copy from ColorEye Object
+ColorEye(fromThreeColor);               // Copy from Three.js Color Object
 ```
 
 #### Color functions can be chained together
@@ -79,23 +79,22 @@ let tetrad2 = new ColorEye.set(color).rybRotateHue(270);
 #### Example usage with [Three.js](https://threejs.org/) <a name="Three-Example"></a>
 
 ```javascript
-// Initialize ColorEye using THREE.Color, hex value, or array
+// Some possible ways to initialize ColorEye using THREE.Color, hex value, or array
 const eyeColor = new ColorEye(threeColor);
 const eyeColor = new ColorEye(threeColor.getHex());
 const eyeColor = new ColorEye(threeColor.toArray());
 
-// Initialize THREE.Color using ColorEye, hex value, or string
+// Some possible ways to initialize THREE.Color using ColorEye, hex value, or string
 const threeColor = new THREE.Color(eyeColor);
 const threeColor = new THREE.Color(eyeColor.hex());
 const threeColor = new THREE.Color(eyeColor.hexString());
 
-// Some ways to copy the values of the THREE.Color back to ColorEye
+// Some possible ways to copy the values of the THREE.Color back to ColorEye
 eyeColor.copy(threeColor);
-eyeColor.set(threeColor);
 eyeColor.set(threeColor.getHex());
 eyeColor.setRGBF(threeColor.r, threeColor.g, threeColor.b);
 
-// Some ways to copy the values of the ColorEye back to THREE.Color
+// Some possible ways to copy the values of the ColorEye back to THREE.Color
 threeColor.copy(eyeColor);
 threeColor.setHex(eyeColor.hex());
 threeColor.setRGB(eyeColor.r, eyeColor.g, eyeColor.b);
@@ -168,7 +167,7 @@ Returns value as hexidecimal.
 Returns value as hex string for use in CSS, HTML, etc. Example: "#ff0000". If optional [hexColor]() is supplied, the returned string will be for the supplied color, not the underlying value of the current ColorEye Object.
 
 ### **.[rgbString]()** ( alpha : Integer ) : String
-Returns value as inner section of cssString(). For example "255, 0, 0". This allows you to write to CSS variables for use with custom alpha channels in your CSS.
+Returns value as inner section of cssString(). For example "255, 0, 0". This allows you to write to CSS variables for use with custom alpha channels in your CSS. Optional [alpha]() value.
 
 ### **.[toJSON]()** ( ) : Integer
 Returns value as hexidecimal, JSON friendly data.
@@ -181,16 +180,16 @@ Returns value as hexidecimal, JSON friendly data.
 Returns a new ColorEye Object with the same color value as this ColorEye Object.
 
 ### **.[getHSL]()** ( target ) : Object
-Provide an optional target to copy hue, saturation, lightness values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with h, s, l properties is returned.
+Provide an optional [target]() to copy hue, saturation, lightness values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with h, s, l properties is returned.
 
 ### **.[getRGB]()** ( target ) : Object
-Provide an optional target to copy red, green, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, g, b properties is returned.
+Provide an optional [target]()) to copy red, green, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, g, b properties is returned.
 
 ### **.[getRYB]()** ( target ) : Object
-Provide an optional target to copy red, yellow, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, y, b properties is returned.
+Provide an optional [target]() to copy red, yellow, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, y, b properties is returned.
 
 ### **.[toArray]()** ( array : Array, offset : Integer ) : Array
-Provide an optional array to copy red, green, blue values into, they will be in the range 0.0 to 1.0. Optionally provide an offset to specify where in the array to write the data. If no array is provided a new Array will be returned.
+Provide an optional [array]() to copy red, green, blue values into, they will be in the range 0.0 to 1.0. Optionally provide an offset to specify where in the [array]() to write the data. If no array is provided a new Array will be returned.
 
 <br>
 
@@ -231,14 +230,14 @@ Returns hue value of current ColorEye object in range 0.01 to 1.0.
 # Color Functions
 
 ### **.[add]()** ( color : ColorEye ) : this
-Adds the red, green, blue values from 'color' to this ColorEye Object's values.
+Adds the red, green, blue values from [color]() to this ColorEye Object's values.
 
 <br>
 
 # Comparison
 
 ### **.[equals]()** ( color : ColorEye ) : Boolean
-Returns true if the RGB values of 'color' are the same as those of this Object.
+Returns true if the RGB values of [color]() are the same as those of this Object.
 
 <br>
 

@@ -9,27 +9,27 @@
 /////////////////////////////////////////////////////////////////////////////////////
 ////
 ////    Initialization
-////        ColorEye()                              // Defaults to white, 0xffffff
-////        ColorEye(hexColor)                      // Hexadecimal (0xff0000, i.e. 16711680)
+////        ColorEye();                             // Defaults to white, 0xffffff
+////        ColorEye(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
 ////
-////        ColorEye(1.0, 0.0, 0.0)                 // RGB Values (0.0 to 1.0)
+////        ColorEye(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
 ////
-////        ColorEye(255,   0,   0, 'rgb')          // RGB Values (0 to 255)
-////        ColorEye(255,   0,   0, 'ryb')          // RYB Values (0 to 255)
-////        ColorEye(360, 1.0, 0.5, 'hsl')          // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
+////        ColorEye(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
+////        ColorEye(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
+////        ColorEye(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
 ////
-////        ColorEye({ r: 1.0, g: 0.0, b: 0.0 })    // Object with RGB Properties (0.0 to 1.0)
-////        ColorEye({ r: 1.0, y: 0.0, b: 0.0 })    // Object with RYB Properties (0.0 to 1.0)
-////        ColorEye({ h: 1.0, s: 1.0, l: 0.5 })    // Object with HSL Properties (0.0 to 1.0)
+////        ColorEye({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
+////        ColorEye({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
+////        ColorEye({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
 ////
-////        ColorEye([ 1.0, 0.0, 0.0 ], offset)     // RGB Array (0.0 to 1.0), optional array offset
+////        ColorEye([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional array offset
 ////
-////        ColorEye('#ff0000')                     // Hex String (also 3 digits: #f00)
-////        ColorEye('rgb(255, 0, 0)')              // CSS Color String
-////        ColorEye('red')                         // X11 Color Name
+////        ColorEye('#ff0000');                    // Hex String (also 3 digits: #f00)
+////        ColorEye('rgb(255, 0, 0)');             // CSS Color String
+////        ColorEye('red');                        // X11 Color Name
 ////
-////        ColorEye(fromColorEye)                  // Copy from ColorEye Object
-////        ColorEye(fromThreeColor)                // Copy from Three.js Color Object
+////        ColorEye(fromColorEye);                 // Copy from ColorEye Object
+////        ColorEye(fromThreeColor);               // Copy from Three.js Color Object
 ////
 ////    Properties
 ////        ColorEye.r      0.0 to 1.0
