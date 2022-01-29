@@ -3,7 +3,7 @@ Small, fast, zero-dependency javascript color library with support for the RGB /
 
 Also features hue shifting around the RYB color wheel. This creates much more natural complementary colors and palettes, similar to those seen at tools like [Paletton](https://paletton.com/).
 
-The internal implementation of 'color' classes vary among libraries. ColorEye was designed with functionality to make it as easy as possible to work alongside other popular frameworks (such as [Three.js](https://threejs.org/)). See [example](#Three-Example) below of converting back and forth between a ColorEye Object and a THREE.Color Object.
+The internal implementation of Color type classes vary. ColorEye was designed with functionality to make it as easy to work alongside other popular frameworks (such as [Three.js](https://threejs.org/)). See [example](#Three-Example) below of converting back and forth between a ColorEye Object and a THREE.Color Object.
 
 <br>
 
@@ -56,10 +56,16 @@ console.log(myColor.rybRotateHue(270).darken(0.5).hexString().toUpperCase());
 #### Example usage with [Three.js](https://threejs.org/) <a name="Three-Example"></a>
 
 ```javascript
+// Create new ColorEye color
 const eyeColor = new ColorEye('blue');
-const threeColor = new THREE.Color(eyeColor.hex()).multiplyScalar(0.75);
 
+// Initialize THREE.Color using ColorEye hex value
+const threeColor = new THREE.Color(eyeColor.hex());
+
+// Copy THREE.Color back to ColorEye and use ColorEye to perform some alterations
 eyeColor.set(threeColor).rybRotateHue(180).brighten(0.5);
+
+// Set THREE.Color value from new ColorEye value
 threeColor.setHex(eyeColor.hex());
 ```
 

@@ -482,8 +482,12 @@ function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
 function red(hexColor) { return clamp((hexColor & 0xff0000) >> 16, 0, 255); }
 function green(hexColor) { return clamp((hexColor & 0x00ff00) >> 8, 0, 255); }
 function blue(hexColor) { return clamp((hexColor & 0x0000ff), 0, 255); }
+function redF(hexColor) { return red(hexColor) / 255.0; }
+function greenF(hexColor) { return green(hexColor) / 255.0; }
+function blueF(hexColor) { return blue(hexColor) / 255.0; }
 
 function hue(hexColor) { return hsl(hexColor, 'h'); }
+function hueF(hexColor) { return hue(hexColor) / 360; }
 function saturation(hexColor) { return hsl(hexColor, 's'); }
 function lightness(hexColor) { return hsl(hexColor, 'l'); }
 
@@ -506,7 +510,7 @@ function hsl(hexColor, channel = 'h') {
     if (hexColor !== _hslHex) {
         if (hexColor === undefined || hexColor === null) return 0;
 
-        const r = red(hexColor) / 255, g = green(hexColor) / 255, b = blue(hexColor) / 255;
+        const r = redF(hexColor), g = greenF(hexColor), b = blueF(hexColor);
         const max = Math.max(r, g, b), min = Math.min(r, g, b);
         const delta = max - min;
         _hslL = (max + min) / 2;
