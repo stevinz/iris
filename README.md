@@ -62,6 +62,18 @@ console.log(color.rybRotateHue(270).darken(0.5).hexString().toUpperCase());
 
     > #2E007F
 
+#### Hue Shifting
+```javascript
+let color = new ColorEye(0xff0000);
+
+// To find the RYB color wheel complement (opposite) color
+let compliment = new ColorEye.set(color).rybComplementary();
+
+// To adjust hue a specific number of degrees (0 to 360) around the RYB color wheel
+let tetrad1 = new ColorEye.set(color).rybRotateHue(90);
+let tetrad2 = new ColorEye.set(color).rybRotateHue(270);
+```
+
 #### Example usage with [Three.js](https://threejs.org/) <a name="Three-Example"></a>
 
 ```javascript
