@@ -48,14 +48,6 @@ class ColorEye {
     /////////////////////////////////////////////////////////////////////////////////////
     ////    Assignment
     ////////////////////
-    clone() { 
-        return new this.constructor(this.r, this.g, this.b);
-    }
-   
-    copy(colorObject) {
-        return this.set(colorObject);
-    }
-   
     set(r = 0, g, b, type = 'rgb') {
         // No arguments passed
         if (arguments.length === 0) {
@@ -70,8 +62,9 @@ class ColorEye {
             if (typeof value === 'number' || value === 0) {
                 return this.setHex(value);
             } else if (value && isRgb(value)) {
-                let multiplier = (value.isColor) ? 255 : 1.0;           // #NOTE: check if THREE.Color()
-                return this.setRgb(value.r, value.g, value.b, multiplier);
+                // Check if value passed in is THREE.Color Object
+                if (value.isColor) return this.setRgbF(value.r, value.g, value.b);
+                return this.setRgb(value.r, value.g, value.b);
             } else if (value && isHsl(value)) {
                 return this.setHsl(value.h, value.s, value.l);
             } else if (value && isRyb(value)) {
@@ -85,12 +78,16 @@ class ColorEye {
         // Three arguments were passed
         } else {
             switch (type) {
-                case 'hsl':     return this.setHsl(r, g, b);
-                case 'rgb':     return this.setRgb(r, g, b, 1.0);
-                case 'ryb':     return this.setRyb(r, g, b);
-                case 'three':   return this.setRgb(r, g, b, 255);
-                case 'gl':      return this.setRgb(r, g, b, 255);
-                default:        return this.setRgb(r, g, b, 1.0);
+                case 'hsl':
+                    return this.setHsl(r, g, b);
+                case 'ryb':
+                    return this.setRyb(r, g, b);
+                case 'three':
+                case 'gl':
+                    return this.setRgbF(r, g, b);
+                case 'rgb':
+                default:
+                    return this.setRgb(r, g, b);
             }
         }
         return this;
@@ -140,28 +137,36 @@ class ColorEye {
     }
 
     setRandom() {
-        let r = Math.floor(Math.random() * 256);
-        let g = Math.floor(Math.random() * 256);
-        let b = Math.floor(Math.random() * 256);
-        return this.setRgb(r, g, b);
+        return this.setRgbF(Math.random(), Math.random(), Math.random());
     };
 
-    setRgb(r, g, b, multiplier = 1.0) {
-        r = r ?? 0;
-        g = g ?? 0;
-        b = b ?? 0;
-        this.r = clamp(Math.floor(r * multiplier), 0, 255);
-        this.g = clamp(Math.floor(g * multiplier), 0, 255);
-        this.b = clamp(Math.floor(b * multiplier), 0, 255);
+    // 0 to 255
+    setRgb(r, g, b) {
+        this.r = clamp(Math.floor(r ?? 0), 0, 255);
+        this.g = clamp(Math.floor(g ?? 0), 0, 255);
+        this.b = clamp(Math.floor(b ?? 0), 0, 255);
         return this;
     }
 
+    // 0.0 to 1.0
+    setRgbF(r, g, b) {
+        return this.setRgb(r * 255, g * 255, b * 255);
+    }
+
+    // 0 to 255
     setRyb(r, y, b) {
-        r = r ?? 0;
-        y = y ?? 0;
-        b = b ?? 0;
-        let hexColor = cubicInterpolation(r, y, b, 255, CUBE.RYB_TO_RGB);
+        let hexColor = cubicInterpolation(r ?? 0, y ?? 0, b ?? 0, 255, CUBE.RYB_TO_RGB);
         return this.setHex(hexColor);
+    }
+
+    // 0 to 255
+    setScalar(scalar) {
+        return this.setRgb(scalar, scalar, scalar);
+    }
+
+    // 0.0 to 1.0
+    setScalarF(scalarF) {
+        return this.setRgbF(scalarF, scalarF, scalarF);
     }
 
     setStyle(style) {
@@ -229,14 +234,14 @@ class ColorEye {
     /////////////////////////////////////////////////////////////////////////////////////
     ////    Output
     ////////////////////
-    // Returns decimal, i.e. 16777215 (equivalent to 0xff0000)
-    hex() {
-        return ((this.r << 16) + (this.g << 8) + this.b);
-    }
-
     // Example output: 'rgb(255, 0, 0)'
     cssString(alpha) {
         return ('rgb(' + this.rgbString(alpha) + ')');
+    }
+
+    // Returns decimal, i.e. 16777215 (equivalent to 0xff0000)
+    hex() {
+        return ((this.r << 16) + (this.g << 8) + this.b);
     }
 
     // Example output: '#ff0000'
@@ -252,37 +257,46 @@ class ColorEye {
         return rgba;
     }
 
-    // Spectrum components
-    red() { return this.r; }
-    green() { return this.g; }
-    blue() { return this.b; }
-    redF() { return this.r / 255.0; }
-    greenF() { return this.g / 255.0; }
-    blueF() { return this.b / 255.0; }
-    hue() { return hue(this.hex()); }
-    saturation() { return saturation(this.hex()); }
-    lightness() { return lightness(this.hex()); }
+    // Export to JSON
+    toJSON() {
+		return this.hex();
+	}
 
-    // Map a color's RGB hue to the closest hue in the RYB spectrum
-    rybHue() {
-        const colorHue = this.hue();
-        for (let i = 1; i < RYB_OFFSET.length; i++) {
-            if (RYB_OFFSET[i] > colorHue) return i - 2;
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    ////    Copying Values
+    ////////////////////
+    clone() { 
+        return new this.constructor(this.r, this.g, this.b);
+    }
+   
+    copy(colorObject) {
+        return this.set(colorObject);
+    }
+
+    // Copies HSL values into optional target, or returns new Object with HSL properties
+    getHsl(target) {
+        if (target && isHsl(target)) {
+            target.h = hue(this.hex());
+            target.s = saturation(this.hex());
+            target.l = lightness(this.hex());
+        } else {
+            return { h: hue(this.hex()), s: saturation(this.hex()), l: lightness(this.hex()) };
         }
     }
 
-    // Copies hsl values into target
-    getHsl(target) {
-        target.h = hue(this.hex());
-        target.s = saturation(this.hex());
-        target.l = lightness(this.hex());
+    // Copies RGB values ranging from 0 to 255 into target
+    getRgb(target) {
+        target.r = this.r;
+        target.g = this.g;
+        target.b = this.b;
     }
 
-    // Copies rgb values into target, when copying to THREE.Color() use multiplier = (1 / 255)
-    getRgb(target, multiplier = 1.0) {
-        target.r = this.r * multiplier;
-        target.g = this.g * multiplier;
-        target.b = this.b * multiplier;
+    // Same as getRgb() except copies RGB values in range 0.0 to 1.0, suitable for use with Three.js Color Object
+    getRgbF(target) {
+        target.r = this.r / 255;
+        target.g = this.g / 255;
+        target.b = this.b / 255;
     }
 
     getRyb(target) {
@@ -292,15 +306,52 @@ class ColorEye {
         target.b = clamp((rybAsHex & 0x0000ff),       0, 255);
     }
 
-    // Export to JSON
-    toJSON() {
-		return this.hex();
+    // Copy to, or optionally export as new Array of RGB values ranging from 0 to 255, optional array offset
+    toArray(array = [], offset = 0) {
+		array[offset] = this.r;
+		array[offset + 1] = this.g;
+		array[offset + 2] = this.b;
+		return array;
+	}
+
+    // Same as toArray() except exports RGB values in range 0.0 to 1.0
+    toArrayF(array = [], offset = 0) {
+		array[offset] = this.r / 255;
+		array[offset + 1] = this.g / 255;
+		array[offset + 2] = this.b / 255;
+		return array;
 	}
  
 
     /////////////////////////////////////////////////////////////////////////////////////
+    ////    Spectrum Components
+    ////////////////////
+    red() { return this.r; }
+    green() { return this.g; }
+    blue() { return this.b; }
+    redF() { return this.r / 255.0; }
+    greenF() { return this.g / 255.0; }
+    blueF() { return this.b / 255.0; }
+    hue() { return hue(this.hex()); }
+    hueF() { return hue(this.hex()) / 6.0; }
+    saturation() { return saturation(this.hex()); }
+    lightness() { return lightness(this.hex()); }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
     ////    Color Functions
     ////////////////////
+    // Adds RGB values from color to this color
+    add(color) {
+        if (! (color instanceof ColorEye)) console.warn(`ColorEye: add() was not called with a ColorEye object`);
+        return this.setRgb(this.r + color.r, this.g + color.g, this.b + color.b);
+    }
+
+    // Adds scalar value to this colors RGB values
+    addScalar(scalar) {
+        return this.setRgb(this.r + scalar, this.g + scalar, this.b + scalar);
+    }
+
     // Lightens color by amount
     brighten(amount = 0.5 /* percentage from 0 to 1 */ ) {
         let h = hue(this.hex());
@@ -320,32 +371,80 @@ class ColorEye {
         return this;
     }
 
-    // Mixes in mixColor by percent
+    // Converts color to grayscale
+    grayscale(type = 'luminosity') { return this.greyscale(type) }
+    greyscale(type = 'luminosity') {
+        let gray = 0;
+        switch (type) {
+            case 'luminosity': 
+                gray = (this.r * 0.21) + (this.g * 0.72) + (this.b * 0.07);
+            case 'average': 
+            default:
+                gray = (this.r + this.g + this.b) / 3;
+        }
+        return this.setScalar(gray, 1.0)
+    }
+
+    hslOffset(h, s, l) {
+        let _h = this.hue();
+    }
+
+    // Mixes in mixColor by percent to this color
     mix(mixColor, percent = 0.5) {
+        if (! (mixColor instanceof ColorEye)) console.warn(`ColorEye: mix() was not called with a ColorEye object`);
         percent = Math.abs(percent);
         if (percent > 1.0) percent = 1.0;
-    
         let r3 = Math.floor(this.r + (percent * (mixColor.r - this.r)));
         let g3 = Math.floor(this.g + (percent * (mixColor.g - this.g)));
         let b3 = Math.floor(this.b + (percent * (mixColor.b - this.b)));
         return this.setRgb(r3, g3, b3);
     }
 
-     // Adjusts the RGB values to fit in the RYB spectrum as best as possible
-    adjustToRyb() {
+    multiply(color) {
+        if (! (color instanceof ColorEye)) console.warn(`ColorEye: multiply() was not called with a ColorEye object`);
+        return this.setRgbF(this.redF() * color.redF(), this.greenF() * color.greenF(), this.blueF() * color.blueF());
+    }
+
+    // Multiplies RGB values from this color with scalar value
+    multiplyScalar(scalar) {
+        return this.setRgb(this.r * scalar, this.g * scalar, this.b * scalar);
+    }
+
+    // Adjusts the RGB values to fit in the RYB spectrum as best as possible
+    rybAdjust() {
         return this.setHsl(hue(matchSpectrum(this.hue(), SPECTRUM.RYB)), this.saturation(), this.lightness());
+    }
+
+    rybComplementary() {
+        return this.rybRotateHue(180);
     }
 
     // Rotates the hue of a color in the RYB spectrum by degrees
     rybRotateHue(degrees = 90) {
-        let newHue = keepInRange(this.rybHue() + degrees);
+        // Map a color's RGB hue to the closest hue in the RYB spectrum
+        let rybHue = 0;
+        for (let i = 1; i < RYB_OFFSET.length; i++) {
+            if (RYB_OFFSET[i] > this.hue()) { rybHue = i - 2; break; }
+        }
+        // Add in degrees to rotate hue
+        let newHue = keepInRange(rybHue + degrees);
         return this.setHsl(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
+    }
+
+    rgbComplementary() {
+        return this.rgbRotateHue(180);
     }
 
     // Rotates the hue of a color in the RGB spectrum by degrees
     rgbRotateHue(degrees = 90) {
         let newHue = keepInRange(this.hue() + degrees);
         return this.setHsl(newHue, this.saturation(), this.lightness());
+    }
+
+    // Subtractd RGB values from color to this color
+    subtract(color) {
+        if (! (color instanceof ColorEye)) console.warn(`ColorEye: sub() was not called with a ColorEye object`);
+        return this.setRgb(this.r - color.r, this.g - color.g, this.b - color.b);
     }
 
 
@@ -364,6 +463,9 @@ class ColorEye {
         return ((l < 0.60 && (h >= 210 || h <= 27)) || (l <= 0.32));
     }
 
+    isLight() {
+        return (! this.isDark());
+    }
 
 }
 
@@ -391,11 +493,15 @@ function keepInRange(value, min = 0, max = 360) {
     return value;
 }
 
-// Returns: hsl(0 to 360, 0 to 1, 0 to 1)
+
+/////////////////////////////////////////////////////////////////////////////////////
+////    Return hue (0 to 360), saturation (0 to 1), and lightness (0 to 1)
+////////////////////
 let _hslHex;
 let _hslH;
 let _hslS;
 let _hslL;
+
 function hsl(hexColor, channel = 'h') {
     if (hexColor !== _hslHex) {
         if (hexColor === undefined || hexColor === null) return 0;
@@ -435,7 +541,7 @@ function hsl(hexColor, channel = 'h') {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Match to 'matchHue' into 'spectrum'
 ////////////////////
-const _mix1 = new ColoColorEyeeye();
+const _mix1 = new ColorEye();
 const _mix2 = new ColorEye();
 
 function matchSpectrum(matchHue, spectrum) {

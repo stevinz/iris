@@ -66,28 +66,24 @@ function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle)
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let eye = new ColorEye();
 
-
-    if (type === 'rgb') {
-        let time, test = 0;
-
-        time = performance.now();
-        for (let x = 0; x < 20000000; x++) {
-            let eye1 = new ColorEye(1, 0, 0).brighten();
-            test += eye1.r;
-        }
-        console.log(performance.now() - time);
-
-        time = performance.now();
-        let eye2 = new ColorEye();
-        for (let x = 0; x < 20000000; x++) {
-            eye2.set(1, 0, 0).brighten();
-            test += eye2.r;
-        }
-        console.log(performance.now() - time);
-        console.log(test);
-    }
-
-    
+    // // Performance Test
+    // if (type === 'rgb') {
+    //     let time, test = 0;
+    //     time = performance.now();
+    //     for (let x = 0; x < 20000000; x++) {
+    //         let eye1 = new ColorEye(1, 0, 0).brighten();
+    //         test += eye1.r;
+    //     }
+    //     console.log(performance.now() - time);
+    //     time = performance.now();
+    //     let eye2 = new ColorEye();
+    //     for (let x = 0; x < 20000000; x++) {
+    //         eye2.set(1, 0, 0).brighten();
+    //         test += eye2.r;
+    //     }
+    //     console.log(performance.now() - time);
+    //     console.log(test);
+    // }
 
     for (let x = 0; x < canvas.width; x++) {
         for (let y = 0; y < canvas.height; y++) {
@@ -98,7 +94,7 @@ function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle)
             let l = (Math.pow((Math.pow(ax, 2) + Math.pow(ay, 2)), 0.5) / (canvas.width));
             if (l > (size / 2)) {
                 eye.set(h, s, l, 'hsl');
-                if (type === 'ryb') eye.adjustToRyb();
+                if (type === 'ryb') eye.rybAdjust();
                 setPixel(img, x, y, eye.r, eye.g, eye.b, 255);
             }
         }
@@ -163,7 +159,7 @@ function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 *
             let l = 1.0 - (x / inMemoryCanvas.width);
                 
             eye.set(h, s, l, 'hsl');
-            if (type === 'ryb') eye.adjustToRyb();
+            if (type === 'ryb') eye.rybAdjust();
             setPixel(img, x, y, eye.r, eye.g, eye.b, 255);
         }
     }
