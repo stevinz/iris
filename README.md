@@ -53,6 +53,8 @@ ColorEye(fromColorEye);                 // Copy from ColorEye Object
 ColorEye(fromThreeColor);               // Copy from Three.js Color Object
 ```
 
+<br>
+
 #### Color functions can be chained together
 
 ```javascript
@@ -63,6 +65,8 @@ console.log(color.rybRotateHue(270).darken(0.5).hexString().toUpperCase());
 * _output_
 
     > #2E007F
+
+<br>
 
 #### Hue Shifting
 ```javascript
@@ -75,6 +79,8 @@ let complement = new ColorEye.set(color).rybComplementary();
 let tetrad1 = new ColorEye.set(color).rybRotateHue(90);
 let tetrad2 = new ColorEye.set(color).rybRotateHue(270);
 ```
+
+<br>
 
 #### Example usage with [Three.js](https://threejs.org/) <a name="Three-Example"></a>
 
@@ -118,7 +124,7 @@ Blue channel value between 0.0 and 1.0, default is 1.
 # Assignment
 
 ### **.[copy]()** ( colorObject : ColorEye or THREE.Color ) ( ) : this
-Copies the r, g, b properties from [colorObject](). This Object can be any type as long as it has r, g, b properties containing numeric values ranging from 0.0 to 1.0.
+Copies the r, g, b properties from **colorObject**. This Object can be any type as long as it has r, g, b properties containing numeric values ranging from 0.0 to 1.0.
 
 ### **.[set]()** ( r: Number or Object or String, g : Number, b : Number, type : String ) : this
 All arguments are optional. Sets this color based on a wide range of possible inputs, all options are the same as with the constructor.
@@ -158,16 +164,16 @@ Sets this color based on CSS ('rgb(255,0,0)' / 'hsl(360,50%,50%)'), Hex ('#FF000
 # Output
 
 ### **.[cssString]()** ( alpha : Integer ) : String
-Returns string for use with CSS, for example "rgb(255, 0, 0)". Optionally include an [alpha]() value from 0 to 255 to be included with the string, for example "rgba(255, 0, 0, 255)".
+Returns string for use with CSS, for example "rgb(255, 0, 0)". Optionally include an **alpha** value from 0 to 255 to be included with the string, for example "rgba(255, 0, 0, 255)".
 
 ### **.[hex]()** ( ) : Integer
 Returns value as hexidecimal.
 
 ### **.[hexString]()** ( hexColor : Integer ) : String
-Returns value as hex string for use in CSS, HTML, etc. Example: "#ff0000". If optional [hexColor]() is supplied, the returned string will be for the supplied color, not the underlying value of the current ColorEye Object.
+Returns value as hex string for use in CSS, HTML, etc. Example: "#ff0000". If optional **hexColor** is supplied, the returned string will be for the supplied color, not the underlying value of the current ColorEye Object.
 
 ### **.[rgbString]()** ( alpha : Integer ) : String
-Returns value as inner section of cssString(). For example "255, 0, 0". This allows you to write to CSS variables for use with custom alpha channels in your CSS. Optional [alpha]() value.
+Returns value as inner section of cssString(). For example "255, 0, 0". This allows you to write to CSS variables for use with custom alpha channels in your CSS. Optional **alpha** value.
 
 ### **.[toJSON]()** ( ) : Integer
 Returns value as hexidecimal, JSON friendly data.
@@ -189,7 +195,7 @@ Provide an optional [target]()) to copy red, green, blue values into, they will 
 Provide an optional [target]() to copy red, yellow, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, y, b properties is returned.
 
 ### **.[toArray]()** ( array : Array, offset : Integer ) : Array
-Provide an optional [array]() to copy red, green, blue values into, they will be in the range 0.0 to 1.0. Optionally provide an offset to specify where in the [array]() to write the data. If no array is provided a new Array will be returned.
+Provide an optional **array** to copy red, green, blue values into, they will be in the range 0.0 to 1.0. Optionally provide an offset to specify where in the **array** to write the data. If no array is provided a new Array will be returned.
 
 <br>
 
@@ -230,14 +236,14 @@ Returns hue value of current ColorEye object in range 0.01 to 1.0.
 # Color Functions
 
 ### **.[add]()** ( color : ColorEye ) : this
-Adds the red, green, blue values from [color]() to this ColorEye Object's values.
+Adds the red, green, blue values from **color** to this ColorEye Object's values.
 
 <br>
 
 # Comparison
 
 ### **.[equals]()** ( color : ColorEye ) : Boolean
-Returns true if the RGB values of [color]() are the same as those of this Object.
+Returns true if the RGB values of **color** are the same as those of this Object.
 
 <br>
 
