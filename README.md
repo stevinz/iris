@@ -186,13 +186,13 @@ Returns value as hexidecimal, JSON friendly data.
 Returns a new ColorEye Object with the same color value as this ColorEye Object.
 
 ### **.[getHSL]()** ( target ) : Object
-Provide an optional [target]() to copy hue, saturation, lightness values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with h, s, l properties is returned.
+Provide an optional **target** to copy hue, saturation, lightness values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with h, s, l properties is returned.
 
 ### **.[getRGB]()** ( target ) : Object
-Provide an optional [target]()) to copy red, green, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, g, b properties is returned.
+Provide an optional **target** to copy red, green, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, g, b properties is returned.
 
 ### **.[getRYB]()** ( target ) : Object
-Provide an optional [target]() to copy red, yellow, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, y, b properties is returned.
+Provide an optional **target** to copy red, yellow, blue values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with r, y, b properties is returned.
 
 ### **.[toArray]()** ( array : Array, offset : Integer ) : Array
 Provide an optional **array** to copy red, green, blue values into, they will be in the range 0.0 to 1.0. Optionally provide an offset to specify where in the **array** to write the data. If no array is provided a new Array will be returned.
