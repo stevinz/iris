@@ -22,14 +22,14 @@
 ////        ColorEye({ r: 1.0, y: 0.0, b: 0.0 })    // Object with RYB Properties (0.0 to 1.0)
 ////        ColorEye({ h: 1.0, s: 1.0, l: 0.5 })    // Object with HSL Properties (0.0 to 1.0)
 ////
-////        ColorEye([ 1.0, 0.0, 0.0 ], offset)     // RGB Array (0.0 to 1.0), Optional Array Offset
+////        ColorEye([ 1.0, 0.0, 0.0 ], offset)     // RGB Array (0.0 to 1.0), optional array offset
 ////
 ////        ColorEye('#ff0000')                     // Hex String (also 3 digits: #f00)
 ////        ColorEye('rgb(255, 0, 0)')              // CSS Color String
 ////        ColorEye('red')                         // X11 Color Name
 ////
 ////        ColorEye(fromColorEye)                  // Copy from ColorEye Object
-////        ColorEye(fromTHREEColor)                // Copy from THREE.Color Object
+////        ColorEye(fromThreeColor)                // Copy from Three.js Color Object
 ////
 ////    Properties
 ////        ColorEye.r      0.0 to 1.0
@@ -51,6 +51,10 @@ class ColorEye {
     /////////////////////////////////////////////////////////////////////////////////////
     ////    Assignment
     ////////////////////
+    copy(colorObject) {
+        return this.set(colorObject);
+    }
+
     set(r = 0, g, b, type = '') {
         // No arguments passed
         if (arguments.length === 0) {
@@ -144,9 +148,14 @@ class ColorEye {
         return this.setHex(hexColor);
     }
 
-    // 0.0 to 1.0
+    // 0 to 255
     setScalar(scalar) {
         return this.setRgb(scalar, scalar, scalar);
+    }
+
+    // 0.0 to 1.0
+    setScalarF(scalar) {
+        return this.setRgbF(scalar, scalar, scalar);
     }
 
     setStyle(style) {
@@ -244,16 +253,12 @@ class ColorEye {
 
 
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Copying Values
+    ////    Retrieving Data
     ////////////////////
     clone() { 
         return new this.constructor(this.r, this.g, this.b);
     }
    
-    copy(colorObject) {
-        return this.set(colorObject);
-    }
-
     // Copies HSL values into optional target, or returns new Object, values range from 0.0 to 1.0
     // Values are in range 0.0 to 1.0
     getHsl(target) {
@@ -357,7 +362,7 @@ class ColorEye {
             default:
                 gray = (this.r + this.g + this.b) / 3;
         }
-        return this.setScalar(gray, 1.0)
+        return this.setScalarF(gray, 1.0)
     }
 
     hslOffset(h, s, l) {
