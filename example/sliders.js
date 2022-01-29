@@ -79,14 +79,15 @@ function updateSlider(event) {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Update Sliders / Values
 /////////////////////////////////////////////////////////////////////////////////////
-function updateRgbR(event) { eye.set(event.target.value, eye.green(), eye.blue(), 'rgb'); updateRyb(); }
-function updateRgbG(event) { eye.set(eye.red(), event.target.value, eye.blue(), 'rgb'); updateRyb(); }
-function updateRgbB(event) { eye.set(eye.red(), eye.green(), event.target.value, 'rgb'); updateRyb(); }
+function updateRgbR(event) { eye.set(event.target.value, rgbG.value, rgbB.value, 'rgb'); updateRyb(); }
+function updateRgbG(event) { eye.set(rgbR.value, event.target.value, rgbB.value, 'rgb'); updateRyb(); }
+function updateRgbB(event) { eye.set(rgbR.value, rgbG.value, event.target.value, 'rgb'); updateRyb(); }
 
 function updateRgb() { 
-    rgbR.value = eye.red();
-    rgbG.value = eye.green();
-    rgbB.value = eye.blue();
+    let rgb = eye.getRgb();
+    rgbR.value = rgb.r * 255;
+    rgbG.value = rgb.g * 255;
+    rgbB.value = rgb.b * 255;
     updateText();
 }
 
@@ -96,9 +97,9 @@ function updateRybB(event) { eye.set(rybR.value, rybY.value, event.target.value,
 
 function updateRyb() { 
     let ryb = eye.getRyb();
-    rybR.value = ryb.r;
-    rybY.value = ryb.y;
-    rybB.value = ryb.b;
+    rybR.value = ryb.r * 255;
+    rybY.value = ryb.y * 255;
+    rybB.value = ryb.b * 255;
     updateText();
 }
 

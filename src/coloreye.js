@@ -8,25 +8,30 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////
 ////
-////                                    ColorEye
+////    Initialization
+////        ColorEye()                              // Defaults to white, 0xffffff
+////        ColorEye(hexColor)                      // Hexadecimal (0xff0000, i.e. 16711680)
 ////
-////    constructor() or .set() arguments
-////        ColorEye(hexColor);                     // Hexadecimal (0xff0000, i.e. 16711680)
-////        ColorEye(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
-////        ColorEye(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
-////        ColorEye(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
-////        ColorEye(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
-////        ColorEye({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
-////        ColorEye({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
-////        ColorEye({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
-////        ColorEye([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), Optional Array Offset
-////        ColorEye('#ff0000');                    // Hex String (also 3 digits: #f00)
-////        ColorEye('rgb(255, 0, 0)');             // CSS Color String
+////        ColorEye(1.0, 0.0, 0.0)                 // RGB Values (0.0 to 1.0)
+////
+////        ColorEye(255,   0,   0, 'rgb')          // RGB Values (0 to 255)
+////        ColorEye(255,   0,   0, 'ryb')          // RYB Values (0 to 255)
+////        ColorEye(360, 1.0, 0.5, 'hsl')          // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
+////
+////        ColorEye({ r: 1.0, g: 0.0, b: 0.0 })    // Object with RGB Properties (0.0 to 1.0)
+////        ColorEye({ r: 1.0, y: 0.0, b: 0.0 })    // Object with RYB Properties (0.0 to 1.0)
+////        ColorEye({ h: 1.0, s: 1.0, l: 0.5 })    // Object with HSL Properties (0.0 to 1.0)
+////
+////        ColorEye([ 1.0, 0.0, 0.0 ], offset)     // RGB Array (0.0 to 1.0), Optional Array Offset
+////
+////        ColorEye('#ff0000')                     // Hex String (also 3 digits: #f00)
+////        ColorEye('rgb(255, 0, 0)')              // CSS Color String
 ////        ColorEye('red')                         // X11 Color Name
-////        ColorEye(fromColorEye);                 // Copy from ColorEye Object
-////        ColorEye(fromTHREEColor);               // Copy from THREE.Color Object
 ////
-////    properties:
+////        ColorEye(fromColorEye)                  // Copy from ColorEye Object
+////        ColorEye(fromTHREEColor)                // Copy from THREE.Color Object
+////
+////    Properties
 ////        ColorEye.r      0.0 to 1.0
 ////        ColorEye.g      0.0 to 1.0
 ////        ColorEye.b      0.0 to 1.0
@@ -35,10 +40,10 @@
 
 class ColorEye {
 
-    constructor(r = 0, g, b, type = '') {
-        this.r = 0;
-        this.g = 0;
-        this.b = 0;
+    constructor(r = 0xffffff, g, b, type = '') {
+        this.r = 1;
+        this.g = 1;
+        this.b = 1;
         this.set(r, g, b, type);
     }
 
@@ -249,7 +254,8 @@ class ColorEye {
         return this.set(colorObject);
     }
 
-    // Copies HSL values into optional target, or returns new Object with HSL properties
+    // Copies HSL values into optional target, or returns new Object, values range from 0.0 to 1.0
+    // Values are in range 0.0 to 1.0
     getHsl(target) {
         if (target && isHsl(target)) {
             target.h = hueF(this.hex());
@@ -260,7 +266,7 @@ class ColorEye {
         }
     }
 
-    // Copies RGB values into optional target, or returns new Object with RGB properties
+    // Copies RGB values into optional target, or returns new Object, values range from 0.0 to 1.0
     getRgb(target) {
         if (target && isHsl(target)) {
             target.r = this.r;
@@ -271,22 +277,19 @@ class ColorEye {
         }
     }
 
-    // Copies RYB values into optional target, or returns new Object with RYB properties
+    // Copies RYB values into optional target, or returns new Object, values range from 0.0 to 1.0
     getRyb(target) {
 	    let rybAsHex = cubicInterpolation(this.r, this.g, this.b, 1.0, CUBE.RGB_TO_RYB);
-        let r = clamp((rybAsHex & 0xff0000) >> 16, 0, 255);
-        let y = clamp((rybAsHex & 0x00ff00) >>  8, 0, 255);
-        let b = clamp((rybAsHex & 0x0000ff),       0, 255);
         if (target && isRyb(target)) {
-            target.r = r;
-            target.y = y;
-            target.b = b;
+            target.r = redF(rybAsHex);
+            target.y = greenF(rybAsHex);
+            target.b = blueF(rybAsHex);
         } else {
-            return { r: r, y: y, b: b };
+            return { r: redF(rybAsHex), y: greenF(rybAsHex), b: blueF(rybAsHex) };
         }
     }
 
-    // Copy to, or optionally export as new Array of RGB values ranging from 0.0 to 1.0, optional array offset
+    // Copies RGB values into optional array, or returns a new Array, values range from 0.0 to 1.0
     toArray(array = [], offset = 0) {
 		array[offset] = this.r;
 		array[offset + 1] = this.g;
@@ -344,8 +347,8 @@ class ColorEye {
     }
 
     // Converts color to grayscale
-    grayscale(type = 'luminosity') { return this.greyscale(type) }
-    greyscale(type = 'luminosity') {
+    greyscale(type = 'luminosity') { return this.grayscale(type) }
+    grayscale(type = 'luminosity') {
         let gray = 0;
         switch (type) {
             case 'luminosity': 
@@ -683,11 +686,21 @@ const COLOR_KEYWORDS = {
     'white': 0xFFFFFF, 'whitesmoke': 0xF5F5F5, 'yellow': 0xFFFF00, 'yellowgreen': 0x9ACD32
 };
 
+
+/////////////////////////////////////////////////////////////////////////////////////
+////    Add to ColorEye Prototype
+/////////////////////////////////////////////////////////////////////////////////////
+ColorEye.NAMES = COLOR_KEYWORDS;
+ColorEye.prototype.isColor = true;
+ColorEye.prototype.r = 1;
+ColorEye.prototype.g = 1;
+ColorEye.prototype.b = 1;
+
   
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Exports
 /////////////////////////////////////////////////////////////////////////////////////
-export { ColorEye, COLOR_KEYWORDS };
+export { ColorEye };
 
 
 /////////////////////////////////////////////////////////////////////////////////////

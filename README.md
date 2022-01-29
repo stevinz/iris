@@ -1,9 +1,11 @@
 # ColorEye
-Small, fast, zero-dependency javascript color library with support for the RGB / RYB / HSL color models. Internal functions create no new Objects for maximum performance. 
+> DEVELOPER NOTE: These docs are still being actively prepared. Also working on an example page. Check back soon...
+
+Small, fast, zero-dependency javascript color library with support for RGB, RYB, and HSL color models. Internal functions create no new Objects for maximum performance. 
 
 Also features hue shifting around the RYB color wheel. This creates much more natural complementary colors and palettes, similar to those seen at tools like [Paletton](https://paletton.com/).
 
-The internal implementation of Color type classes vary. ColorEye was designed with functionality to make it as easy to work alongside other popular frameworks (such as [Three.js](https://threejs.org/)). See [example](#Three-Example) below of converting back and forth between a ColorEye Object and a THREE.Color Object.
+The internal implementation of color libraries very. ColorEye was designed with functionality to make it easy to work alongside other popular frameworks such as [Three.js](https://threejs.org/). See [example](#Three-Example) below of converting back and forth between a ColorEye Object and a THREE.Color Object.
 
 <br>
 
