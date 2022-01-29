@@ -1,6 +1,8 @@
 # ColorEye
 > DEVELOPER NOTE: These docs are still being actively prepared. Also working on an example page. Check back soon...
 
+<br>
+
 Small, fast, zero-dependency javascript color library with support for RGB, RYB, and HSL color models. Internal functions create no new Objects for maximum performance. 
 
 Also features hue shifting around the RYB color wheel. This creates much more natural complementary colors and palettes, similar to those seen at tools like [Paletton](https://paletton.com/).
@@ -148,7 +150,11 @@ Sets this color based on CSS ('rgb(255,0,0)' / 'hsl(360,50%,50%)'), Hex ('#FF000
 ### **.[equals]()** ( color : ColorEye ) : Boolean
 Returns true if the RGB values of 'color' are the same as those of this Object.
 
+<br>
+
 # Contributing
+
+<br>
 
 # License
 ColorEye is released under the terms of the MIT license, so it is free to use in your free or commercial projects.
