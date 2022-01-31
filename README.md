@@ -7,7 +7,7 @@ Small, fast, dependency free javascript color library with support for the RGB, 
 
 Internal calls create zero new Objects for maximum performance. Easy color conversion between color models. Additionally provides support for color mixing and color alteration with functions like mix, add, subtract, brighten, darken, grayscale, and more.
 
-Also features hue shifting around the more traditional artistic RYB (red, yellow, blue) color wheel. This creates much more natural complementary colors and intuitive palettes, similar to those seen at tools like [Paletton](https://paletton.com/).
+Also features hue shifting around the more traditional artistic RYB (red, yellow, blue) color wheel. This creates much more natural complementary colors and intuitive palettes, see [online example](https://stevinz.github.io/coloreye/).
 
 ColorEye was designed to make it easy to work alongside other popular frameworks, such as [Three.js](https://threejs.org/). See [example](#Three-Example) below of converting back and forth between a ColorEye Object and a THREE.Color Object.
 
@@ -276,6 +276,9 @@ Adjusts the RGB values to fit in the RYB spectrum as best as possible.
     
 ### **.[rybComplementary]()** ( ) : this
 Adjusts this color to be 180 degress (opposite) of the current color on the RYB color wheel.
+
+### **.[rybHue]()** ( ) : Integer
+Returns the RYB adjusted hue value of current ColorEye object in range 0 to 360.
 
 ### **.[rybRotateHue]()** ( degrees : Integer ) : this
 Adjusts this color to be **degress** of the current color on the RYB color wheel, range from -360 to 360.
