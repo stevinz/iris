@@ -420,15 +420,16 @@ class ColorEye {
         return this.rybRotateHue(180);
     }
 
+    // Map a color's RGB hue to the closest hue in the RYB spectrum
+    rybHue() {
+        for (let i = 1; i < RYB_OFFSET.length; i++) {
+            if (RYB_OFFSET[i] > this.hue()) return i - 2;
+        }
+    }
+
     // Rotates the hue of a color in the RYB spectrum by degrees
     rybRotateHue(degrees = 90) {
-        // Map a color's RGB hue to the closest hue in the RYB spectrum
-        let rybHue = 0;
-        for (let i = 1; i < RYB_OFFSET.length; i++) {
-            if (RYB_OFFSET[i] > this.hue()) { rybHue = i - 2; break; }
-        }
-        // Add in degrees to rotate hue
-        let newHue = keepInRange(rybHue + degrees);
+        let newHue = keepInRange(this.rybHue() + degrees);
         return this.setHSL(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 
@@ -542,7 +543,7 @@ function hsl(hexColor, channel = 'h') {
 const _mix1 = new ColorEye();
 const _mix2 = new ColorEye();
 
-function matchSpectrum(matchHue, spectrum) {
+function matchSpectrum(matchHue, spectrum = SPECTRUM.RYB) {
     let colorDegrees = 360 / spectrum.length;
     let degreeCount = colorDegrees;
     let stopCount = 0;

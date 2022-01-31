@@ -7,56 +7,131 @@
         <link rel='stylesheet' href='./css/colorwheel.css' type='text/css'>
     </head>
     <body>
-        <div class='filler' style='height: 210px;'></div>
+        
+
+        <!-- <div style="height: 200px;"></div> -->
 
         <!-------------------------------------------------------------------->
 
-        <div class='title'><h1>Color Eye</h1></div>
+        <div class='colorCircle' id='circleRgb' style='z-index: 100;'></div>
+        <div class='colorCircle' id='circleRyb' style='z-index: 100;'></div>
 
-        <div class='centerBox'>
-            <canvas class='colorWheel' id='colorWheelRgb' width='200' height='200'></canvas>
-            <div class="colorCircle" id="circleRgb" style="z-index: 100;"></div>
+        <div class='contentBox'>
+            <div class='title'><h1>Color Eye</h1></div>
 
-            <div id='sliders'>
-                <div class='sliderCombo'>
-                    <div class='dot unselectable' style='color: red; font-size: xx-large; margin: -8px;'>●</div>
-                    <div class='sliderBox'><input type='range' min='0' max='255' value='255' class='slider' id='sliderRgbR'></div>
-                    <span class='unselectable' id='rgbValueR'>255</span>
+            <div class='centerBox'>
+                <canvas class='colorWheel' id='colorWheelRgb' width='200' height='200'></canvas>
+                <div id='sliders'>
+                    <div class='sliderCombo'>
+                        <div class='dot unselectable' style='color: red; font-size: xx-large; margin: -8px;'>●</div>
+                        <div class='sliderBox'><input type='range' min='0' max='255' value='255' class='slider' id='sliderRgbR'></div>
+                        <span class='unselectable' id='rgbValueR'>255</span>
+                    </div>
+                    <div class='sliderCombo'>
+                        <div class='dot unselectable' style='color: green; font-size: xx-large; margin: -8px;'>●</div>
+                        <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRgbG'></div>
+                        <span class='unselectable' id='rgbValueG'>0</span>
+                    </div>
+                    <div class='sliderCombo'>
+                        <div class='dot unselectable' style='color: blue; font-size: xx-large; margin: -8px;'>●</div>
+                        <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRgbB'></div>
+                        <span class='unselectable' id='rgbValueB'>0</span>
+                    </div>
+                    <div id='colorBox' style="background-color: yellow;"></div>
+                    <div class='sliderCombo'>
+                        <div class='dot unselectable' style='color: red; font-size: xx-large; margin: -8px;'>●</div>
+                        <div class='sliderBox'><input type='range' min='0' max='255' value='255' class='slider' id='sliderRybR'></div>
+                        <span class='unselectable' id='rybValueR'>255</span>
+                    </div>
+                    <div class='sliderCombo'>
+                        <div class='dot unselectable' style='color: yellow; font-size: xx-large; margin: -8px;'>●</div>
+                        <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRybY'></div>
+                        <span class='unselectable' id='rybValueY'>0</span>
+                    </div>
+                    <div class='sliderCombo'>
+                        <div class='dot unselectable' style='color: blue; font-size: xx-large; margin: -8px;'>●</div>
+                        <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRybB'></div>
+                        <span class='unselectable' id='rybValueB'>0</span>
+                    </div>
                 </div>
-                <div class='sliderCombo'>
-                    <div class='dot unselectable' style='color: green; font-size: xx-large; margin: -8px;'>●</div>
-                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRgbG'></div>
-                    <span class='unselectable' id='rgbValueG'>0</span>
-                </div>
-                <div class='sliderCombo'>
-                    <div class='dot unselectable' style='color: blue; font-size: xx-large; margin: -8px;'>●</div>
-                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRgbB'></div>
-                    <span class='unselectable' id='rgbValueB'>0</span>
+                <canvas class='colorWheel' id='colorWheelRyb' width='200' height='200'></canvas>
+            </div>
+
+            <div class='centerBoxDark'>
+                <div class='flexBoxLeft'>
+                    <div class='title'>
+                        Complement
+                    </div>
+                    <div class='horizontalRow'>
+                        <div class='colorSquare' id='colorRgb1'></div>
+                        <div class='colorSquare' id='colorRgb2'></div>
+                        <div class='colorSquare' id='colorRgb3'></div>
+                        <div class='colorSquare' id='colorRgb4'></div>
+                        <div class='colorSquare' id='colorRgb5'></div>
+                        <div class='colorSquare' id='colorRgb6'></div>
+                        <div class='colorSquare' id='colorRgb7'></div>
+                        <div class='colorSquare' id='colorRgb8'></div>
+                        <div class='colorSquare' id='colorRgb9'></div>
+                    </div>  
                 </div>
                 
-                <div id='colorBox' style="background-color: yellow;"></div>
-                
-                <div class='sliderCombo'>
-                    <div class='dot unselectable' style='color: red; font-size: xx-large; margin: -8px;'>●</div>
-                    <div class='sliderBox'><input type='range' min='0' max='255' value='255' class='slider' id='sliderRybR'></div>
-                    <span class='unselectable' id='rybValueR'>255</span>
-                </div>
-                <div class='sliderCombo'>
-                    <div class='dot unselectable' style='color: yellow; font-size: xx-large; margin: -8px;'>●</div>
-                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRybY'></div>
-                    <span class='unselectable' id='rybValueY'>0</span>
-                </div>
-                <div class='sliderCombo'>
-                    <div class='dot unselectable' style='color: blue; font-size: xx-large; margin: -8px;'>●</div>
-                    <div class='sliderBox'><input type='range' min='0' max='255' value='000' class='slider' id='sliderRybB'></div>
-                    <span class='unselectable' id='rybValueB'>0</span>
+                <div class='flexBoxRight'>
+                    <div class='title'>
+                        Complement
+                    </div>
+                    <div class='horizontalRow'>
+                        <div class='colorSquare' id='colorRyb1'></div>
+                        <div class='colorSquare' id='colorRyb2'></div>
+                        <div class='colorSquare' id='colorRyb3'></div>
+                        <div class='colorSquare' id='colorRyb4'></div>
+                        <div class='colorSquare' id='colorRyb5'></div>
+                        <div class='colorSquare' id='colorRyb6'></div>
+                        <div class='colorSquare' id='colorRyb7'></div>
+                        <div class='colorSquare' id='colorRyb8'></div>
+                        <div class='colorSquare' id='colorRyb9'></div>
+                    </div>
                 </div>
             </div>
 
-            <canvas class='colorWheel' id='colorWheelRyb' width='200' height='200'></canvas>
-            <div class="colorCircle" id="circleRyb" style="z-index: 100;"></div>
-        </div>
+            <div style='height: 88px;'></div>
 
+            <div class='centerBoxDark'>
+                <div class='flexBoxLeft'>
+                    <div class='title'>
+                        Triadic
+                    </div>
+                    <div class='horizontalRow'>
+                        <div class='colorSquare' id='triadRgb1'></div>
+                        <div class='colorSquare' id='triadRgb2'></div>
+                        <div class='colorSquare' id='triadRgb3'></div>
+                        <div class='colorSquare' id='triadRgb4'></div>
+                        <div class='colorSquare' id='triadRgb5'></div>
+                        <div class='colorSquare' id='triadRgb6'></div>
+                        <div class='colorSquare' id='triadRgb7'></div>
+                        <div class='colorSquare' id='triadRgb8'></div>
+                        <div class='colorSquare' id='triadRgb9'></div>
+                    </div>  
+                </div>
+                
+                <div class='flexBoxRight'>
+                    <div class='title'>
+                        Triadic
+                    </div>
+                    <div class='horizontalRow'>
+                        <div class='colorSquare' id='triadRyb1'></div>
+                        <div class='colorSquare' id='triadRyb2'></div>
+                        <div class='colorSquare' id='triadRyb3'></div>
+                        <div class='colorSquare' id='triadRyb4'></div>
+                        <div class='colorSquare' id='triadRyb5'></div>
+                        <div class='colorSquare' id='triadRyb6'></div>
+                        <div class='colorSquare' id='triadRyb7'></div>
+                        <div class='colorSquare' id='triadRyb8'></div>
+                        <div class='colorSquare' id='triadRyb9'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-------------------------------------------------------------------->
         
         <script type='module'>

@@ -60,7 +60,6 @@ function rotatePoint(centerX, centerY, x, y, degrees, target) {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Color Wheels
 ////        size = 0.0 to 1.0 (percent)
-////        circle = circle element
 /////////////////////////////////////////////////////////////////////////////////////
 function drawHueWheel(canvas, type = 'rgb', size = 0.75) {
     let ctx = canvas.getContext('2d');
@@ -106,12 +105,20 @@ function setPixel(img, x, y, r, g, b, a) {
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////
+////    Color Highlight
+/////////////////////////////////////////////////////////////////////////////////////
 function placeCircle(canvas, type = 'rgb', circle, hue) {
     let eye = new ColorEye();
     eye.set(hue, 1.0, 0.5, 'hsl');
 
     let h = eye.hue();
-    if (type === 'ryb') h += (h - eye.rybAdjust().hue());
+
+    if (type === 'ryb') {
+        //h += h - eye.rybAdjust().hue();
+
+        h = eye.rybHue();
+    }
 
     let box = canvas.getBoundingClientRect();
     let cir = circle.getBoundingClientRect();

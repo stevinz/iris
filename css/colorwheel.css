@@ -61,8 +61,16 @@ body {
 	user-select: none;
  }
 
+.contentBox {
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	transform: translate(-50%, 0%);
+}
+
 .title {
 	margin: auto;
+	padding: 5px;
 }
 
 .centerBox {
@@ -75,6 +83,48 @@ body {
 	align-items: center;
 }
 
+.centerBoxDark {
+	background-color: var(--color-background-dark);
+	border-radius: var(--display-radius);
+	margin: auto;
+    padding: 0px;
+	width: var(--display-width);
+	/* display: flex;
+	align-items: center; */
+}
+
+.flexBoxLeft {
+	background-color: var(--color-background-light);
+	border-radius: 10px;
+	left: 0;
+    padding: 5px 2px 5px 2px;
+	width: 42%;
+	position: absolute;
+}
+
+.flexBoxRight {
+	background-color: var(--color-background-light);
+	border-radius: 10px;
+	right: 0;
+    padding: 5px 2px 5px 2px;
+	width: 42%;
+	position: absolute;
+}
+
+.horizontalRow {
+	display: flex;
+	align-items: center;
+}
+
+.colorSquare {
+	background-color: white;
+	border: 0px solid;
+	border-radius: 8px;
+	margin: auto;
+	width: 37px;
+	height: 30px;
+}
+
 .colorWheel {
 	background-color: var(--color-background-light);
 	border-radius: calc(var(--wheel-size) / 2);
@@ -84,10 +134,6 @@ body {
 	width: var(--wheel-size);
 	height: var(--wheel-size);
 	margin: auto;
-}
-.colorWheel:hover {
-	border: 2px solid;
-	border-color: var(--color-background-dark);
 }
 
 .colorCircle {
