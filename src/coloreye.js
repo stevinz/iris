@@ -320,7 +320,14 @@ class ColorEye {
     
     hueF() { return hue(this.hex()) / 6.0; }
 
+    // Map a color's RGB hue to the closest hue in the RYB spectrum
+    hueRYB() {
+        for (let i = 1; i < RYB_OFFSET.length; i++) {
+            if (RYB_OFFSET[i] > this.hue()) return i - 2;
+        }
+    }
 
+    
     /////////////////////////////////////////////////////////////////////////////////////
     ////    Color Functions
     ////////////////////
@@ -420,16 +427,9 @@ class ColorEye {
         return this.rybRotateHue(180);
     }
 
-    // Map a color's RGB hue to the closest hue in the RYB spectrum
-    rybHue() {
-        for (let i = 1; i < RYB_OFFSET.length; i++) {
-            if (RYB_OFFSET[i] > this.hue()) return i - 2;
-        }
-    }
-
     // Rotates the hue of a color in the RYB spectrum by degrees
     rybRotateHue(degrees = 90) {
-        let newHue = keepInRange(this.rybHue() + degrees);
+        let newHue = keepInRange(this.hueRYB() + degrees);
         return this.setHSL(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 

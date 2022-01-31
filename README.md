@@ -231,6 +231,9 @@ Returns lightness value of current ColorEye object in range 0.01 to 1.0.
 ### **.[hueF]()** ( ) : Float
 Returns hue value of current ColorEye object in range 0.01 to 1.0.
 
+### **.[hueRYB]()** ( ) : Integer
+Returns the RYB adjusted hue value of current ColorEye object in range 0 to 360.
+
 <br>
 
 # Color Functions
@@ -276,9 +279,6 @@ Adjusts the RGB values to fit in the RYB spectrum as best as possible.
     
 ### **.[rybComplementary]()** ( ) : this
 Adjusts this color to be 180 degress (opposite) of the current color on the RYB color wheel.
-
-### **.[rybHue]()** ( ) : Integer
-Returns the RYB adjusted hue value of current ColorEye object in range 0 to 360.
 
 ### **.[rybRotateHue]()** ( degrees : Integer ) : this
 Adjusts this color to be **degress** of the current color on the RYB color wheel, range from -360 to 360.
