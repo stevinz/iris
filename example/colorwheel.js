@@ -36,8 +36,9 @@ import { ColorEye } from '../src/coloreye.js';
 ////    Math Utils
 /////////////////////////////////////////////////////////////////////////////////////
 function calculateCartesian(r, theta) {
-    let x = r * Math.cos(theta);
-    let y = r * Math.sin(theta);
+    let radians = (Math.PI / 180) * theta;
+    let x = r * Math.cos(radians);
+    let y = r * Math.sin(radians);
     return { x: x, y: y };
 }
 
@@ -61,36 +62,17 @@ function rotatePoint(centerX, centerY, x, y, degrees, target) {
 ////        size = 0.0 to 1.0 (percent)
 ////        circle = circle element
 /////////////////////////////////////////////////////////////////////////////////////
-function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle) {
+function drawHueWheel(canvas, type = 'rgb', size = 0.75) {
     let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     let eye = new ColorEye();
-
-    // // Performance Test
-    // if (type === 'rgb') {
-    //     let time, test = 0;
-    //     time = performance.now();
-    //     for (let x = 0; x < 20000000; x++) {
-    //         let eye1 = new ColorEye(1, 0, 0).brighten();
-    //         test += eye1.r;
-    //     }
-    //     console.log(performance.now() - time);
-    //     time = performance.now();
-    //     let eye2 = new ColorEye();
-    //     for (let x = 0; x < 20000000; x++) {
-    //         eye2.set(1, 0, 0).brighten();
-    //         test += eye2.r;
-    //     }
-    //     console.log(performance.now() - time);
-    //     console.log(test);
-    // }
 
     for (let x = 0; x < canvas.width; x++) {
         for (let y = 0; y < canvas.height; y++) {
             let ax = x - (canvas.width / 2);
             let ay = y - (canvas.height / 2);
             let h = Math.atan2(ay, ax) * (180 / Math.PI) + 90;
-            let s = saturation;
+            let s = 1;
             let l = (Math.pow((Math.pow(ax, 2) + Math.pow(ay, 2)), 0.5) / (canvas.width));
             if (l > (size / 2)) {
                 eye.set(h, s, l, 'hsl');
@@ -99,7 +81,9 @@ function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle)
             }
         }
     }
+
     ctx.putImageData(img, 0, 0);
+    
     if (size > 0) {
         ctx.beginPath();
         ctx.strokeStyle = '#444';
@@ -107,68 +91,6 @@ function drawHueWheel(canvas, type = 'rgb', saturation = 1, size = 0.75, circle)
         ctx.arc(canvas.width / 2, canvas.height / 2, (canvas.width / 2) * size, 0, Math.PI * 2, false);
         ctx.stroke();
     }
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-////    Color Box
-////        size = 0.0 to 1.0 (percent)
-////        circle = circle element
-/////////////////////////////////////////////////////////////////////////////////////
-function drawColorBox(canvas, type = 'rgb', hue = 0, size = 0.75 /* 0.0 to 1.0 */) {
-    let sizeSquared = size * size;
-    size = Math.sqrt(sizeSquared / 2) - (2 / canvas.width);
-    let ctx = canvas.getContext('2d');
-    let inMemoryCanvas = document.createElement('canvas');
-        inMemoryCanvas.width = Math.round(canvas.width * size);
-        inMemoryCanvas.height = Math.round(canvas.height * size);
-    let ctxMemory = inMemoryCanvas.getContext('2d');
-    let img = ctxMemory.getImageData(0, 0, inMemoryCanvas.width, inMemoryCanvas.height);
-    let eye = new ColorEye();
-    for (let y = 0; y < inMemoryCanvas.height; y++) {
-        for (let x = 0; x < inMemoryCanvas.width; x++) {
-            let h = hue;
-            
-            // Darker design (saturation, lightness)
-            //      (1.0, 0.5) ---- (1.0, 0.0)
-            //          |               |
-            //          |               |
-            //      (0.0, 1.0) ---- (0.0, 0.0)
-            // let s = 1.0 - (y / inMemoryCanvas.height);
-            // let l = 1.0 - (x / inMemoryCanvas.width);
-            //     l = ((0.5 * s) + (l * (1.0 - s))) * l;
-
-            // Medium design (saturation, lightness)
-            //      (1.0, 0.0) ---- (1.0, 0.0)
-            //          |               |
-            //          |               |
-            //      (0.0, 1.0) ---- (0.0, 0.0)
-            // let s = 1.0 - (y / inMemoryCanvas.height);
-            // let l = 1.0 - (x / inMemoryCanvas.width);
-            //     l = (0.5 * s) + (l * (1.0 - s));
-
-            // Lighter design (saturation, lightness)
-            //      (1.0, 1.0) ---- (1.0, 0.0)
-            //          |               |
-            //          |               |
-            //      (0.0, 1.0) ---- (0.0, 0.0)
-            // // also for fun, more saturation in middle:
-            // let s = 2.0 - ((y / inMemoryCanvas.height) * 2.0);
-            //     s = Math.min(1.0, s);
-            let s = 1.0 - (y / inMemoryCanvas.height);
-            let l = 1.0 - (x / inMemoryCanvas.width);
-                
-            eye.set(h, s, l, 'hsl');
-            if (type === 'ryb') eye.rybAdjust();
-            setPixel(img, x, y, eye.red(), eye.green(), eye.blue(), 255);
-        }
-    }
-    ctxMemory.putImageData(img, 0, 0);
-    ctx.save();
-    ctx.translate(canvas.width/2, canvas.height/2);
-    //ctx.rotate((hue + 45) * (Math.PI / 180));
-    ctx.drawImage(inMemoryCanvas, -inMemoryCanvas.width/2, -inMemoryCanvas.height/2);
-    ctx.restore();
 }
 
 function setPixel(img, x, y, r, g, b, a) {
@@ -184,7 +106,23 @@ function setPixel(img, x, y, r, g, b, a) {
 }
 
 
+function placeCircle(canvas, type = 'rgb', circle, hue) {
+    let eye = new ColorEye();
+    eye.set(hue, 1.0, 0.5, 'hsl');
+
+    let h = eye.hue();
+    if (type === 'ryb') h += (h - eye.rybAdjust().hue());
+
+    let box = canvas.getBoundingClientRect();
+    let cir = circle.getBoundingClientRect();
+    let pos = calculateCartesian(canvas.width * 0.5, h - 90);
+    
+    circle.style.left = box.left + (box.width / 2) + pos.x - (cir.width / 2) + 'px';
+    circle.style.top = box.top + (box.height / 2) + pos.y - (cir.height / 2) + 'px';
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Exports
 /////////////////////////////////////////////////////////////////////////////////////
-export { drawColorBox, drawHueWheel };
+export { drawHueWheel, placeCircle };

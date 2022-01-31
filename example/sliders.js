@@ -30,12 +30,14 @@
 ////    Imports
 /////////////////////////////////////////////////////////////////////////////////////
 import { ColorEye } from '../src/coloreye.js';
+import { drawHueWheel, placeCircle } from './colorwheel.js';
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////    File Scope Variables
 /////////////////////////////////////////////////////////////////////////////////////
 let eye = new ColorEye();
+let ryb = new ColorEye();
 let colorBox = document.getElementById('colorBox');
 let rgbR = document.getElementById('sliderRgbR'), txtRgbR = document.getElementById('rgbValueR');
 let rgbG = document.getElementById('sliderRgbG'), txtRgbG = document.getElementById('rgbValueG');
@@ -44,11 +46,16 @@ let rybR = document.getElementById('sliderRybR'), txtRybR = document.getElementB
 let rybY = document.getElementById('sliderRybY'), txtRybY = document.getElementById('rybValueY');
 let rybB = document.getElementById('sliderRybB'), txtRybB = document.getElementById('rybValueB');
 
+let rgbWheel = document.getElementById('colorWheelRgb');
+let rybWheel = document.getElementById('colorWheelRyb');
+let rgbCircle = document.getElementById('circleRgb');
+let rybCircle = document.getElementById('circleRyb');
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Initialization
 /////////////////////////////////////////////////////////////////////////////////////
-function connectSliders() {    
+function connectSliders() {
     onSliderChange(rgbR, updateSlider, updateRgbR);
     onSliderChange(rgbG, updateSlider, updateRgbG);
     onSliderChange(rgbB, updateSlider, updateRgbB);
@@ -61,7 +68,9 @@ function connectSliders() {
     
     updateRgb();
     updateRyb();
-    updateText();
+
+    drawHueWheel(rgbWheel, 'rgb', 0.5);
+    drawHueWheel(rybWheel, 'ryb', 0.5);
 }
 
 
@@ -110,6 +119,9 @@ function updateText() {
     txtRybR.innerHTML = rybR.value;
     txtRybY.innerHTML = rybY.value;
     txtRybB.innerHTML = rybB.value;
+
+    placeCircle(rgbWheel, 'rgb', rgbCircle, eye.hue());
+    placeCircle(rybWheel, 'ryb', rybCircle, eye.hue());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

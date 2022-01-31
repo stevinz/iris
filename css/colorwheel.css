@@ -90,9 +90,9 @@ body {
 	border-color: var(--color-background-dark);
 }
 
-.mouseCircle {
+.colorCircle {
 	background-color: transparent;
-	border: 1px solid;
+	border: 2px solid;
 	border-color: var(--color-background-dark);
 	width: var(--mouse-circle-size);
 	height: var(--mouse-circle-size);

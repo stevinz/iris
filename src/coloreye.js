@@ -330,9 +330,14 @@ class ColorEye {
         return this.setRGB(this.r + color.r, this.g + color.g, this.b + color.b);
     }
 
-    // Adds scalar value to this colors RGB values
+    // Adds scalar value to this colors RGB values, range -255 to 255
     addScalar(scalar) {
-        return this.setRGB(this.r + scalar, this.g + scalar, this.b + scalar);
+        return this.setRGB(this.red() + scalar, this.green() + scalar, this.blue() + scalar);
+    }
+
+    // Adds scalar value to this colors RGB values, range -1.0 to 1.0
+    addScalarF(scalar) {
+        return this.setRGBF(this.r + scalar, this.g + scalar, this.b + scalar);
     }
 
     // Lightens color by amount
@@ -355,8 +360,8 @@ class ColorEye {
     }
 
     // Converts color to grayscale
-    greyscale(type = 'luminosity') { return this.grayscale(type) }
-    grayscale(type = 'luminosity') {
+    greyscale(percent = 1.0, type = 'luminosity') { return this.grayscale(percent, type) }
+    grayscale(percent = 1.0, type = 'luminosity') {
         let gray = 0;
         switch (type) {
             case 'luminosity': 
@@ -365,7 +370,11 @@ class ColorEye {
             default:
                 gray = (this.r + this.g + this.b) / 3;
         }
-        return this.setScalarF(gray, 1.0)
+        percent = clamp(percent, 0, 1);
+        let r = (this.r * (1.0 - percent)) + (percent * gray.r);
+        let g = (this.g * (1.0 - percent)) + (percent * gray.g);
+        let b = (this.b * (1.0 - percent)) + (percent * gray.b);
+        return this.setRGBF(r, g, b);
     }
 
     hslOffset(h, s, l) {
@@ -387,9 +396,19 @@ class ColorEye {
         return this.setRGBF(this.r * color.r, this.g * color.g, this.b * color.b);
     }
 
-    // Multiplies RGB values from this color with scalar value
+    // Multiplies RGB values from this color with scalar value, -Infinity to Infinity
     multiplyScalar(scalar) {
-        return this.setRGB(this.r * scalar, this.g * scalar, this.b * scalar);
+        return this.setRGBF(this.r * scalar, this.g * scalar, this.b * scalar);
+    }
+
+    rgbComplementary() {
+        return this.rgbRotateHue(180);
+    }
+
+    // Rotates the hue of a color in the RGB spectrum by degrees
+    rgbRotateHue(degrees = 90) {
+        let newHue = keepInRange(this.hue() + degrees);
+        return this.setHSL(newHue, this.saturation(), this.lightness());
     }
 
     // Adjusts the RGB values to fit in the RYB spectrum as best as possible
@@ -413,17 +432,7 @@ class ColorEye {
         return this.setHSL(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 
-    rgbComplementary() {
-        return this.rgbRotateHue(180);
-    }
-
-    // Rotates the hue of a color in the RGB spectrum by degrees
-    rgbRotateHue(degrees = 90) {
-        let newHue = keepInRange(this.hue() + degrees);
-        return this.setHSL(newHue, this.saturation(), this.lightness());
-    }
-
-    // Subtractd RGB values from color to this color
+    // Subtract RGB values from color to this color
     subtract(color) {
         if (! (color instanceof ColorEye)) console.warn(`ColorEye: sub() was not called with a ColorEye object`);
         return this.setRGB(this.r - color.r, this.g - color.g, this.b - color.b);

@@ -5,7 +5,7 @@
 
 Small, fast, dependency free javascript color library with support for the RGB, RYB, and HSL color models and easy interaction with HTML, CSS, and third party frameworks. 
 
-Internal calls create zero new Objects for maximum performance. Easy color conversion between color models. Additionally provides support for color mixing and color alteration with functions like mix, add, subtract, brighten, darken, grayscale, and much more.
+Internal calls create zero new Objects for maximum performance. Easy color conversion between color models. Additionally provides support for color mixing and color alteration with functions like mix, add, subtract, brighten, darken, grayscale, and more.
 
 Also features hue shifting around the more traditional artistic RYB (red, yellow, blue) color wheel. This creates much more natural complementary colors and intuitive palettes, similar to those seen at tools like [Paletton](https://paletton.com/).
 
@@ -238,12 +238,63 @@ Returns hue value of current ColorEye object in range 0.01 to 1.0.
 ### **.[add]()** ( color : ColorEye ) : this
 Adds the red, green, blue values from **color** to this ColorEye Object's values.
 
+### **.[addScalar]()** ( scalar : Integer ) : this
+Adds the value **scalar** to the red, green, blue of this ColorEye Object, scalar should be in range -255 to 255.
+
+### **.[addScalarF]()** ( scalar : Float ) : this
+Adds the value **scalar** to the red, green, blue of this ColorEye Object, scalar should be in range -1.0 to 1.0.
+
+### **.[brighten]()** ( amount : Float ) : this
+Increases the lightness of this ColorEye Object by **amount** as a percentage of the remainder of 100% lightness less the current lightness. For example, if the current hsl lightness value is 0.6 (between 0.0 and 1.0), an **amount** of 0.5 will increase the lightness value to 0.6 + ((1.0 - 0.6) * 0.5) = 0.8, an **amount** value of 1.0 will always bring lightness value up to 1.0 (100%).
+
+### **.[darken]()** ( amount : Float ) : this
+Decreases the lightness of this ColorEye Object by **amount**. A value of 0.5 (default) will decrease lightness by 50%, a value of 2.0 will double lightness.
+
+### **.[grayscale]()** ( percent : Float, type : String ) : this
+Changes color into grayscale by **percent** ranging from 0.0 to 1.0. This can be done by type 'average' which takes an average of the red, green, blue values. Or by default type of 'luminosity' which scales red, green, blue values according to how human eyes see color (see [details at GIMP](https://docs.gimp.org/2.6/en/gimp-tool-desaturate.html)).
+
+### **.[hslOffset]()** ( h : Integer, s : Float, l : Float ) : this
+Change the HSL values of this ColorEye object by **h** (-360 to 360), **s** (-1.0 to 1.0), and **l** (-1.0 to 1.0).
+
+### **.[mix]()** ( mixColor : ColorEye, percent : Float ) : this
+Mixes in another ColorEye Object's color value to this ColorEye Object by **percent** (default of 0.5, i.e. 50%).
+
+### **.[multiply]()** ( color : ColorEye ) : this
+Multiplies another ColorEye Object's RGB values to this ColorEye Object's RGB values.
+
+### **.[multiplyScalar]()** ( scalar : Float ) : this
+Multiplies this ColorEye Object's RGB values by **scalar**. There is no range for **scalar**, however, color values will be clamped between 0.0 and 1.0 after multiplication.
+
+### **.[rgbComplementary]()** ( ) : this
+Adjusts this color to be 180 degress (opposite) of the current color on the RGB color wheel.
+
+### **.[rgbRotateHue]()** ( degrees : Integer ) : this
+Adjusts this color to be **degress** of the current color on the RGB color wheel, range from -360 to 360.
+
+### **.[rybAdjust]()** ( ) : this
+Adjusts the RGB values to fit in the RYB spectrum as best as possible.
+    
+### **.[rybComplementary]()** ( ) : this
+Adjusts this color to be 180 degress (opposite) of the current color on the RYB color wheel.
+
+### **.[rybRotateHue]()** ( degrees : Integer ) : this
+Adjusts this color to be **degress** of the current color on the RYB color wheel, range from -360 to 360.
+
+### **.[subtract]()** ( color : ColorEye ) : this
+Subtracts the red, green, blue values from **color** to this ColorEye Object's values.
+
 <br>
 
 # Comparison
 
 ### **.[equals]()** ( color : ColorEye ) : Boolean
 Returns true if the RGB values of **color** are the same as those of this Object.
+
+### **.[isDark]()** ( color : ColorEye ) : Boolean
+Returns true if this ColorEye Object's color value would be considered "dark", helpful for determining whether of not to use black or white text with this color as a background.
+
+### **.[isLight]()** ( color : ColorEye ) : Boolean
+Returns true if this ColorEye Object's color value would be considered "light", helpful for determining whether of not to use black or white text with this color as a background.
 
 <br>
 
