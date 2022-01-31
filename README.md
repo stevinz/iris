@@ -17,6 +17,8 @@ ColorEye was designed to make it easy to work alongside other popular frameworks
 import { ColorEye } from './coloreye.js';
 ```
 
+<br>
+
 #### Create new ColorEye Object
 
 ```javascript
