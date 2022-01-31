@@ -113,12 +113,7 @@ function placeCircle(canvas, type = 'rgb', circle, hue) {
     eye.set(hue, 1.0, 0.5, 'hsl');
 
     let h = eye.hue();
-
-    if (type === 'ryb') {
-        //h += h - eye.rybAdjust().hue();
-
-        h = eye.rybHue();
-    }
+    if (type === 'ryb') h = eye.hueRYB();
 
     let box = canvas.getBoundingClientRect();
     let cir = circle.getBoundingClientRect();

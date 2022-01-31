@@ -179,15 +179,15 @@ function updateText() {
     clrRgb9.style.backgroundColor = clrStart.set(eye).mix(clr1, 1.000).cssString();
     
     clr1 = new ColorEye(eye).rybComplementary();
-    clrRyb1.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.000).cssString();
-    clrRyb2.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.125).cssString();
-    clrRyb3.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.250).cssString();
-    clrRyb4.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.325).cssString();
-    clrRyb5.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.500).cssString();
-    clrRyb6.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.625).cssString();
-    clrRyb7.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.750).cssString();
-    clrRyb8.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 0.875).cssString();
-    clrRyb9.style.backgroundColor = clrStart.set(eye).rybAdjust().mix(clr1, 1.000).cssString();
+    clrRyb1.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.000).cssString();
+    clrRyb2.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.125).cssString();
+    clrRyb3.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.250).cssString();
+    clrRyb4.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.325).cssString();
+    clrRyb5.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.500).cssString();
+    clrRyb6.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.625).cssString();
+    clrRyb7.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.750).cssString();
+    clrRyb8.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.875).cssString();
+    clrRyb9.style.backgroundColor = clrStart.set(eye).mix(clr1, 1.000).cssString();
     
     // Triad
     clr1 = new ColorEye(eye).rgbRotateHue(120);
