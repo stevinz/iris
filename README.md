@@ -1,8 +1,4 @@
 # ColorEye
-> DEVELOPER NOTE: These docs are still being actively prepared. Also working on an example page. Check back soon...
-
-<br>
-
 Small, fast, dependency free javascript color library with support for the RGB, RYB, and HSL color models and easy interaction with HTML, CSS, and third party frameworks. 
 
 Internal calls create zero new Objects for maximum performance. Easy color conversion between color models. Additionally provides support for color mixing and color alteration with functions like mix, add, subtract, brighten, darken, grayscale, and more.
@@ -26,6 +22,8 @@ import { ColorEye } from './coloreye.js';
 ```javascript
 let color = new ColorEye();
 ```
+
+<br>
 
 #### ColorEye can be initialized in the following ways
 
@@ -298,10 +296,6 @@ Returns true if this ColorEye Object's color value would be considered "dark", h
 
 ### **.[isLight]()** ( color : ColorEye ) : Boolean
 Returns true if this ColorEye Object's color value would be considered "light", helpful for determining whether of not to use black or white text with this color as a background.
-
-<br>
-
-# Contributing
 
 <br>
 
