@@ -378,9 +378,9 @@ class ColorEye {
                 gray = (this.r + this.g + this.b) / 3;
         }
         percent = clamp(percent, 0, 1);
-        let r = (this.r * (1.0 - percent)) + (percent * gray.r);
-        let g = (this.g * (1.0 - percent)) + (percent * gray.g);
-        let b = (this.b * (1.0 - percent)) + (percent * gray.b);
+        let r = (this.r * (1.0 - percent)) + (percent * gray);
+        let g = (this.g * (1.0 - percent)) + (percent * gray);
+        let b = (this.b * (1.0 - percent)) + (percent * gray);
         return this.setRGBF(r, g, b);
     }
 
