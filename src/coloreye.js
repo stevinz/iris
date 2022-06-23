@@ -1,56 +1,73 @@
+/** /////////////////////////////////////////////////////////////////////////////////
+// 
+// @description ColorEye
+// @about       Color library with support for RGB, RYB, HSL color models and RYB hue shifting
+// @author      Stephens Nunnally <@stevinz>
+// @license     MIT - Copyright (c) 2022 Stephens Nunnally and Scidian Software
+// @source      https://github.com/stevinz/coloreye
+// 
+//      See end of file for license details and acknowledgements
 //
-// Description:     ColorEye
-// Author:          Copyright (c) 2022 Stephens Nunnally and Scidian Software
-// License:         Distributed under the MIT License
-// Source(s):       https://github.com/stevinz/coloreye
+///////////////////////////////////////////////////////////////////////////////////*/
 //
-// See end of file for license details and acknowledgements
+//  ColorEye
+//      Color library with support for RGB, RYB, HSL color models and RYB hue shifting
 //
-/////////////////////////////////////////////////////////////////////////////////////
-////
-////    Initialization
-////        ColorEye();                             // Defaults to white, 0xffffff
-////        ColorEye(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
-////
-////        ColorEye(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
-////
-////        ColorEye(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
-////        ColorEye(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
-////        ColorEye(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
-////
-////        ColorEye({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
-////        ColorEye({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
-////        ColorEye({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
-////
-////        ColorEye([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional array offset
-////
-////        ColorEye('#ff0000');                    // Hex String (also 3 digits: #f00)
-////        ColorEye('rgb(255, 0, 0)');             // CSS Color String
-////        ColorEye('red');                        // X11 Color Name
-////
-////        ColorEye(fromColorEye);                 // Copy from ColorEye Object
-////        ColorEye(fromThreeColor);               // Copy from Three.js Color Object
-////
-////    Properties
-////        ColorEye.r      0.0 to 1.0
-////        ColorEye.g      0.0 to 1.0
-////        ColorEye.b      0.0 to 1.0
-////
+//  Initialization
+//      ColorEye();                             // Defaults to white, 0xffffff
+//      ColorEye(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
+//  
+//      ColorEye(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
+//  
+//      ColorEye(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
+//      ColorEye(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
+//      ColorEye(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
+//  
+//      ColorEye({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
+//      ColorEye({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
+//      ColorEye({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
+//  
+//      ColorEye([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional array offset
+//  
+//      ColorEye('#ff0000');                    // Hex String (also 3 digits: #f00)
+//      ColorEye('rgb(255, 0, 0)');             // CSS Color String
+//      ColorEye('red');                        // X11 Color Name
+//  
+//      ColorEye(fromColorEye);                 // Copy from ColorEye Object
+//      ColorEye(fromThreeColor);               // Copy from Three.js Color Object
+//  
+//  Properties
+//      ColorEye.r      0.0 to 1.0
+//      ColorEye.g      0.0 to 1.0
+//      ColorEye.b      0.0 to 1.0
+//  
 /////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////////////
+/////   Color Eye
+/////////////////////////////////////////////////////////////////////////////////////
+
+/** Color library with support for RGB, RYB, HSL color models and RYB hue shifting */
 class ColorEye {
 
+    //////////////////// Static
+
+    static get NAMES() { return COLOR_KEYWORDS; }
+
+    //////////////////// Ctor
+
     constructor(r = 0xffffff, g, b, type = '') {
-        this.r = 1;
-        this.g = 1;
-        this.b = 1;
-        return this.set(r, g, b, type);
+        this.isColor = true;
+        this.r = 1;                             // 0.0 to 1.0
+        this.g = 1;                             // 0.0 to 1.0
+        this.b = 1;                             // 0.0 to 1.0
+        this.set(r, g, b, type);
     }
 
-
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Assignment
+    /////   Assignment
     ////////////////////
+
     copy(colorObject) {
         return this.set(colorObject);
     }
@@ -129,12 +146,12 @@ class ColorEye {
         return this.setRGBF(Math.random(), Math.random(), Math.random());
     };
 
-    // 0 to 255
+    /** 0 to 255 */
     setRGB(r, g, b) {
         return this.setRGBF(r / 255, g / 255, b / 255);
     }
 
-    // 0.0 to 1.0
+    /** 0.0 to 1.0 */
     setRGBF(r, g, b) {
         this.r = clamp(r, 0, 1);
         this.g = clamp(g, 0, 1);
@@ -142,18 +159,18 @@ class ColorEye {
         return this;
     }
 
-    // 0 to 255
+    /** 0 to 255 */
     setRYB(r, y, b) {
         let hexColor = cubicInterpolation(clamp(r, 0, 255), clamp(y, 0, 255), clamp(b, 0, 255), 255, CUBE.RYB_TO_RGB);
         return this.setHex(hexColor);
     }
 
-    // 0 to 255
+    /** 0 to 255 */
     setScalar(scalar) {
         return this.setRGB(scalar, scalar, scalar);
     }
 
-    // 0.0 to 1.0
+    /* 0.0 to 1.0 */
     setScalarF(scalar) {
         return this.setRGBF(scalar, scalar, scalar);
     }
@@ -219,48 +236,52 @@ class ColorEye {
 		return this;
 	}
 
-
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Output
+    /////   Output
     ////////////////////
-    // Example output: 'rgb(255, 0, 0)'
+
+    /** Example output: 'rgb(255, 0, 0)' */
     cssString(alpha) {
         return ('rgb(' + this.rgbString(alpha) + ')');
     }
 
-    // Returns decimal, i.e. 16711680 (equivalent to 0xff0000)
+    /** Returns decimal, i.e. 16711680 (equivalent to 0xff0000) */
     hex() {
         return ((this.red() << 16) + (this.green() << 8) + this.blue());
     }
 
-    // Example output: '#ff0000'
-    hexString(hexColor){
+    /** Example output: '#ff0000' */
+    hexString(hexColor /* optional */){
         if (hexColor === undefined || typeof value !== 'number') hexColor = this.hex();
         return '#' + ('000000' + ((hexColor) >>> 0).toString(16)).slice(-6);
     }
 
-    // Example output: '255, 0, 0'
+    /** Returns decimal (hex) of a random color */
+    static randomHex() {
+        return _random.setRandom().hex();
+    }
+
+    /** Example output: '255, 0, 0' */
     rgbString(alpha) {
         let rgb = this.red() + ', ' + this.green() + ', ' + this.blue();
-        let rgba = (alpha) ? rgb + ', ' + alpha : rgb;
+        let rgba = (alpha != undefined) ? rgb + ', ' + alpha : rgb;
         return rgba;
     }
 
-    // Export to JSON
+    /** Export to JSON */
     toJSON() {
 		return this.hex();
 	}
 
-
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Retrieving Data
+    /////   Retrieving Data
     ////////////////////
+
     clone() { 
         return new this.constructor(this.r, this.g, this.b);
     }
    
-    // Copies HSL values into optional target, or returns new Object, values range from 0.0 to 1.0
-    // Values are in range 0.0 to 1.0
+    /** Copies HSL values into optional target, or returns new Object, values range from 0.0 to 1.0. */
     getHSL(target) {
         if (target && isHSL(target)) {
             target.h = hueF(this.hex());
@@ -271,7 +292,7 @@ class ColorEye {
         }
     }
 
-    // Copies RGB values into optional target, or returns new Object, values range from 0.0 to 1.0
+    /** Copies RGB values into optional target, or returns new Object, values range from 0.0 to 1.0 */
     getRGB(target) {
         if (target && isHSL(target)) {
             target.r = this.r;
@@ -294,7 +315,7 @@ class ColorEye {
         }
     }
 
-    // Copies RGB values into optional array, or returns a new Array, values range from 0.0 to 1.0
+    /** Copies RGB values into optional array, or returns a new Array, values range from 0.0 to 1.0 */
     toArray(array = [], offset = 0) {
 		array[offset] = this.r;
 		array[offset + 1] = this.g;
@@ -302,10 +323,10 @@ class ColorEye {
 		return array;
 	}
 
-
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Spectrum Components
+    /////   Spectrum Components
     ////////////////////
+
     red() { return clamp(Math.floor(this.r * 255), 0, 255); }
     green() { return clamp(Math.floor(this.g * 255), 0, 255); }
     blue() { return clamp(Math.floor(this.b * 255), 0, 255); }
@@ -320,34 +341,37 @@ class ColorEye {
     
     hueF() { return hue(this.hex()) / 6.0; }
 
-    // Map a color's RGB hue to the closest hue in the RYB spectrum
+    /** Map a color's RGB hue to the closest hue in the RYB spectrum */
     hueRYB() {
         for (let i = 1; i < RYB_OFFSET.length; i++) {
             if (RYB_OFFSET[i] > this.hue()) return i - 2;
         }
     }
 
-    
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Color Functions
+    /////   Color Functions
     ////////////////////
-    // Adds RGB values from color to this color
+
+    /** Adds RGB values from color to this color */
     add(color) {
-        if (! (color instanceof ColorEye)) console.warn(`ColorEye: add() was not called with a ColorEye object`);
-        return this.setRGB(this.r + color.r, this.g + color.g, this.b + color.b);
+        if (! color.isColor) console.warn(`ColorEye: add() was not called with a 'Color' object`);
+        return this.setRGBF(this.r + color.r, this.g + color.g, this.b + color.b);
     }
 
-    // Adds scalar value to this colors RGB values, range -255 to 255
+    /** Adds scalar value to this colors RGB values, range -255 to 255 */
     addScalar(scalar) {
         return this.setRGB(this.red() + scalar, this.green() + scalar, this.blue() + scalar);
     }
 
-    // Adds scalar value to this colors RGB values, range -1.0 to 1.0
+    /** Adds scalar value to this colors RGB values, range -1.0 to 1.0 */
     addScalarF(scalar) {
         return this.setRGBF(this.r + scalar, this.g + scalar, this.b + scalar);
     }
 
-    // Lightens color by amount
+    /**
+     * Lightens color by amount
+     * @param {Number} [amount] Percentage to lighten (default = 0.5) towards 1.0, possible values are 0.0 to 1.0
+     */
     brighten(amount = 0.5 /* percentage from 0 to 1 */ ) {
         let h = hue(this.hex());
         let s = saturation(this.hex());
@@ -357,7 +381,11 @@ class ColorEye {
         return this;
     }
 
-    // Darkens color by amount
+    /**
+     * Darkens color by amount
+     * @name darken
+     * @param {Number} [amount] Percentage to darken (default = 0.5), 0 = fully dark, 1 = no change, 2 = twice as bright
+     */
     darken(amount = 0.5 /* percentage from 0 to 1 */ ) {
         let h = hue(this.hex());
         let s = saturation(this.hex());
@@ -366,7 +394,7 @@ class ColorEye {
         return this;
     }
 
-    // Converts color to grayscale
+    /** Converts color to grayscale */
     greyscale(percent = 1.0, type = 'luminosity') { return this.grayscale(percent, type) }
     grayscale(percent = 1.0, type = 'luminosity') {
         let gray = 0;
@@ -388,22 +416,22 @@ class ColorEye {
         return this.setHSL(this.hue() + h, this.saturation() + s, this.lightness() + l);
     }
 
-    // Mixes in mixColor by percent to this color
-    mix(mixColor, percent = 0.5) {
-        if (! (mixColor instanceof ColorEye)) console.warn(`ColorEye: mix() was not called with a ColorEye object`);
+    /** Mixes in 'color' by percent to this color */
+    mix(color, percent = 0.5) {
+        if (! color.isColor) console.warn(`ColorEye: mix() was not called with a 'Color' object`);
         percent = clamp(percent, 0, 1);
-        let r = (this.r * (1.0 - percent)) + (percent * mixColor.r);
-        let g = (this.g * (1.0 - percent)) + (percent * mixColor.g);
-        let b = (this.b * (1.0 - percent)) + (percent * mixColor.b);
+        let r = (this.r * (1.0 - percent)) + (percent * color.r);
+        let g = (this.g * (1.0 - percent)) + (percent * color.g);
+        let b = (this.b * (1.0 - percent)) + (percent * color.b);
         return this.setRGBF(r, g, b);
     }
 
     multiply(color) {
-        if (! (color instanceof ColorEye)) console.warn(`ColorEye: multiply() was not called with a ColorEye object`);
+        if (! color.isColor) console.warn(`ColorEye: multiply() was not called with a 'Color' object`);
         return this.setRGBF(this.r * color.r, this.g * color.g, this.b * color.b);
     }
 
-    // Multiplies RGB values from this color with scalar value, -Infinity to Infinity
+    /** Multiplies RGB values from this color with scalar value, -Infinity to Infinity */
     multiplyScalar(scalar) {
         return this.setRGBF(this.r * scalar, this.g * scalar, this.b * scalar);
     }
@@ -412,13 +440,13 @@ class ColorEye {
         return this.rgbRotateHue(180);
     }
 
-    // Rotates the hue of a color in the RGB spectrum by degrees
+    /** Rotates the hue of a color in the RGB spectrum by degrees */
     rgbRotateHue(degrees = 90) {
         let newHue = keepInRange(this.hue() + degrees);
         return this.setHSL(newHue, this.saturation(), this.lightness());
     }
 
-    // Adjusts the RGB values to fit in the RYB spectrum as best as possible
+    /** Adjusts the RGB values to fit in the RYB spectrum as best as possible */
     rybAdjust() {
         return this.setHSL(hue(matchSpectrum(this.hue(), SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
@@ -427,45 +455,46 @@ class ColorEye {
         return this.rybRotateHue(180);
     }
 
-    // Rotates the hue of a color in the RYB spectrum by degrees
+    /** Rotates the hue of a color in the RYB spectrum by degrees */
     rybRotateHue(degrees = 90) {
         let newHue = keepInRange(this.hueRYB() + degrees);
         return this.setHSL(hue(matchSpectrum(newHue, SPECTRUM.RYB)), this.saturation(), this.lightness());
     }
 
-    // Subtract RGB values from color to this color
+    /** Subtract RGB values from color to this color */
     subtract(color) {
-        if (! (color instanceof ColorEye)) console.warn(`ColorEye: sub() was not called with a ColorEye object`);
-        return this.setRGB(this.r - color.r, this.g - color.g, this.b - color.b);
+        if (! color.isColor) console.warn(`ColorEye: subtract() was not called with a 'Color' object`);
+        return this.setRGBF(this.r - color.r, this.g - color.g, this.b - color.b);
     }
 
-
     /////////////////////////////////////////////////////////////////////////////////////
-    ////    Comparison
+    /////   Comparison
     ////////////////////
-    // Returns true if the RGB values of 'color' are the same as those of this object.
+    
+    /** Returns true if the RGB values of 'color' are the same as those of this object. */
     equals(color) {
-        if (! (color instanceof ColorEye)) console.warn(`ColorEye: equals() was not called with a ColorEye object`);
+        if (! color.isColor) console.warn(`ColorEye: equals() was not called with a 'Color' object`);
         return (fuzzy(this.r, color.r) && fuzzy(this.g, color.g) && fuzzy(this.b, color.b));
     }
 
-    // Return true if lightness is < 60% for blue / purple / red, or else < 32% for all other colors
+    /** Return true if lightness is < 60% for blue / purple / red, or else < 32% for all other colors */
     isDark() {
         const h = this.hue();
         const l = this.lightness();
         return ((l < 0.60 && (h >= 210 || h <= 27)) || (l <= 0.32));
     }
 
+    /** Returns true if color is generally light-ish, false if dark-ish */
     isLight() {
         return (! this.isDark());
     }
 
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
+/////   Utility Functions
+/////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////////
-////    Utility Functions
-/////////////////////////////////////////////////////////////////////////////////////
 function isRGB(object) { return (object.r !== undefined && object.g !== undefined && object.b !== undefined); }
 function isHSL(object) { return (object.h !== undefined && object.s !== undefined && object.l !== undefined); }
 function isRYB(object) { return (object.r !== undefined && object.y !== undefined && object.b !== undefined); }
@@ -492,10 +521,10 @@ function keepInRange(value, min = 0, max = 360) {
     return value;
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////
-////    Return hue (0 to 360), saturation (0 to 1), and lightness (0 to 1)
+/////   Return hue (0 to 360), saturation (0 to 1), and lightness (0 to 1)
 ////////////////////
+
 let _hslHex;
 let _hslH;
 let _hslS;
@@ -536,12 +565,13 @@ function hsl(hexColor, channel = 'h') {
     return 0;
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////
-////    Match to 'matchHue' into 'spectrum'
+/////   Match to 'matchHue' into 'spectrum'
 ////////////////////
+
 const _mix1 = new ColorEye();
 const _mix2 = new ColorEye();
+const _random = new ColorEye();
 
 function matchSpectrum(matchHue, spectrum = SPECTRUM.RYB) {
     let colorDegrees = 360 / spectrum.length;
@@ -560,10 +590,10 @@ function matchSpectrum(matchHue, spectrum = SPECTRUM.RYB) {
     }
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////
-////    Cubic Interpolation
+/////   Cubic Interpolation
 ////////////////////
+
 const _interpolate = new ColorEye();
 
 /**
@@ -605,11 +635,11 @@ function cubicInterpolation(v1, v2, v3, scale = 255, table = CUBE.RYB_TO_RGB) {
     return _interpolate.set(o1, o2, o3, 'gl').hex();
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
+/////   Color Data
+/////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////////
-////    Color Data
-/////////////////////////////////////////////////////////////////////////////////////
-let CUBE = {
+const CUBE = {
 	RYB_TO_RGB: [
         [ 1.000, 1.000, 1.000 ],    // white
 		[ 0.163, 0.373, 0.600 ],    // blue
@@ -634,7 +664,7 @@ let CUBE = {
 };
 
 // Stop values for RYB color wheel
-let SPECTRUM = {
+const SPECTRUM = {
     RYB: [
         0xFF0000, 0xFF4900, 0xFF7400, 0xFF9200, 0xFFAA00, 0xFFBF00, 0xFFD300, 0xFFE800, 
         0xFFFF00, 0xCCF600, 0x9FEE00, 0x67E300, 0x00CC00, 0x00AF64, 0x009999, 0x0B61A4,
@@ -703,31 +733,20 @@ const COLOR_KEYWORDS = {
     'tomato': 0xFF6347, 'turquoise': 0x40E0D0, 'transparent': 0x000000, 'violet': 0xEE82EE, 'wheat': 0xF5DEB3,
     'white': 0xFFFFFF, 'whitesmoke': 0xF5F5F5, 'yellow': 0xFFFF00, 'yellowgreen': 0x9ACD32
 };
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-////    Add to ColorEye Prototype
-/////////////////////////////////////////////////////////////////////////////////////
-ColorEye.NAMES = COLOR_KEYWORDS;
-ColorEye.prototype.isColor = true;
-ColorEye.prototype.r = 1;
-ColorEye.prototype.g = 1;
-ColorEye.prototype.b = 1;
-
   
 /////////////////////////////////////////////////////////////////////////////////////
-////    Exports
+/////   Exports
 /////////////////////////////////////////////////////////////////////////////////////
+
 export { ColorEye };
 
-
 /////////////////////////////////////////////////////////////////////////////////////
-////    Acknowledgements
+/////   Acknowledgements
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // Some portions of this code adapted from:
 //      Description:    Color Schemer
-//      Author:         Scott Kellum (@scottkellum) and Mason Wendell (@canarymason)
+//      Author:         Scott Kellum <@scottkellum> and Mason Wendell <@canarymason>
 //      License:        Distributed under the MIT License
 //      Source:         https://github.com/at-import/color-schemer/blob/master/stylesheets/color-schemer/_ryb.scss
 //
@@ -751,16 +770,16 @@ export { ColorEye };
 //      Source:         http://vis.computer.org/vis2004/DVD/infovis/papers/gossett.pdf
 //
 /////////////////////////////////////////////////////////////////////////////////////
-////    License
+/////   License
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // MIT License
 //
 // ColorEye
-//      Copyright (c) 2022 Stephens Nunnally (@stevinz)
+//      Copyright (c) 2022 Stephens Nunnally <@stevinz>
 //
 // Some Portions
-//      Copyright (c) 2011 Scott Kellum (@scottkellum) and Mason Wendell (@canarymason)
+//      Copyright (c) 2011 Scott Kellum <@scottkellum> and Mason Wendell <@canarymason>
 //      Copyright (c) 2010-2022 mrdoob and three.js authors
 //      Copyright (c) 2018 Ilya Kolbin
 //
