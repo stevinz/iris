@@ -7,10 +7,10 @@
 
 */
 
-
 /*/////////////////////////////////////////////////////////////////////////////////////
 //		Variables
 /////////////////////////////////////////////////////////////////////////////////////*/
+
 :root {
 	--color-icon: #08f;
 	--color-shadow: #111;
@@ -34,7 +34,6 @@
 	--slider-width: 5px;
 	--slider-thumb: 18px;
 }
-
 
 /*/////////////////////////////////////////////////////////////////////////////////////
 //		Main
@@ -146,14 +145,13 @@ body {
 	position: absolute;
 }
 
-
 /*/////////////////////////////////////////////////////////////////////////////////////
 //		Slider
 /////////////////////////////////////////////////////////////////////////////////////*/
 
 #sliders {
 	background-color: transparent;
-	margin: auto;	
+	margin: auto;
 	display: flex;
   	align-items: center;
 }
@@ -193,7 +191,7 @@ body {
 				height: var(--slider-thumb);
 				border: 2px solid;
 				border-color: var(--color-background-light);
-				border-radius: 50%; 
+				border-radius: 50%;
 				background: var(--color-icon);
 				cursor: pointer;
 			}
@@ -204,7 +202,7 @@ body {
 				height: var(--slider-thumb);
 				border: 2px solid;
 				border-color: var(--color-background-light);
-				border-radius: 50%; 
+				border-radius: 50%;
 				background: var(--color-icon);
 				cursor: pointer;
 			}

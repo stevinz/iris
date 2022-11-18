@@ -1,56 +1,56 @@
-# ColorEye
-Small, fast, dependency free javascript color library with support for the RGB, RYB, and HSL color models and easy interaction with HTML, CSS, and third party frameworks. 
+# Iris
+Small, fast, dependency free javascript color library with support for the RGB, RYB, and HSL color models and easy interaction with HTML, CSS, and third party frameworks.
 
 Internal calls create zero new Objects for maximum performance. Easy color conversion between color models. Additionally provides support for color mixing and color alteration with functions like mix, add, subtract, brighten, darken, grayscale, and more.
 
-Also features hue shifting around the more traditional artistic RYB (red, yellow, blue) color wheel. This creates much more natural complementary colors and intuitive palettes, see [online example](https://stevinz.github.io/coloreye/).
+Also features hue shifting around the more traditional artistic RYB (red, yellow, blue) color wheel. This creates much more natural complementary colors and intuitive palettes, see [online example](https://stevinz.github.io/iris/).
 
-ColorEye was designed to make it easy to work alongside other popular frameworks, such as [Three.js](https://threejs.org/). See [example](#Three-Example) below of converting back and forth between a ColorEye Object and a THREE.Color Object.
+Iris was designed to make it easy to work alongside other popular frameworks, such as [Three.js](https://threejs.org/). See [example](#Three-Example) below of converting back and forth between a Iris Object and a THREE.Color Object.
 
 <br>
 
 ## Usage
 
-#### Copy file 'coloreye.js' into project, import class
+#### Copy file 'Iris.js' into project, import class
 
 ```javascript
-import { ColorEye } from './coloreye.js';
+import { Iris } from './Iris.js';
 ```
 
 <br>
 
-#### Create new ColorEye Object
+#### Create new Iris Object
 
 ```javascript
-let color = new ColorEye();
+const color = new Iris();
 ```
 
 <br>
 
-#### ColorEye can be initialized in the following ways
+#### Iris can be initialized in the following ways
 
 ```javascript
-ColorEye();                             // Defaults to white, 0xffffff
-ColorEye(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
+Iris();                             // Defaults to white, 0xffffff
+Iris(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
 
-ColorEye(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
+Iris(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
 
-ColorEye(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
-ColorEye(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
-ColorEye(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
+Iris(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
+Iris(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
+Iris(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
 
-ColorEye({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
-ColorEye({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
-ColorEye({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
+Iris({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
+Iris({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
+Iris({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
 
-ColorEye([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional array offset
+Iris([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional array offset
 
-ColorEye('#ff0000');                    // Hex String (also 3 digits: #f00)
-ColorEye('rgb(255, 0, 0)');             // CSS Color String
-ColorEye('red');                        // X11 Color Name
+Iris('#ff0000');                    // Hex String (also 3 digits: #f00)
+Iris('rgb(255, 0, 0)');             // CSS Color String
+Iris('red');                        // X11 Color Name
 
-ColorEye(fromColorEye);                 // Copy from ColorEye Object
-ColorEye(fromThreeColor);               // Copy from Three.js Color Object
+Iris(fromIris);                     // Copy from Iris Object
+Iris(fromThreeColor);               // Copy from Three.js Color Object
 ```
 
 <br>
@@ -58,7 +58,7 @@ ColorEye(fromThreeColor);               // Copy from Three.js Color Object
 #### Color functions can be chained together
 
 ```javascript
-let color = new ColorEye(0xff0000);
+const color = new Iris(0xff0000);
 
 console.log(color.rybRotateHue(270).darken(0.5).hexString().toUpperCase());
 ```
@@ -70,14 +70,14 @@ console.log(color.rybRotateHue(270).darken(0.5).hexString().toUpperCase());
 
 #### Hue Shifting
 ```javascript
-let color = new ColorEye(0xff0000);
+const color = new Iris(0xff0000);
 
 // To find the RYB color wheel complement (opposite) color
-let complement = new ColorEye.set(color).rybComplementary();
+const complement = new Iris.set(color).rybComplementary();
 
 // To adjust hue a specific number of degrees (0 to 360) around the RYB color wheel
-let tetrad1 = new ColorEye.set(color).rybRotateHue(90);
-let tetrad2 = new ColorEye.set(color).rybRotateHue(270);
+const tetrad1 = new Iris.set(color).rybRotateHue(90);
+const tetrad2 = new Iris.set(color).rybRotateHue(270);
 ```
 
 <br>
@@ -85,22 +85,22 @@ let tetrad2 = new ColorEye.set(color).rybRotateHue(270);
 #### Example usage with [Three.js](https://threejs.org/) <a name="Three-Example"></a>
 
 ```javascript
-// Some possible ways to initialize ColorEye using THREE.Color, hex value, or array
-const eyeColor = new ColorEye(threeColor);
-const eyeColor = new ColorEye(threeColor.getHex());
-const eyeColor = new ColorEye(threeColor.toArray());
+// Some possible ways to initialize Iris using THREE.Color, hex value, or array
+const eyeColor = new Iris(threeColor);
+const eyeColor = new Iris(threeColor.getHex());
+const eyeColor = new Iris(threeColor.toArray());
 
-// Some possible ways to initialize THREE.Color using ColorEye, hex value, or string
+// Some possible ways to initialize THREE.Color using Iris, hex value, or string
 const threeColor = new THREE.Color(eyeColor);
 const threeColor = new THREE.Color(eyeColor.hex());
 const threeColor = new THREE.Color(eyeColor.hexString());
 
-// Some possible ways to copy the values of the THREE.Color back to ColorEye
+// Some possible ways to copy the values of the THREE.Color back to Iris
 eyeColor.copy(threeColor);
 eyeColor.set(threeColor.getHex());
 eyeColor.setRGBF(threeColor.r, threeColor.g, threeColor.b);
 
-// Some possible ways to copy the values of the ColorEye back to THREE.Color
+// Some possible ways to copy the values of the Iris back to THREE.Color
 threeColor.copy(eyeColor);
 threeColor.setHex(eyeColor.hex());
 threeColor.setRGB(eyeColor.r, eyeColor.g, eyeColor.b);
@@ -123,7 +123,7 @@ Blue channel value between 0.0 and 1.0, default is 1.
 
 # Assignment
 
-### **.[copy]()** ( colorObject : ColorEye or THREE.Color ) ( ) : this
+### **.[copy]()** ( colorObject : Iris or THREE.Color ) ( ) : this
 Copies the r, g, b properties from **colorObject**. This Object can be any type as long as it has r, g, b properties containing numeric values ranging from 0.0 to 1.0.
 
 ### **.[set]()** ( r: Number or Object or String, g : Number, b : Number, type : String ) : this
@@ -170,7 +170,7 @@ Returns string for use with CSS, for example "rgb(255, 0, 0)". Optionally includ
 Returns value as hexidecimal.
 
 ### **.[hexString]()** ( hexColor : Integer ) : String
-Returns value as hex string for use in CSS, HTML, etc. Example: "#ff0000". If optional **hexColor** is supplied, the returned string will be for the supplied color, not the underlying value of the current ColorEye Object.
+Returns value as hex string for use in CSS, HTML, etc. Example: "#ff0000". If optional **hexColor** is supplied, the returned string will be for the supplied color, not the underlying value of the current Iris Object.
 
 ### **.[rgbString]()** ( alpha : Integer ) : String
 Returns value as inner section of cssString(). For example "255, 0, 0". This allows you to write to CSS variables for use with custom alpha channels in your CSS. Optional **alpha** value.
@@ -182,8 +182,8 @@ Returns value as hexidecimal, JSON friendly data.
 
 # Retrieving Data
 
-### **.[clone]()** ( ) : ColorEye
-Returns a new ColorEye Object with the same color value as this ColorEye Object.
+### **.[clone]()** ( ) : Iris
+Returns a new Iris Object with the same color value as this Iris Object.
 
 ### **.[getHSL]()** ( target ) : Object
 Provide an optional **target** to copy hue, saturation, lightness values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with h, s, l properties is returned.
@@ -202,71 +202,71 @@ Provide an optional **array** to copy red, green, blue values into, they will be
 # Spectrum Components
 
 ### **.[red]()** ( ) : Integer
-Returns red value of current ColorEye object in range 0 to 255.
+Returns red value of current Iris object in range 0 to 255.
 
 ### **.[green]()** ( ) : Integer
-Returns green value of current ColorEye object in range 0 to 255.
+Returns green value of current Iris object in range 0 to 255.
 
 ### **.[blue]()** ( ) : Integer
-Returns blue value of current ColorEye object in range 0 to 255.
+Returns blue value of current Iris object in range 0 to 255.
 
 ### **.[redF]()** ( ) : Float
-Returns red value of current ColorEye object in range 0.0 to 1.0.
+Returns red value of current Iris object in range 0.0 to 1.0.
 
 ### **.[greenF]()** ( ) : Float
-Returns green value of current ColorEye object in range 0.0 to 1.0.
+Returns green value of current Iris object in range 0.0 to 1.0.
 
 ### **.[blueF]()** ( ) : Float
-Returns blue value of current ColorEye object in range 0.0 to 1.0.
+Returns blue value of current Iris object in range 0.0 to 1.0.
 
 ### **.[hue]()** ( ) : Integer
-Returns hue value of current ColorEye object in range 0 to 360.
+Returns hue value of current Iris object in range 0 to 360.
 
 ### **.[saturation]()** ( ) : Float
-Returns saturation value of current ColorEye object in range 0.0 to 1.0.
+Returns saturation value of current Iris object in range 0.0 to 1.0.
 
 ### **.[lightness]()** ( ) : Float
-Returns lightness value of current ColorEye object in range 0.01 to 1.0.
+Returns lightness value of current Iris object in range 0.01 to 1.0.
 
 ### **.[hueF]()** ( ) : Float
-Returns hue value of current ColorEye object in range 0.01 to 1.0.
+Returns hue value of current Iris object in range 0.01 to 1.0.
 
 ### **.[hueRYB]()** ( ) : Integer
-Returns the RYB adjusted hue value of current ColorEye object in range 0 to 360.
+Returns the RYB adjusted hue value of current Iris object in range 0 to 360.
 
 <br>
 
 # Color Functions
 
-### **.[add]()** ( color : ColorEye ) : this
-Adds the red, green, blue values from **color** to this ColorEye Object's values.
+### **.[add]()** ( color : Iris ) : this
+Adds the red, green, blue values from **color** to this Iris Object's values.
 
 ### **.[addScalar]()** ( scalar : Integer ) : this
-Adds the value **scalar** to the red, green, blue of this ColorEye Object, scalar should be in range -255 to 255.
+Adds the value **scalar** to the red, green, blue of this Iris Object, scalar should be in range -255 to 255.
 
 ### **.[addScalarF]()** ( scalar : Float ) : this
-Adds the value **scalar** to the red, green, blue of this ColorEye Object, scalar should be in range -1.0 to 1.0.
+Adds the value **scalar** to the red, green, blue of this Iris Object, scalar should be in range -1.0 to 1.0.
 
 ### **.[brighten]()** ( amount : Float ) : this
-Increases the lightness of this ColorEye Object by **amount** as a percentage of the remainder of 100% lightness less the current lightness. For example, if the current hsl lightness value is 0.6 (between 0.0 and 1.0), an **amount** of 0.5 will increase the lightness value to 0.6 + ((1.0 - 0.6) * 0.5) = 0.8, an **amount** value of 1.0 will always bring lightness value up to 1.0 (100%).
+Increases the lightness of this Iris Object by **amount** as a percentage of the remainder of 100% lightness less the current lightness. For example, if the current hsl lightness value is 0.6 (between 0.0 and 1.0), an **amount** of 0.5 will increase the lightness value to 0.6 + ((1.0 - 0.6) * 0.5) = 0.8, an **amount** value of 1.0 will always bring lightness value up to 1.0 (100%).
 
 ### **.[darken]()** ( amount : Float ) : this
-Decreases the lightness of this ColorEye Object by **amount**. A value of 0.5 (default) will decrease lightness by 50%, a value of 2.0 will double lightness.
+Decreases the lightness of this Iris Object by **amount**. A value of 0.5 (default) will decrease lightness by 50%, a value of 2.0 will double lightness.
 
 ### **.[grayscale]()** ( percent : Float, type : String ) : this
 Changes color into grayscale by **percent** ranging from 0.0 to 1.0. This can be done by type 'average' which takes an average of the red, green, blue values. Or by default type of 'luminosity' which scales red, green, blue values according to how human eyes see color (see [details at GIMP](https://docs.gimp.org/2.6/en/gimp-tool-desaturate.html)).
 
 ### **.[hslOffset]()** ( h : Integer, s : Float, l : Float ) : this
-Change the HSL values of this ColorEye object by **h** (-360 to 360), **s** (-1.0 to 1.0), and **l** (-1.0 to 1.0).
+Change the HSL values of this Iris object by **h** (-360 to 360), **s** (-1.0 to 1.0), and **l** (-1.0 to 1.0).
 
-### **.[mix]()** ( mixColor : ColorEye, percent : Float ) : this
-Mixes in another ColorEye Object's color value to this ColorEye Object by **percent** (default of 0.5, i.e. 50%).
+### **.[mix]()** ( mixColor : Iris, percent : Float ) : this
+Mixes in another Iris Object's color value to this Iris Object by **percent** (default of 0.5, i.e. 50%).
 
-### **.[multiply]()** ( color : ColorEye ) : this
-Multiplies another ColorEye Object's RGB values to this ColorEye Object's RGB values.
+### **.[multiply]()** ( color : Iris ) : this
+Multiplies another Iris Object's RGB values to this Iris Object's RGB values.
 
 ### **.[multiplyScalar]()** ( scalar : Float ) : this
-Multiplies this ColorEye Object's RGB values by **scalar**. There is no range for **scalar**, however, color values will be clamped between 0.0 and 1.0 after multiplication.
+Multiplies this Iris Object's RGB values by **scalar**. There is no range for **scalar**, however, color values will be clamped between 0.0 and 1.0 after multiplication.
 
 ### **.[rgbComplementary]()** ( ) : this
 Adjusts this color to be 180 degress (opposite) of the current color on the RGB color wheel.
@@ -276,33 +276,33 @@ Adjusts this color to be **degress** of the current color on the RGB color wheel
 
 ### **.[rybAdjust]()** ( ) : this
 Adjusts the RGB values to fit in the RYB spectrum as best as possible.
-    
+
 ### **.[rybComplementary]()** ( ) : this
 Adjusts this color to be 180 degress (opposite) of the current color on the RYB color wheel.
 
 ### **.[rybRotateHue]()** ( degrees : Integer ) : this
 Adjusts this color to be **degress** of the current color on the RYB color wheel, range from -360 to 360.
 
-### **.[subtract]()** ( color : ColorEye ) : this
-Subtracts the red, green, blue values from **color** to this ColorEye Object's values.
+### **.[subtract]()** ( color : Iris ) : this
+Subtracts the red, green, blue values from **color** to this Iris Object's values.
 
 <br>
 
 # Comparison
 
-### **.[equals]()** ( color : ColorEye ) : Boolean
+### **.[equals]()** ( color : Iris ) : Boolean
 Returns true if the RGB values of **color** are the same as those of this Object.
 
-### **.[isDark]()** ( color : ColorEye ) : Boolean
-Returns true if this ColorEye Object's color value would be considered "dark", helpful for determining whether of not to use black or white text with this color as a background.
+### **.[isDark]()** ( color : Iris ) : Boolean
+Returns true if this Iris Object's color value would be considered "dark", helpful for determining whether of not to use black or white text with this color as a background.
 
-### **.[isLight]()** ( color : ColorEye ) : Boolean
-Returns true if this ColorEye Object's color value would be considered "light", helpful for determining whether of not to use black or white text with this color as a background.
+### **.[isLight]()** ( color : Iris ) : Boolean
+Returns true if this Iris Object's color value would be considered "light", helpful for determining whether of not to use black or white text with this color as a background.
 
 <br>
 
 # License
-ColorEye is released under the terms of the MIT license, so it is free to use in your free or commercial projects.
+Iris is released under the terms of the MIT license, so it is free to use in your free or commercial projects.
 
 Copyright (c) 2022 Stephens Nunnally and Scidian Software
 

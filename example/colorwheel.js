@@ -1,8 +1,8 @@
 //
-// Description:     ColorEye
+// Description:     Iris
 // Author:          Copyright (c) 2022 Stephens Nunnally and Scidian Software
 // License:         Distributed under the MIT License
-// Source(s):       https://github.com/stevinz/coloreye
+// Source(s):       https://github.com/stevinz/iris
 //
 // MIT License
 //
@@ -29,12 +29,13 @@
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Imports
 /////////////////////////////////////////////////////////////////////////////////////
-import { ColorEye } from '../src/coloreye.js';
 
+import { Iris } from '../src/Iris.js';
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Math Utils
 /////////////////////////////////////////////////////////////////////////////////////
+
 function calculateCartesian(r, theta) {
     let radians = (Math.PI / 180) * theta;
     let x = r * Math.cos(radians);
@@ -56,15 +57,15 @@ function rotatePoint(centerX, centerY, x, y, degrees, target) {
     target.y = (cos * (y - centerY)) - (sin * (x - centerX)) + centerY;
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Color Wheels
 ////        size = 0.0 to 1.0 (percent)
 /////////////////////////////////////////////////////////////////////////////////////
+
 function drawHueWheel(canvas, type = 'rgb', size = 0.75) {
     let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    let eye = new ColorEye();
+    let eye = new Iris();
 
     for (let x = 0; x < canvas.width; x++) {
         for (let y = 0; y < canvas.height; y++) {
@@ -82,7 +83,7 @@ function drawHueWheel(canvas, type = 'rgb', size = 0.75) {
     }
 
     ctx.putImageData(img, 0, 0);
-    
+
     if (size > 0) {
         ctx.beginPath();
         ctx.strokeStyle = '#444';
@@ -104,12 +105,12 @@ function setPixel(img, x, y, r, g, b, a) {
     }
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Color Highlight
 /////////////////////////////////////////////////////////////////////////////////////
+
 function placeCircle(canvas, type = 'rgb', circle, hue) {
-    let eye = new ColorEye();
+    let eye = new Iris();
     eye.set(hue, 1.0, 0.5, 'hsl');
 
     let h = eye.hue();
@@ -118,13 +119,13 @@ function placeCircle(canvas, type = 'rgb', circle, hue) {
     let box = canvas.getBoundingClientRect();
     let cir = circle.getBoundingClientRect();
     let pos = calculateCartesian(canvas.width * 0.5, h - 90);
-    
+
     circle.style.left = box.left + (box.width / 2) + pos.x - (cir.width / 2) + 'px';
     circle.style.top = box.top + (box.height / 2) + pos.y - (cir.height / 2) + 'px';
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Exports
 /////////////////////////////////////////////////////////////////////////////////////
+
 export { drawHueWheel, placeCircle };

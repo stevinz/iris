@@ -1,8 +1,8 @@
 //
-// Description:     ColorEye
+// Description:     Iris
 // Author:          Copyright (c) 2022 Stephens Nunnally and Scidian Software
 // License:         Distributed under the MIT License
-// Source(s):       https://github.com/stevinz/coloreye
+// Source(s):       https://github.com/stevinz/iris
 //
 // MIT License
 //
@@ -29,15 +29,15 @@
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Imports
 /////////////////////////////////////////////////////////////////////////////////////
-import { ColorEye } from '../src/coloreye.js';
+import { Iris } from '../src/Iris.js';
 import { drawHueWheel, placeCircle } from './colorwheel.js';
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////    File Scope Variables
 /////////////////////////////////////////////////////////////////////////////////////
-let eye = new ColorEye();
-let ryb = new ColorEye();
+let eye = new Iris();
+let ryb = new Iris();
 let colorBox = document.getElementById('colorBox');
 let rgbR = document.getElementById('sliderRgbR'), txtRgbR = document.getElementById('rgbValueR');
 let rgbG = document.getElementById('sliderRgbG'), txtRgbG = document.getElementById('rgbValueG');
@@ -107,7 +107,7 @@ function connectSliders() {
 
     const colorStyle = getComputedStyle(colorBox);
     eye.set(colorStyle.backgroundColor);
-    
+
     updateRgb();
     updateRyb();
 
@@ -119,7 +119,7 @@ function connectSliders() {
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Callback
 /////////////////////////////////////////////////////////////////////////////////////
-function updateSlider(event) {    
+function updateSlider(event) {
     const colorStyle = getComputedStyle(colorBox);
     eye.set(colorStyle.backgroundColor);
     event.target.updateFunction(event);
@@ -134,7 +134,7 @@ function updateRgbR(event) { eye.set(event.target.value, rgbG.value, rgbB.value,
 function updateRgbG(event) { eye.set(rgbR.value, event.target.value, rgbB.value, 'rgb'); updateRyb(); }
 function updateRgbB(event) { eye.set(rgbR.value, rgbG.value, event.target.value, 'rgb'); updateRyb(); }
 
-function updateRgb() { 
+function updateRgb() {
     let rgb = eye.getRGB();
     rgbR.value = rgb.r * 255;
     rgbG.value = rgb.g * 255;
@@ -146,7 +146,7 @@ function updateRybR(event) { eye.set(event.target.value, rybY.value, rybB.value,
 function updateRybY(event) { eye.set(rybR.value, event.target.value, rybB.value, 'ryb'); updateRgb(); }
 function updateRybB(event) { eye.set(rybR.value, rybY.value, event.target.value, 'ryb'); updateRgb(); }
 
-function updateRyb() { 
+function updateRyb() {
     let ryb = eye.getRYB();
     rybR.value = ryb.r * 255;
     rybY.value = ryb.y * 255;
@@ -162,12 +162,12 @@ function updateText() {
     txtRybY.innerHTML = rybY.value;
     txtRybB.innerHTML = rybB.value;
 
-    let clrStart = new ColorEye();
-    let clr1 = new ColorEye();
-    let clr2 = new ColorEye();
-    
+    let clrStart = new Iris();
+    let clr1 = new Iris();
+    let clr2 = new Iris();
+
     // Complement
-    clr1 = new ColorEye(eye).rgbComplementary();
+    clr1 = new Iris(eye).rgbComplementary();
     clrRgb1.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.000).cssString();
     clrRgb2.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.125).cssString();
     clrRgb3.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.250).cssString();
@@ -177,8 +177,8 @@ function updateText() {
     clrRgb7.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.750).cssString();
     clrRgb8.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.875).cssString();
     clrRgb9.style.backgroundColor = clrStart.set(eye).mix(clr1, 1.000).cssString();
-    
-    clr1 = new ColorEye(eye).rybComplementary();
+
+    clr1 = new Iris(eye).rybComplementary();
     clrRyb1.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.000).cssString();
     clrRyb2.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.125).cssString();
     clrRyb3.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.250).cssString();
@@ -188,10 +188,10 @@ function updateText() {
     clrRyb7.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.750).cssString();
     clrRyb8.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.875).cssString();
     clrRyb9.style.backgroundColor = clrStart.set(eye).mix(clr1, 1.000).cssString();
-    
+
     // Triad
-    clr1 = new ColorEye(eye).rgbRotateHue(120);
-    clr2 = new ColorEye(eye).rgbRotateHue(240);
+    clr1 = new Iris(eye).rgbRotateHue(120);
+    clr2 = new Iris(eye).rgbRotateHue(240);
     triRgb1.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.000).cssString();
     triRgb2.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.250).cssString();
     triRgb3.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.500).cssString();
@@ -202,8 +202,8 @@ function updateText() {
     triRgb8.style.backgroundColor = clrStart.set(clr1).mix(clr2, 0.750).cssString();
     triRgb9.style.backgroundColor = clrStart.set(clr1).mix(clr2, 1.000).cssString();
 
-    clr1 = new ColorEye(eye).rybRotateHue(120);
-    clr2 = new ColorEye(eye).rybRotateHue(240);
+    clr1 = new Iris(eye).rybRotateHue(120);
+    clr2 = new Iris(eye).rybRotateHue(240);
     triRyb1.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.000).cssString();
     triRyb2.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.250).cssString();
     triRyb3.style.backgroundColor = clrStart.set(eye).mix(clr1, 0.500).cssString();
@@ -225,17 +225,17 @@ function onSliderChange(element, handler, updateFunction) {
     element.updateFunction = updateFunction;
     element.currentValue = element.value;
     element.newValue = element.value;
-    
+
     element.addEventListener('input', function(event) {
         event.target.inputCalled = true;
         event.target.newValue = event.target.value;
         if (event.target.newValue !== event.target.currentValue) handler(event);
         event.target.currentValue = event.target.newValue;
     });
-  
+
     element.addEventListener('change', function(event) {
         if (! event.target.inputCalled) handler(event);
-    }); 
+    });
 }
 
 
