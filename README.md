@@ -1,5 +1,5 @@
 # Iris
-Small, fast, dependency free javascript color library with support for the RGB, RYB, and HSL color models and easy interaction with HTML, CSS, and third party frameworks.
+Small, fast, dependency free JavaScript color library with support for the RGB, RYB, and HSL color models and easy interaction with HTML, CSS, and third party frameworks.
 
 Internal calls create zero new Objects for maximum performance. Easy color conversion between color models. Additionally provides support for color mixing and color alteration with functions like mix, add, subtract, brighten, darken, grayscale, and more.
 
