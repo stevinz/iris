@@ -2,7 +2,7 @@
 // Description:     Iris
 // Author:          Copyright (c) 2022 Stephens Nunnally and Scidian Software
 // License:         Distributed under the MIT License
-// Source(s):       https://github.com/stevinz/iris
+// Source(s):       https://github.com/scidian/iris
 //
 // MIT License
 //
@@ -30,7 +30,7 @@
 ////    Imports
 /////////////////////////////////////////////////////////////////////////////////////
 
-import { Iris } from '../src/Iris.js';
+import { Iris } from 'iris';
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////    Math Utils

@@ -9,20 +9,25 @@ Iris was designed to make it easy to work alongside other popular frameworks, su
 
 <br>
 
-## Usage
+## Install
 
-#### Copy file 'Iris.js' into project, import class
+- Option 1: Copy file `Iris.js`, import from file...
 
 ```javascript
-import { Iris } from './Iris.js';
+import { Iris } from 'Iris.js';
 ```
 
-<br>
-
-#### Create new Iris Object
-
+- Option 2: Install from [npm](https://www.npmjs.com/package/@scidian/iris), import from '@scidian/iris'...
+```
+npm install @scidian/iris
+```
 ```javascript
-const color = new Iris();
+import { Iris } from '@scidian/iris';
+```
+
+- Option 3: Import directly from CDN...
+```javascript
+import { Iris } from 'https://unpkg.com/@scidian/iris/build/iris.module.js';
 ```
 
 <br>
@@ -30,6 +35,11 @@ const color = new Iris();
 #### Iris can be initialized in the following ways
 
 ```javascript
+
+const myColor = new Iris();
+
+/* Initialization Methods */
+
 Iris();                             // Defaults to white, 0xffffff
 Iris(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
 
