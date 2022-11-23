@@ -236,7 +236,7 @@ Returns hue value of current Iris object in range 0 to 360.
 Returns saturation value of current Iris object in range 0.0 to 1.0.
 
 ### **.[lightness]()** ( ) : Float
-Returns lightness value of current Iris object in range 0.01 to 1.0.
+Returns lightness value of current Iris object in range 0.0 to 1.0.
 
 ### **.[hueF]()** ( ) : Float
 Returns hue value of current Iris object in range 0.0 to 1.0.
