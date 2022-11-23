@@ -67,8 +67,8 @@
 //      color.blueF();                              // Returns blue value of color, 0.0 to 1.0
 //
 //      color.hue();                                // Returns hue value of color, 0 to 360
-//      color.saturation();                         // Returns saturation value of color, 0 to 255
-//      color.lightness();                          // Returns lightness value of color, 0 to 255
+//      color.saturation();                         // Returns saturation value of color, 0 to 1.0
+//      color.lightness();                          // Returns lightness value of color, 0 to 1.0
 //
 //      color.hueF();                               // Returns hue value of color, 0.0 to 1.0
 //      color.hueRYB();                             // Returns RGB hue mapped to hue in the RYB, 0 to 360
