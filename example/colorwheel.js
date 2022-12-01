@@ -1,6 +1,6 @@
 //
 // Description:     Iris
-// Author:          Copyright (c) 2022 Stephens Nunnally and Scidian Software
+// Author:          Copyright (c) 2022 Stephens Nunnally and Scidian Studios
 // License:         Distributed under the MIT License
 // Source(s):       https://github.com/scidian/iris
 //

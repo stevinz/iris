@@ -3,7 +3,7 @@
 // @description Iris
 // @about       Color library with support for RGB, RYB, HSL color models and RYB hue shifting
 // @author      Stephens Nunnally <@stevinz>
-// @license     MIT - Copyright (c) 2021-2022 Stephens Nunnally and Scidian Software
+// @license     MIT - Copyright (c) 2021-2022 Stephens Nunnally and Scidian Studios
 // @source      https://github.com/scidian/iris
 //
 //      See end of file for license details and acknowledgements
