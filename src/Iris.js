@@ -227,7 +227,7 @@ class Iris {
                         let b = Math.min(255, parseInt(color[3], 10));
                         return this.setRGB(r, g, b);
                     }
-                    if ( color = /^\s*(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
+                    if (color = /^\s*(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
                         // rgb(100%,0%,0%) rgba(100%,0%,0%,0.5)
                         let r = (Math.min(100, parseInt(color[1], 10)) / 100);
                         let g = (Math.min(100, parseInt(color[2], 10)) / 100);
