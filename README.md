@@ -136,7 +136,7 @@ Blue channel value between 0.0 and 1.0, default is 1.
 ### **.[copy]()** ( colorObject : Iris or THREE.Color ) ( ) : this
 Copies the r, g, b properties from **colorObject**. This Object can be any type as long as it has r, g, b properties containing numeric values ranging from 0.0 to 1.0.
 
-### **.[set]()** ( r: Number or Object or String, g : Number, b : Number, type : String ) : this
+### **.[set]()** ( r: Number or Object or Array or String, g : Number, b : Number, type : String ) : this
 All arguments are optional. Sets this color based on a wide range of possible inputs, all options are the same as with the constructor.
 
 ### **.[setColorName]()** ( style : String ) : this

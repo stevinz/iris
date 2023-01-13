@@ -3,7 +3,7 @@
 // @description Iris
 // @about       Color library with support for RGB, RYB, HSL color models and RYB hue shifting
 // @author      Stephens Nunnally <@stevinz>
-// @license     MIT - Copyright (c) 2021-2022 Stephens Nunnally and Scidian Software
+// @license     MIT - Copyright (c) 2021-2022 Stephens Nunnally and Scidian Studios
 // @source      https://github.com/scidian/iris
 //
 //      See end of file for license details and acknowledgements
@@ -67,8 +67,8 @@
 //      color.blueF();                              // Returns blue value of color, 0.0 to 1.0
 //
 //      color.hue();                                // Returns hue value of color, 0 to 360
-//      color.saturation();                         // Returns saturation value of color, 0 to 255
-//      color.lightness();                          // Returns lightness value of color, 0 to 255
+//      color.saturation();                         // Returns saturation value of color, 0 to 1.0
+//      color.lightness();                          // Returns lightness value of color, 0 to 1.0
 //
 //      color.hueF();                               // Returns hue value of color, 0.0 to 1.0
 //      color.hueRYB();                             // Returns RGB hue mapped to hue in the RYB, 0 to 360
@@ -123,7 +123,7 @@ class Iris {
             } else if (value && isHSL(value)) { return this.setHSL(value.h * 360, value.s, value.l);
             } else if (value && isRYB(value)) { return this.setRYB(value.r * 255, value.y * 255, value.b * 255);
             } else if (Array.isArray(value) && value.length > 2) {
-                let offset = (typeof g === number && g > 0) ? g : 0;
+                let offset = (g != null && ! Number.isNaN(g) && g > 0) ? g : 0;
                 return this.setRGBF(value[offset], value[offset + 1], value[offset + 2])
             } else if (typeof value === 'string') {
                 return this.setStyle(value);
@@ -227,7 +227,7 @@ class Iris {
                         let b = Math.min(255, parseInt(color[3], 10));
                         return this.setRGB(r, g, b);
                     }
-                    if ( color = /^\s*(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
+                    if (color = /^\s*(\d+)\%\s*,\s*(\d+)\%\s*,\s*(\d+)\%\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
                         // rgb(100%,0%,0%) rgba(100%,0%,0%,0.5)
                         let r = (Math.min(100, parseInt(color[1], 10)) / 100);
                         let g = (Math.min(100, parseInt(color[2], 10)) / 100);
