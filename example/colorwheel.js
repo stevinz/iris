@@ -1,67 +1,6 @@
-//
-// Description:     Iris
-// Author:          Copyright (c) 2022 Stephens Nunnally and Scidian Studios
-// License:         Distributed under the MIT License
-// Source(s):       https://github.com/scidian/iris
-//
-// MIT License
-//
-// Copyright (c) 2022 Stephens Nunnally (@stevinz)
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-
-/////////////////////////////////////////////////////////////////////////////////////
-////    Imports
-/////////////////////////////////////////////////////////////////////////////////////
-
 import { Iris } from 'iris';
 
-/////////////////////////////////////////////////////////////////////////////////////
-////    Math Utils
-/////////////////////////////////////////////////////////////////////////////////////
-
-function calculateCartesian(r, theta) {
-    let radians = (Math.PI / 180) * theta;
-    let x = r * Math.cos(radians);
-    let y = r * Math.sin(radians);
-    return { x: x, y: y };
-}
-
-function calculatePolar(x, y) {
-    let r = Math.pow((Math.pow(x, 2) + Math.pow(y, 2)), 0.5);
-    let theta = Math.atan2(y, x);
-    return { magnitude: r, angle: theta };
-}
-
-function rotatePoint(centerX, centerY, x, y, degrees, target) {
-    let radians = (Math.PI / 180) * degrees;
-    let cos = Math.cos(radians);
-    let sin = Math.sin(radians);
-    target.x = (cos * (x - centerX)) + (sin * (y - centerY)) + centerX;
-    target.y = (cos * (y - centerY)) - (sin * (x - centerX)) + centerY;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-////    Color Wheels
-////        size = 0.0 to 1.0 (percent)
-/////////////////////////////////////////////////////////////////////////////////////
-
+/** Color Wheels, size = 0.0 to 1.0 (percent) */
 function drawHueWheel(canvas, type = 'rgb', size = 0.75) {
     let ctx = canvas.getContext('2d');
     let img = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -105,10 +44,7 @@ function setPixel(img, x, y, r, g, b, a) {
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-////    Color Highlight
-/////////////////////////////////////////////////////////////////////////////////////
-
+/** Color highlight */
 function placeCircle(canvas, type = 'rgb', circle, hue) {
     let eye = new Iris();
     eye.set(hue, 1.0, 0.5, 'hsl');
@@ -124,8 +60,27 @@ function placeCircle(canvas, type = 'rgb', circle, hue) {
     circle.style.top = box.top + (box.height / 2) + pos.y - (cir.height / 2) + 'px';
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
-////    Exports
-/////////////////////////////////////////////////////////////////////////////////////
-
 export { drawHueWheel, placeCircle };
+
+/******************** INTERNAL ********************/
+
+function calculateCartesian(r, theta) {
+    let radians = (Math.PI / 180) * theta;
+    let x = r * Math.cos(radians);
+    let y = r * Math.sin(radians);
+    return { x: x, y: y };
+}
+
+function calculatePolar(x, y) {
+    let r = Math.pow((Math.pow(x, 2) + Math.pow(y, 2)), 0.5);
+    let theta = Math.atan2(y, x);
+    return { magnitude: r, angle: theta };
+}
+
+function rotatePoint(centerX, centerY, x, y, degrees, target) {
+    let radians = (Math.PI / 180) * degrees;
+    let cos = Math.cos(radians);
+    let sin = Math.sin(radians);
+    target.x = (cos * (x - centerX)) + (sin * (y - centerY)) + centerX;
+    target.y = (cos * (y - centerY)) - (sin * (x - centerX)) + centerY;
+}

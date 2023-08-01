@@ -1,6 +1,6 @@
 {
   "name": "@scidian/iris",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Color library with support for RGB, RYB, HSL color models and RYB hue shifting.",
   "module": "src/Iris.js",
   "main": "build/iris.module.js",
@@ -23,14 +23,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scidian/iris.git"
+    "url": "git+https://github.com/onsightengine/iris.git"
   },
   "author": "Stephens Nunnally <stephens@scidian.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/scidian/iris/issues"
+    "url": "https://github.com/onsightengine/iris/issues"
   },
-  "homepage": "https://github.com/scidian/iris",
+  "homepage": "https://github.com/onsightengine/iris",
   "devDependencies": {
     "rollup": "^2.58.0"
   },

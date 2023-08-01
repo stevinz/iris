@@ -2,17 +2,18 @@
 
 Small, fast, dependency free JavaScript color library with support for the RGB, RYB, and HSL color models and easy interaction with HTML, CSS, and third party frameworks.
 
-Internal calls create zero new Objects for maximum performance. Easy color conversion between color models. Additionally provides support for color mixing and color alteration with functions like mix, add, subtract, brighten, darken, grayscale, and more.
-
-Also features hue shifting around the more traditional artistic RYB (red, yellow, blue) color wheel. This creates much more natural complementary colors and intuitive palettes, see [online example](https://stevinz.github.io/iris/).
-
-Iris was designed to make it easy to work alongside other popular frameworks, such as [Three.js](https://threejs.org/). See [example](#Three-Example) below of converting back and forth between a Iris Object and a THREE.Color Object.
+Features
+- Internal calls don't allocate memory, reducing garbage collector activity.
+- Color conversion between color models.
+- Support for color mixing and color alteration (mix, add, subtract, brighten, darken, grayscale, etc.)
+- Hue shifting around the more traditional artistic RYB (red, yellow, blue) color wheel, creating much more natural complementary colors and intuitive palettes, see [online example](https://stevinz.github.io/iris/).
+- Works alongside other popular frameworks, such as [Three.js](https://threejs.org/). See [example](#Three-Example) below of passing data between `Iris` and `THREE.Color`.
 
 <br>
 
-## Install
+## Installation
 
-- Option 1: Copy file `Iris.js`, import from file...
+- Option 1: Copy file `Iris.js` to project, import from file...
 
 ```javascript
 import { Iris } from 'Iris.js';
@@ -36,37 +37,32 @@ import { Iris } from 'https://unpkg.com/@scidian/iris/build/iris.module.js';
 #### Iris can be initialized in the following ways
 
 ```javascript
+new Iris();                             // Defaults to white, 0xffffff
+new Iris(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
 
-const myColor = new Iris();
+new Iris(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
 
-/* Initialization Methods */
+new Iris(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
+new Iris(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
+new Iris(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
 
-Iris();                             // Defaults to white, 0xffffff
-Iris(0xff0000);                     // Hexadecimal (0xff0000, i.e. 16711680)
+new Iris({ r: 1.0, g: 0.0, b: 0.0 });   // Object, RGB Properties (0.0 to 1.0)
+new Iris({ r: 1.0, y: 0.0, b: 0.0 });   // Object, RYB Properties (0.0 to 1.0)
+new Iris({ h: 1.0, s: 1.0, l: 0.5 });   // Object, HSL Properties (0.0 to 1.0)
 
-Iris(1.0, 0.0, 0.0);                // RGB Values (0.0 to 1.0)
+new Iris([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional offset
 
-Iris(255,   0,   0, 'rgb');         // RGB Values (0 to 255)
-Iris(255,   0,   0, 'ryb');         // RYB Values (0 to 255)
-Iris(360, 1.0, 0.5, 'hsl');         // HSL Values (H: 0 to 360, SL: 0.0 to 1.0)
+new Iris('#ff0000');                    // Hex String (also 3 digits: '#f00')
+new Iris('rgb(255, 0, 0)');             // CSS Color String
+new Iris('red');                        // X11 Color Name
 
-Iris({ r: 1.0, g: 0.0, b: 0.0 });   // Object with RGB Properties (0.0 to 1.0)
-Iris({ r: 1.0, y: 0.0, b: 0.0 });   // Object with RYB Properties (0.0 to 1.0)
-Iris({ h: 1.0, s: 1.0, l: 0.5 });   // Object with HSL Properties (0.0 to 1.0)
-
-Iris([ 1.0, 0.0, 0.0 ], offset);    // RGB Array (0.0 to 1.0), optional array offset
-
-Iris('#ff0000');                    // Hex String (also 3 digits: #f00)
-Iris('rgb(255, 0, 0)');             // CSS Color String
-Iris('red');                        // X11 Color Name
-
-Iris(fromIris);                     // Copy from Iris Object
-Iris(fromThreeColor);               // Copy from Three.js Color Object
+new Iris(myIrisColor);                  // Copy from Iris Color Object
+new Iris(myThreeColor);                 // Copy from Three.js Color Object
 ```
 
 <br>
 
-#### Color functions can be chained together
+#### Color alterations support chaining
 
 ```javascript
 const color = new Iris(0xff0000);
@@ -93,15 +89,15 @@ const tetrad2 = new Iris.set(color).rybRotateHue(270);
 
 <br>
 
-#### Example usage with [Three.js](https://threejs.org/) <a name="Three-Example"></a>
+#### Example usage alongside [Three.js](https://threejs.org/) <a name="Three-Example"></a>
 
 ```javascript
-// Some possible ways to initialize Iris using THREE.Color, hex value, or array
+// Some possible ways to initialize Iris using THREE.Color
 const eyeColor = new Iris(threeColor);
 const eyeColor = new Iris(threeColor.getHex());
 const eyeColor = new Iris(threeColor.toArray());
 
-// Some possible ways to initialize THREE.Color using Iris, hex value, or string
+// Some possible ways to initialize THREE.Color using Iris
 const threeColor = new THREE.Color(eyeColor);
 const threeColor = new THREE.Color(eyeColor.hex());
 const threeColor = new THREE.Color(eyeColor.hexString());
@@ -132,10 +128,17 @@ Blue channel value between 0.0 and 1.0, default is 1.
 
 <br>
 
-# Assignment
+# Copy / Clone
 
 ### **.[copy]()** ( colorObject : Iris or THREE.Color ) ( ) : this
 Copies the r, g, b properties from **colorObject**. This Object can be any type as long as it has r, g, b properties containing numeric values ranging from 0.0 to 1.0.
+
+### **.[clone]()** ( ) : Iris
+Returns a new Iris Object with the same color value as this Iris Object.
+
+<br>
+
+# Assignment
 
 ### **.[set]()** ( r: Number or Object or Array or String, g : Number, b : Number, type : String ) : this
 All arguments are optional. Sets this color based on a wide range of possible inputs, all options are the same as with the constructor.
@@ -191,10 +194,7 @@ Returns value as hexidecimal, JSON friendly data.
 
 <br>
 
-# Retrieving Data
-
-### **.[clone]()** ( ) : Iris
-Returns a new Iris Object with the same color value as this Iris Object.
+# Color Data
 
 ### **.[getHSL]()** ( target ) : Object
 Provide an optional **target** to copy hue, saturation, lightness values into, they will be in the range 0.0 to 1.0. If no target is provided a new Object with h, s, l properties is returned.
@@ -210,7 +210,7 @@ Provide an optional **array** to copy red, green, blue values into, they will be
 
 <br>
 
-# Spectrum Components
+# Components
 
 ### **.[red]()** ( ) : Integer
 Returns red value of current Iris object in range 0 to 255.
@@ -247,7 +247,7 @@ Returns the RYB adjusted hue value of current Iris object in range 0 to 360.
 
 <br>
 
-# Color Functions
+# Color Adjustment
 
 ### **.[add]()** ( color : Iris ) : this
 Adds the red, green, blue values from **color** to this Iris Object's values.
@@ -309,11 +309,3 @@ Returns true if this Iris Object's color value would be considered "dark", helpf
 
 ### **.[isLight]()** ( color : Iris ) : Boolean
 Returns true if this Iris Object's color value would be considered "light", helpful for determining whether of not to use black or white text with this color as a background.
-
-<br>
-
-# License
-
-Iris is released under the terms of the MIT license, so it is free to use in your free or commercial projects.
-
-Copyright (c) 2022-2023 Stephens Nunnally and Scidian Studios
