@@ -85,12 +85,12 @@ function updateElements(color) {
     rybY.value = ryb.y * 255;
     rybB.value = ryb.b * 255;
 
-    txtRgbR.innerHTML = rgbR.value;
-    txtRgbG.innerHTML = rgbG.value;
-    txtRgbB.innerHTML = rgbB.value;
-    txtRybR.innerHTML = rybR.value;
-    txtRybY.innerHTML = rybY.value;
-    txtRybB.innerHTML = rybB.value;
+    txtRgbR.textContent = rgbR.value;
+    txtRgbG.textContent = rgbG.value;
+    txtRgbB.textContent = rgbB.value;
+    txtRybR.textContent = rybR.value;
+    txtRybY.textContent = rybY.value;
+    txtRybB.textContent = rybB.value;
 
     // Complement
     _clr1.set(_color).rgbComplementary();
