@@ -1,6 +1,6 @@
 {
   "name": "@scidian/iris",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Color library with support for RGB, RYB, HSL color models and RYB hue shifting.",
   "module": "src/Iris.js",
   "main": "build/iris.module.js",
